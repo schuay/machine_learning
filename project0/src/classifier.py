@@ -6,9 +6,13 @@ import cPickle as pickle
 import re
 import time
 
+import dataset_splitter as ds
 import featureselection as fs
 import transformer as tr
 import tweet
+
+import annealing
+import twitter
 
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
@@ -18,11 +22,19 @@ from sklearn.svm import LinearSVC
 NEG = 0
 POS = 1
 
+DSETS_DEFAULT  = 'twitter'
 CUTOFF_DEFAULT = 0.75
 CLASS_DEFAULT  = 'svm'
 NGRAM_DEFAULT  = 1
 FEAT_DEFAULT   = 'aes'
 TRAN_DEFAULT   = 'id'
+
+DATASETS = { 'twitter': lambda mi, fs, tr: twitter.TwitterDataset(
+                    '../data/twitter/Sentiment-Analysis-Dataset.zip',
+                    mi, fs, tr)
+           , 'annealing': lambda mi, fs, tr: annealing.AnnealingDataset(
+                    '../data/annealing/anneal.data')
+           }
 
 CLASSIFIERS = { 'bayes': NaiveBayesClassifier
               , 'svm':   SklearnClassifier(LinearSVC())
@@ -45,10 +57,8 @@ TRANSFORMERS = { 'id':    tr.IdentityTransformer()
                }
 
 class Classifier:
-    def __init__(self, classifier, feature_selection, transformer, train_size):
+    def __init__(self, classifier, train_size):
         self.__nltk_classifier = classifier
-        self.__fs = feature_selection
-        self.__tr = transformer
         self.__train_size = train_size
 
     @staticmethod
@@ -59,23 +69,17 @@ class Classifier:
     """Takes a dictionary with keys: POSITIVE/NEGATIVE, values: list of
     individual tweets. Returns a classifier object trained on the given training sets."""
     @staticmethod
-    def train(raw_classifier, training_sets, feature_selection, transformer):
+    def train(raw_classifier, training_sets):
         training = []
 
-        # Since we have a rather large amount of training data, build features
-        # lazily to avoid running out of memory.
-        tuple_set = [(transformer.transform(x), cl)
-                             for cl in [POS, NEG]
+        tuple_set = [(x, cl) for cl in [POS, NEG]
                              for x in training_sets[cl]]
-        train_set = apply_features(feature_selection.select_features, tuple_set)
 
-        return Classifier(raw_classifier.train(train_set), feature_selection,
-                transformer, len(tuple_set))
+        return Classifier(raw_classifier.train(tuple_set), len(tuple_set))
 
     """Evaluates the classifier with the given data sets."""
     def evaluate(self, test_sets):
-        tuple_set = [(self.__tr.transform(x), cl)
-                             for cl in [POS, NEG]
+        tuple_set = [(x, cl) for cl in [POS, NEG]
                              for x in test_sets[cl]]
         referenceSets = [set() for x in [POS, NEG]]
         referenceList = []
@@ -109,9 +113,7 @@ class Classifier:
 
 
     def classify(self, obj):
-        transformed = self.__tr.transform(obj)
-        features = self.__fs.select_features(transformed)
-        return self.__nltk_classifier.classify(features)
+        return self.__nltk_classifier.classify(obj)
 
     def save(self, filename):
         with open(filename, 'wb') as f:
@@ -122,79 +124,43 @@ import nltk
 import re
 import sys
 
-def prefilter(tweets):
-    PATTERN_SPAM1 = re.compile("Get 100 followers a day")
-    PATTERN_SPAM2 = re.compile("I highly recommends you join www.m2e.asia")
-    PATTERN_SPAM3 = re.compile("Banksyart2.*posting there since having probs")
+def evaluate_features(dataset, splitter, raw_classifier):
+    dataset_tuples = splitter.split(dataset)
 
-    FILTERS = [ lambda t: not PATTERN_SPAM1.search(t)
-              , lambda t: not PATTERN_SPAM2.search(t)
-              , lambda t: not PATTERN_SPAM3.search(t)
-              ]
-
-    return filter(lambda t: all([f(t[tweet.TEXT]) for f in FILTERS]), tweets)
-
-def to_tweets(lines):
-    """Turns a list of tweet texts into a list of tweet dict objects."""
-    return [{tweet.TEXT: t} for t in lines]
-
-def evaluate_features(positive, negative, load, save, cutoff,
-                      raw_classifier, feature_selector, transformer):
-    with open(positive, 'r') as f:
-        posTweets = prefilter(to_tweets(re.split(r'\n', f.read())))
-    with open(negative, 'r') as f:
-        negTweets = prefilter(to_tweets(re.split(r'\n', f.read())))
- 
-    # Selects cutoff of the features to be used for training and (1 - cutoff)
-    # to be used for testing.
-    posCutoff = int(math.floor(len(posTweets)*cutoff))
-    negCutoff = int(math.floor(len(negTweets)*cutoff))
-
-    if load:
-        print 'loading classifier \'%s\'' % load
-        classifier = Classifier.load(load)
-
-    else:
+    for (train_set, test_set) in dataset_tuples:
         print 'training new classifier'
 
-        trainSets = [list() for x in [POS, NEG]]
-        trainSets[POS] = posTweets[:posCutoff]
-        trainSets[NEG] = negTweets[:negCutoff]
+        trainSets = [[], []]
+        trainSets[NEG] = [ i.features() for i in train_set.instances()
+                                   if i.instance_class() == NEG ]
+        trainSets[POS] = [ i.features() for i in train_set.instances()
+                                   if i.instance_class() == POS ]
 
-        classifier = Classifier.train(raw_classifier, trainSets,
-                feature_selector, transformer);
+        classifier = Classifier.train(raw_classifier, trainSets);
 
-        trainSets = None
-        gc.collect()
+        print 'testing classifier...'
 
-    trainSets = [list() for x in [POS, NEG]]
-    trainSets[POS] = posTweets[posCutoff:]
-    trainSets[NEG] = negTweets[negCutoff:]
-    posTweets, negTweets = None, None # Free some space.
-    gc.collect()
-
-    if save:
-        print 'saving classifier as \'%s\'' % save
-
-        classifier.save(save)
-
-    print 'testing classifier...'
-
-    classifier.evaluate(trainSets)
+        trainSets = [[], []]
+        trainSets[NEG] = [ i.features() for i in test_set.instances()
+                                   if i.instance_class() == NEG ]
+        trainSets[POS] = [ i.features() for i in test_set.instances()
+                                   if i.instance_class() == POS ]
+        classifier.evaluate(trainSets)
 
 def usage():
-    print("""USAGE: %s [-p positive_tweets] [-n negative_tweets] [-s classifier]
-                       [-l classifier] [-c cutoff] [-f type] [-r type] [-t type]
-            -p  Text file containing one positive tweet per line.
-            -n  Text file containing one negative tweet per line.
-            -s  Saves the classifier to the specified file.
-            -l  Loads the classifier from the specified file.
+    print("""USAGE: %s [-d dataset] [-s classifier] [-f type] [-r type] [-t type]
+            -d  The dataset to use. One of 'twitter' (default), 'annealing'.
+            -t  Selects the classifier type. One of 'bayes', 'svm' (default).
+
+            Twitter:
             -c  Specifies the percentage of training tweets (default = 0.75).
             -f  Selects the feature selector. One of %s (default = '%s').
             -g  Specifies the n for the n-gram feature selector. Can be any positive integer (default = '%s').
             -r  Enables the given transformer. Can be passed multiple times.
                 One of %s (default = '%s').
-            -t  Selects the classifier type. One of 'bayes', 'svm' (default).""" %
+                
+            Annealing:
+            TODO""" %
             ( sys.argv[0]
             , ", ".join(["'" + t + "'" for t in FEATURE_SELECTORS.keys()])
             , FEAT_DEFAULT
@@ -205,27 +171,19 @@ def usage():
     sys.exit(1)
 
 if __name__ == '__main__':
-    classifier_save = None
-    classifier_load = None
-
-    positive_file = 'sentiment.pos'
-    negative_file = 'sentiment.neg'
+    dataset_ctor = DATASETS[DSETS_DEFAULT]
     cutoff = CUTOFF_DEFAULT
     raw_classifier = CLASSIFIERS[CLASS_DEFAULT]
     feature_selector = FEATURE_SELECTORS[FEAT_DEFAULT]
     ngram = NGRAM_DEFAULT
     transformers = [TRANSFORMERS[TRAN_DEFAULT]]
 
-    opts, args = getopt.getopt(sys.argv[1:], "hc:s:l:p:n:c:t:f:g:r:")
+    opts, args = getopt.getopt(sys.argv[1:], "c:d:f:g:hr:t:")
     for o, a in opts:
-        if o == "-s":
-            classifier_save = a
-        elif o == "-l":
-            classifier_load = a
-        elif o == "-p":
-            positive_file = a
-        elif o == "-n":
-            negative_file = a
+        if o == "-d":
+            if not a in DATASETS:
+                usage()
+            dataset_ctor = DATASETS[a]
         elif o == "-c":
             cutoff = float(a)
         elif o == "-t":
@@ -245,13 +203,11 @@ if __name__ == '__main__':
         else:
             usage()
 
+    splitter = ds.RatioSplitter(0.75)
     feature_selector = feature_selector(ngram)
-    evaluate_features( positive_file
-                     , negative_file
-                     , classifier_load
-                     , classifier_save
-                     , cutoff
+    evaluate_features( dataset_ctor(10000,
+                                    feature_selector,
+                                    tr.SequenceTransformer(transformers))
+                     , splitter
                      , raw_classifier
-                     , feature_selector
-                     , tr.SequenceTransformer(transformers)
                      )

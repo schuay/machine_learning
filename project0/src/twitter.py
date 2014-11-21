@@ -48,13 +48,13 @@ class TwitterDataset(cd.ClassificationDatasetI):
                 self.__instances.append(
                     TwitterInstance(row, feature_selection, transformer))
                 instance_count += 1
-                if instance_count > max_instances:
+                if max_instances is not None and instance_count >= max_instances:
                     break
 
         self.__filter_spam()
 
     def classes(self):
-        return [POS, NEG]
+        return [self.POS, self.NEG]
 
     def instances(self):
         return self.__instances
