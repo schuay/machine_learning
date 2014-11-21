@@ -1,5 +1,5 @@
 class ClassificationInstanceI:
-    def class(self):
+    def instance_class(self):
         """Returns the class of this instance."""
         raise NotImplementedError("Please implement this yourself.")
 
