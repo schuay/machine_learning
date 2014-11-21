@@ -1,0 +1,22 @@
+* No datasets with < 1k samples: small enough, but not too small.
+
+Twitter:
+        - large
+        - familiar to us
+        - very different from other sets
+        - many attributes
+        - text classification
+        - no real or integer attributes
+        - no missing values
+Annealing:
+        - different from twitter data set
+        - categorical, real and integer attributes
+        - few instances
+        - fewer attributes
+        - missing values
+Solar Flares:
+        - space!
+        - only categorical attributes
+Household Power Consumption:
+        - real values
+        - very large, yet few attributes
