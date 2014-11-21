@@ -18,9 +18,31 @@ from sklearn.svm import LinearSVC
 NEG = 0
 POS = 1
 
+CUTOFF_DEFAULT = 0.75
+CLASS_DEFAULT  = 'svm'
+NGRAM_DEFAULT  = 1
+FEAT_DEFAULT   = 'aes'
+TRAN_DEFAULT   = 'id'
+
 CLASSIFIERS = { 'bayes': NaiveBayesClassifier
               , 'svm':   SklearnClassifier(LinearSVC())
               }
+
+FEATURE_SELECTORS = { 'aes': lambda n: fs.AllFeatures(
+                                [ fs.NGram(fs.StopWordFilter(fs.AllWords()), n)
+                                , fs.Emoticons()
+                                ])
+                    , 'ae':  lambda n: fs.AllFeatures(
+                                [fs.NGram(fs.AllWords(), n), fs.Emoticons()])
+                    , 'a':   lambda n: fs.NGram(fs.AllWords(), n)
+                    , 'as':  lambda n: fs.NGram(fs.StopWordFilter(fs.AllWords()), n)
+                    }
+
+TRANSFORMERS = { 'id':    tr.IdentityTransformer()
+               , 'url':   tr.UrlTransformer()
+               , 'user':  tr.UserTransformer()
+               , 'mchar': tr.MulticharTransformer()
+               }
 
 class Classifier:
     def __init__(self, classifier, feature_selection, transformer, train_size):
@@ -160,22 +182,6 @@ def evaluate_features(positive, negative, load, save, cutoff,
 
     classifier.evaluate(trainSets)
 
-NGRAM_DEFAULT = 1
-
-FEAT_DEFAULT = 'aes'
-FEATURE_SELECTORS = { 'aes': lambda n: fs.AllFeatures([fs.NGram(fs.StopWordFilter(fs.AllWords()), n), fs.Emoticons()])
-                    , 'ae':  lambda n: fs.AllFeatures([fs.NGram(fs.AllWords(), n), fs.Emoticons()])
-                    , 'a':   lambda n: fs.NGram(fs.AllWords(), n)
-                    , 'as':  lambda n: fs.NGram(fs.StopWordFilter(fs.AllWords()), n)
-                    }
-
-TRAN_DEFAULT = 'id'
-TRANSFORMERS = { 'id':    tr.IdentityTransformer()
-               , 'url':   tr.UrlTransformer()
-               , 'user':  tr.UserTransformer()
-               , 'mchar': tr.MulticharTransformer()
-               }
-
 def usage():
     print("""USAGE: %s [-p positive_tweets] [-n negative_tweets] [-s classifier]
                        [-l classifier] [-c cutoff] [-f type] [-r type] [-t type]
@@ -198,17 +204,14 @@ def usage():
             ))
     sys.exit(1)
 
-# TODO: Since we now need to download nltk stopwords, mention this in the readme
-# or implement automatic downloading into a local dir within this script.
-
 if __name__ == '__main__':
     classifier_save = None
     classifier_load = None
 
     positive_file = 'sentiment.pos'
     negative_file = 'sentiment.neg'
-    cutoff = 0.75
-    raw_classifier = CLASSIFIERS['svm']
+    cutoff = CUTOFF_DEFAULT
+    raw_classifier = CLASSIFIERS[CLASS_DEFAULT]
     feature_selector = FEATURE_SELECTORS[FEAT_DEFAULT]
     ngram = NGRAM_DEFAULT
     transformers = [TRANSFORMERS[TRAN_DEFAULT]]
