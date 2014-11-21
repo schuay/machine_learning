@@ -47,8 +47,9 @@ ANNEALING_FEATURES = [
 
 class AnnealingInstance(classification_dataset.ClassificationInstanceI):
     def __init__(self, line):
-        #TODO: filter missing features ('?')
         ziplist = zip(ANNEALING_FEATURES, re.split(r',', line))
+        ziplist = filter(lambda (_,fv): fv != '?', ziplist)
+
         self.__features = dict(ziplist)
         self.__class = self.__features[ANNEALING_CLASS_FEATURE]
         del self.__features[ANNEALING_CLASS_FEATURE]
