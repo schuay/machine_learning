@@ -21,9 +21,6 @@ from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
 from sklearn.svm import LinearSVC
 
-NEG = 0
-POS = 1
-
 DSETS_DEFAULT  = 'twitter'
 CUTOFF_DEFAULT = 0.75
 CLASS_DEFAULT  = 'svm'
@@ -79,21 +76,26 @@ class Classifier:
 
     """Evaluates the classifier with the given data sets."""
     def evaluate(self, test_sets):
-        tuple_set = [ (x.features(), x.instance_class())
-                      for x in test_sets.instances()
-                    ]
-        referenceSets = { set() for x in test_sets.classes()]
+        class_ixs = { c: ix for ix, c in enumerate(test_sets.classes()) }
+
+        referenceSets = [set() for x in test_sets.classes()]
         referenceList = []
         testSets = [set() for x in test_sets.classes()]
         testList = []
 
         start = time.clock()
-        for i, (t, label) in enumerate(tuple_set):
-            referenceSets[label].add(i)
-            referenceList.append(label)
-            predicted = self.classify(t)
-            testSets[predicted].add(i)
-            testList.append(predicted)
+        for i, inst in enumerate(test_sets.instances()):
+            label = inst.instance_class()
+            label_ix = class_ixs[label]
+            referenceSets[label_ix].add(i)
+            referenceList.append(label_ix)
+
+            predicted = self.classify(inst.features())
+            predicted_ix = class_ixs[predicted]
+            testSets[predicted_ix].add(i)
+            testList.append(predicted_ix)
+
+            print("ACTUAL: %s, PREDICTED: %s FEATURES: %s" % (label, predicted, inst.features()))
         elapsed = time.clock() - start
 
         tuple_set = None
@@ -104,13 +106,14 @@ class Classifier:
         print 'classified evaluation set in %f seconds' % elapsed
         print 'accuracy:', nltk.metrics.accuracy(referenceList, testList)
 
+        for cl, ix in class_ixs.iteritems():
+            precision = nltk.metrics.precision(referenceSets[ix], testSets[ix])
+            recall = nltk.metrics.recall(referenceSets[ix], testSets[ix])
+            print '%s precision: %s' % (cl, precision)
+            print '%s recall: %s' % (cl, recall) 
+
         if test_sets.kind() == twitter.KIND_TWITTER:
             # TODO: Possibly extract this to function defined in dataset class.
-            print 'pos precision:', nltk.metrics.precision(referenceSets[POS], testSets[POS])
-            print 'pos recall:', nltk.metrics.recall(referenceSets[POS], testSets[POS])
-            print 'neg precision:', nltk.metrics.precision(referenceSets[NEG], testSets[NEG])
-            print 'neg recall:', nltk.metrics.recall(referenceSets[NEG], testSets[NEG])
-
             try:
                 print self.__nltk_classifier.show_most_informative_features(10)
             except AttributeError:
