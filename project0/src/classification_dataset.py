@@ -19,3 +19,7 @@ class ClassificationDatasetI:
     def name(self):
         """Returns the name of this dataset."""
         raise NotImplementedError("Please implement this yourself.")
+
+    def kind(self):
+        """Returns the kind of this dataset."""
+        raise NotImplementedError("Please implement this yourself.")

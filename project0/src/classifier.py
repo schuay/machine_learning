@@ -1,9 +1,12 @@
 #!/usr/bin/env python2
 
-import gc
-import math
 import cPickle as pickle
+import gc
+import getopt
+import math
+import nltk
 import re
+import sys
 import time
 
 import dataset_splitter as ds
@@ -16,7 +19,6 @@ import twitter
 
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
-from nltk.classify.util import apply_features
 from sklearn.svm import LinearSVC
 
 NEG = 0
@@ -70,21 +72,21 @@ class Classifier:
     individual tweets. Returns a classifier object trained on the given training sets."""
     @staticmethod
     def train(raw_classifier, training_sets):
-        training = []
-
-        tuple_set = [(x, cl) for cl in [POS, NEG]
-                             for x in training_sets[cl]]
-
+        tuple_set = [ (x.features(), x.instance_class())
+                      for x in training_sets.instances()
+                    ]
         return Classifier(raw_classifier.train(tuple_set), len(tuple_set))
 
     """Evaluates the classifier with the given data sets."""
     def evaluate(self, test_sets):
-        tuple_set = [(x, cl) for cl in [POS, NEG]
-                             for x in test_sets[cl]]
-        referenceSets = [set() for x in [POS, NEG]]
+        tuple_set = [ (x.features(), x.instance_class())
+                      for x in test_sets.instances()
+                    ]
+        referenceSets = { set() for x in test_sets.classes()]
         referenceList = []
-        testSets = [set() for x in [POS, NEG]]
+        testSets = [set() for x in test_sets.classes()]
         testList = []
+
         start = time.clock()
         for i, (t, label) in enumerate(tuple_set):
             referenceSets[label].add(i)
@@ -98,18 +100,21 @@ class Classifier:
         gc.collect()
 
         print 'train on %d instances, test on %d instances' % (self.__train_size,
-                sum(map(len, test_sets)))
+                len(test_sets.instances()))
         print 'classified evaluation set in %f seconds' % elapsed
         print 'accuracy:', nltk.metrics.accuracy(referenceList, testList)
-        print 'pos precision:', nltk.metrics.precision(referenceSets[POS], testSets[POS])
-        print 'pos recall:', nltk.metrics.recall(referenceSets[POS], testSets[POS])
-        print 'neg precision:', nltk.metrics.precision(referenceSets[NEG], testSets[NEG])
-        print 'neg recall:', nltk.metrics.recall(referenceSets[NEG], testSets[NEG])
 
-        try:
-            print self.__nltk_classifier.show_most_informative_features(10)
-        except AttributeError:
-            pass # Not all classifiers provide this function.
+        if test_sets.kind() == twitter.KIND_TWITTER:
+            # TODO: Possibly extract this to function defined in dataset class.
+            print 'pos precision:', nltk.metrics.precision(referenceSets[POS], testSets[POS])
+            print 'pos recall:', nltk.metrics.recall(referenceSets[POS], testSets[POS])
+            print 'neg precision:', nltk.metrics.precision(referenceSets[NEG], testSets[NEG])
+            print 'neg recall:', nltk.metrics.recall(referenceSets[NEG], testSets[NEG])
+
+            try:
+                print self.__nltk_classifier.show_most_informative_features(10)
+            except AttributeError:
+                pass # Not all classifiers provide this function.
 
 
     def classify(self, obj):
@@ -119,33 +124,15 @@ class Classifier:
         with open(filename, 'wb') as f:
             pickle.dump(self, f)
 
-import getopt
-import nltk
-import re
-import sys
-
 def evaluate_features(dataset, splitter, raw_classifier):
     dataset_tuples = splitter.split(dataset)
 
     for (train_set, test_set) in dataset_tuples:
         print 'training new classifier'
-
-        trainSets = [[], []]
-        trainSets[NEG] = [ i.features() for i in train_set.instances()
-                                   if i.instance_class() == NEG ]
-        trainSets[POS] = [ i.features() for i in train_set.instances()
-                                   if i.instance_class() == POS ]
-
-        classifier = Classifier.train(raw_classifier, trainSets);
+        classifier = Classifier.train(raw_classifier, train_set);
 
         print 'testing classifier...'
-
-        trainSets = [[], []]
-        trainSets[NEG] = [ i.features() for i in test_set.instances()
-                                   if i.instance_class() == NEG ]
-        trainSets[POS] = [ i.features() for i in test_set.instances()
-                                   if i.instance_class() == POS ]
-        classifier.evaluate(trainSets)
+        classifier.evaluate(test_set)
 
 def usage():
     print("""USAGE: %s [-d dataset] [-s classifier] [-f type] [-r type] [-t type]

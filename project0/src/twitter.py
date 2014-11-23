@@ -8,6 +8,8 @@ COMPRESSED_FILENAME = "Sentiment Analysis Dataset.csv"
 IX_CLASS = 1
 IX_TEXT  = 3
 
+KIND_TWITTER = cd.ClassificationDatasetI()
+
 # TODO: Possibly take a look at further filtering and preprocessing: quotes,
 # punctuation, etc.
 
@@ -61,6 +63,9 @@ class TwitterDataset(cd.ClassificationDatasetI):
 
     def name(self):
         return "twitter"
+
+    def kind(self):
+        return KIND_TWITTER
 
     def __filter_spam(self):
         PATTERN_SPAM1 = re.compile("Get 100 followers a day")

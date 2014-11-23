@@ -45,6 +45,8 @@ ANNEALING_FEATURES = [
     "class"
     ]
 
+KIND_ANNEALING = classification_dataset.ClassificationDatasetI()
+
 class AnnealingInstance(classification_dataset.ClassificationInstanceI):
     def __init__(self, line):
         ziplist = zip(ANNEALING_FEATURES, re.split(r',', line))
@@ -73,7 +75,10 @@ class AnnealingDataset(classification_dataset.ClassificationDatasetI):
         return self.__instances
 
     def name(self):
-        return "Annealing"
+        return "annealing"
+
+    def kind(self):
+        return KIND_ANNEALING
 
 if __name__ == '__main__':
     a = AnnealingDataset("../data/annealing/anneal.data")

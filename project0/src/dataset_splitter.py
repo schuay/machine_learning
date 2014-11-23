@@ -3,10 +3,11 @@ import math
 import classification_dataset
 
 class GenericDataset(classification_dataset.ClassificationDatasetI):
-    def __init__(self, classes, instances, name):
+    def __init__(self, classes, instances, name, kind):
         self.__classes = classes
         self.__instances = instances
         self.__name = name
+        self.__kind = kind
 
     def classes(self):
         return self.__classes
@@ -16,6 +17,9 @@ class GenericDataset(classification_dataset.ClassificationDatasetI):
 
     def name(self):
         return self.__name
+
+    def kind(self):
+        return self.__kind
 
 class DatasetSplitterI:
     def split(self, dataset):
@@ -30,7 +34,9 @@ class RatioSplitter(DatasetSplitterI):
         instances = ds.instances()
         cutoff = int(math.floor(len(instances) * self.__ratio))
 
-        trainDataset = GenericDataset(ds.classes(), instances[:cutoff], ds.name() + "_train")
-        testDataset = GenericDataset(ds.classes(), instances[cutoff:], ds.name() + "_test")
+        trainDataset = GenericDataset(ds.classes(), instances[:cutoff],
+                                      ds.name() + "_train", ds.kind())
+        testDataset = GenericDataset(ds.classes(), instances[cutoff:],
+                                     ds.name() + "_test", ds.kind())
 
         return [(trainDataset, testDataset)]
