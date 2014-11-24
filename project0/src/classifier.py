@@ -65,8 +65,7 @@ class Classifier:
         with open(filename, 'rb') as f:
             return pickle.load(f)
 
-    """Takes a dictionary with keys: POSITIVE/NEGATIVE, values: list of
-    individual tweets. Returns a classifier object trained on the given training sets."""
+    """Returns a classifier object trained on the given training sets."""
     @staticmethod
     def train(raw_classifier, training_sets):
         tuple_set = [ (x.features(), x.instance_class())
@@ -95,7 +94,6 @@ class Classifier:
             testSets[predicted_ix].add(i)
             testList.append(predicted_ix)
 
-            print("ACTUAL: %s, PREDICTED: %s FEATURES: %s" % (label, predicted, inst.features()))
         elapsed = time.clock() - start
 
         tuple_set = None
