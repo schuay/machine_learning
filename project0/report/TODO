@@ -20,3 +20,6 @@ Solar Flares:
 Household Power Consumption:
         - real values
         - very large, yet few attributes
+
+* try different train/eval splits, also splitting on features.
+* check effects of preprocessing.
