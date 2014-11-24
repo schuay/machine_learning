@@ -1,8 +1,8 @@
 import math
 
-import classification_dataset
+import classification_dataset as cd
 
-class GenericDataset(classification_dataset.ClassificationDatasetI):
+class GenericDataset(cd.ClassificationDatasetI):
     def __init__(self, classes, instances, name, kind):
         self.__classes = classes
         self.__instances = instances
