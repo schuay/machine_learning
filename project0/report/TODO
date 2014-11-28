@@ -21,5 +21,9 @@ Household Power Consumption:
         - real values
         - very large, yet few attributes
 
+	- days when added as weekdays (one feature per weekday) result in very bad predictions unless the training set contains more than a week
+
 * try different train/eval splits, also splitting on features.
 * check effects of preprocessing.
+* try random splits
+* deal with missing values (mean, random, nearest neighbor, remove sample)
