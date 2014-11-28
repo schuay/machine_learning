@@ -1,11 +1,13 @@
 \documentclass[a4paper,10pt]{article}
 
 \usepackage{amsmath}
-\usepackage{mathtools}
+\usepackage{booktabs}
 \usepackage{comment}
 \usepackage[pdfborder={0 0 0}]{hyperref}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
+\usepackage{mathtools}
+\usepackage{multirow}
 
 \lstset{
     language=Python,
@@ -24,14 +26,96 @@
 \author{Jakob Gruber, 0203440 \\
         Mino Sharkhawy, 1025887}
 
+\newcommand{\annealing}{\texttt{annealing}}
+\newcommand{\powerconsumption}{\texttt{power\_consumption}}
+\newcommand{\solarflares}{\texttt{solar\_flares}}
+\newcommand{\twitter}{\texttt{twitter}}
+
 \begin{document}
 
 \maketitle
 
-\section{Intraprozedurale Dominator-Analyse}
-\section{}
-\section{}
-\section{}
-\section{}
+\section{Introduction}
+
+This assignment consists of:
+
+\begin{itemize}
+\item picking a good, diverse selection of datasets,
+\item choosing several suitable classifier and regression techniques,
+\item analyzing the behavior of the latter when run on the former,
+\item while experimenting with different preprocessing techniques,
+\item and finally reporting on the results (you are feasting your eyes on this
+      artifact right now).
+\end{itemize}
+
+\section{Dataset Selection}
+
+When selecting our datasets, we selected mainly for diversity in dataset features:
+if one dataset had few instances, we preferred sets with a huge number of instances
+as the second selection; if one set had only categorical attributes, we tried to
+find a second set with integer and/or real attributes, etc. Finally, we also
+preferred datasets that simply sounded interesting.
+
+Our classification datasets are \annealing, a small dataset with a medium
+number of multivariate attributes and partially missing values which ties various
+attributes of the steel annealing process to the produced class of steel;
+and \twitter, a huge dataset of tweets in which we interpreted words (or combinations of words)
+as binary features. The purpose of the \twitter dataset is to predict the sentiment
+of a tweet, i.e. if the tweet carries a positive or negative emotion.
+Full disclosure: we have previously experimented on this dataset
+in the \emph{Advanced Internet Computing} lecture.
+
+Our regression datasets are \solarflares, with a medium number of both
+instances and categorical features, and predicts the number of solar flares in
+three potential classes. Finally, the \powerconsumption dataset contains
+a huge number of instances, and a low number of  attributes (with missing values).
+Some of the attributes are time-based, leading to interesting choices in preprocessing,
+while the others are real values.
+
+For further dataset details, see Figure \ref{fig:datasets}.
+
+\begin{comment}
+solar flares:
+* interesting since regression on categorical data
+
+powerconsumption:
+* coupled attributes -> reduce only to time. choice of preprocessing important.
+\end{comment}
+
+
+\begin{figure}[h]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\multirow{2}[4]{*}{Datasets} & \multicolumn{2}{c}{Classification} & \multicolumn{2}{c}{Regression} \\
+\cmidrule(l){2-3} \cmidrule(l){4-5}
+                & \twitter     & \annealing     & \solarflares   & \powerconsumption \\
+\midrule
+Nr. of samples  & Huge         & Medium         & Medium         & Huge              \\
+Nr. of features & Huge         & Medium         & Low            & Low               \\
+Feature types   & Binary       & Cat, Int, Real & Categorical    & Date, Real        \\
+Missing values  & No           & Yes            & No             & Yes               \\
+Preprocessing   & Beneficial   & TODO           & TODO           & TODO              \\
+Result set      & \{Pos, Neg\} & 6 classes      & $\text{Int}^3$ & $\text{Real}^3$   \\
+\bottomrule
+\end{tabular}
+\caption{Dataset details. Feature types are abbreviated as: Bin = binary, Cat = categorical, Int = integral. \label{fig:datasets}}
+\end{figure}
+
+\section{Classifier Selection}
+
+% TODO
+
+\section{Tools}
+
+% TODO
+
+\section{Preprocessing} % Maybe we can handle this in results?
+
+% TODO
+
+\section{Results}
+
+% TODO
 
 \end{document}
