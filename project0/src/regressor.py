@@ -13,7 +13,7 @@ import solar_flares as sf
 DSETS_DEFAULT  = 'solar_flares'
 CUTOFF_DEFAULT = 0.75
 
-DATASETS = { 'power_consumption': lambda mi: pc.PowerConsumption(
+DATASETS = { 'power_consumption': lambda mi: pc.PowerConsumptionDataset(
                     '../data/power_consumption/household_power_consumption.zip',
                     mi)
            , 'solar_flares': lambda mi: sf.SolarFlaresDataset(
