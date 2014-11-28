@@ -115,12 +115,10 @@ class Classifier:
             print '%s precision: %s' % (cl, precision)
             print '%s recall: %s' % (cl, recall) 
 
-        if test_sets.kind() == twitter.KIND_TWITTER:
-            # TODO: Possibly extract this to function defined in dataset class.
-            try:
-                print self.__nltk_classifier.show_most_informative_features(10)
-            except AttributeError:
-                pass # Not all classifiers provide this function.
+        try:
+            print self.__nltk_classifier.show_most_informative_features(10)
+        except AttributeError:
+            pass # Not all classifiers provide this function.
 
 
     def classify(self, obj):
