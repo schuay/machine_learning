@@ -33,10 +33,13 @@ class Regressor:
 
     """Evaluates the classifier with the given data sets."""
     def evaluate(self, test_sets):
+        squares = list()
         for inst in test_sets.instances():
             predictions = [ int(val) for val in self.__clf.predict(inst.x()) ]
             print("ACTUAL: %s PREDICTED: %s FEATURES: %s" %
                     (inst.y(), predictions, inst.x()))
+            squares.append([(y - py)**2 for y,py in zip(inst.y(), predictions)])
+        print map(lambda l: sum(l)/len(l), zip(*squares))
 
     def classify(self, obj):
         return self.__nltk_classifier.classify(obj)
