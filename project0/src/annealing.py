@@ -47,6 +47,7 @@ ANNEALING_FEATURES = [
 
 KIND_ANNEALING = classification_dataset.ClassificationDatasetI()
 
+# TODO: Float, int attributes, filter to most informative attributes.
 class AnnealingInstance(classification_dataset.ClassificationInstanceI):
     def __init__(self, line):
         ziplist = zip(ANNEALING_FEATURES, re.split(r',', line))
