@@ -26,6 +26,7 @@ CUTOFF_DEFAULT = 0.75
 CLASS_DEFAULT  = 'svm'
 NGRAM_DEFAULT  = 1
 FEAT_DEFAULT   = 'aes'
+SPLIT_DEFAULT  = 'ratio75'  
 TRAN_DEFAULT   = 'id'
 
 DATASETS = { 'twitter': lambda mi, fs, tr: twitter.TwitterDataset(
@@ -48,6 +49,10 @@ FEATURE_SELECTORS = { 'aes': lambda n: fs.AllFeatures(
                     , 'a':   lambda n: fs.NGram(fs.AllWords(), n)
                     , 'as':  lambda n: fs.NGram(fs.StopWordFilter(fs.AllWords()), n)
                     }
+
+SPLITTERS = { 'ratio75': ds.RatioSplitter(0.75)
+            , '10fold':  ds.CrossfoldSplitter(10)
+            }
 
 TRANSFORMERS = { 'id':    tr.IdentityTransformer()
                , 'url':   tr.UrlTransformer()
@@ -139,6 +144,7 @@ def usage():
     print("""USAGE: %s [-d dataset] [-s classifier] [-f type] [-r type] [-t type]
             -d  The dataset to use. One of 'twitter' (default), 'annealing'.
             -t  Selects the classifier type. One of 'bayes', 'svm' (default).
+            -s  Selects the splitter. One of 'ratio75' (default), '10fold'.
 
             Twitter:
             -c  Specifies the percentage of training tweets (default = 0.75).
@@ -164,9 +170,10 @@ if __name__ == '__main__':
     raw_classifier = CLASSIFIERS[CLASS_DEFAULT]
     feature_selector = FEATURE_SELECTORS[FEAT_DEFAULT]
     ngram = NGRAM_DEFAULT
+    splitter = SPLITTERS[SPLIT_DEFAULT]
     transformers = [TRANSFORMERS[TRAN_DEFAULT]]
 
-    opts, args = getopt.getopt(sys.argv[1:], "c:d:f:g:hr:t:")
+    opts, args = getopt.getopt(sys.argv[1:], "c:d:f:g:hr:s:t:")
     for o, a in opts:
         if o == "-d":
             if not a in DATASETS:
@@ -188,10 +195,13 @@ if __name__ == '__main__':
             if not a in TRANSFORMERS:
                 usage()
             transformers.append(TRANSFORMERS[a])
+        elif o == "-s":
+            if not a in SPLITTERS:
+                usage()
+            splitter = SPLITTERS[a]
         else:
             usage()
 
-    splitter = ds.RatioSplitter(0.75)
     feature_selector = feature_selector(ngram)
     evaluate_features( dataset_ctor(10000,
                                     feature_selector,

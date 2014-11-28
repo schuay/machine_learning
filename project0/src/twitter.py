@@ -61,6 +61,9 @@ class TwitterDataset(cd.ClassificationDatasetI):
     def instances(self):
         return self.__instances
 
+    def set_instances(self, instances):
+        self.__instances = instances
+
     def name(self):
         return "twitter"
 
