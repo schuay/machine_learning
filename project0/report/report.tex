@@ -108,7 +108,20 @@ Result set      & \{Pos, Neg\} & 6 classes      & $\text{Int}^3$ & $\text{Real}^
 
 \section{Tools}
 
-% TODO
+We based our experiments on the machine learning toolkit
+\verb|scikit-learn 0.15.2|\footnote{\url{http://scikit-learn.org/stable/}}
+in conjunction with the natural language toolkit
+\verb|nltk 3.0a4|\footnote{\url{http://www.nltk.org/}}.
+
+The entire application logic
+(loading, preprocessing, training, and evaluation) is written in Python, giving us
+maximal flexibility.
+
+Results were exported to CSV files, which were then used to generate graphs
+using R and the \verb|ggplot2|\footnote{\url{http://ggplot2.org/}} package.
+
+Obviously, this report was typeset in \LaTeX (and less obviously, integrated with
+R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Sweave/}}).
 
 \section{Preprocessing} % Maybe we can handle this in results?
 
