@@ -3,6 +3,78 @@ library(ggplot2)
 library(plyr)
 library(scales)
 
+plot_ratio_range_accuracy <- function(bayesfile, svmfile, knnfile) {
+    # install.packages(c("Rmisc", "ggplot2", "plyr"))
+
+    figfile <- "fig.eps"
+
+    dfb <- read.csv(bayesfile)
+    dfs <- read.csv(svmfile)
+    dfk <- read.csv(knnfile)
+
+    df <- rbind(dfb, dfs, dfk)
+
+    df$ratio <- df$train_size / (df$train_size + df$eval_size)
+
+    # Line graph.
+
+    p <- ggplot(df, aes(x = ratio, y = accuracy, color = classifier, shape = classifier)) +
+                geom_line() +
+                ylab("accuracy") +
+                xlab("training-evaluation ratio") +
+                scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+    # Themes
+                theme_bw() +
+                theme(axis.text = element_text(size = 14),
+                      axis.title = element_text(size = 16),
+                      legend.text = element_text(size = 16),
+                      legend.title = element_text(size = 18),
+                      legend.position = c(1, 0.3),
+                      legend.justification = c(1, 1),
+                      legend.background = element_rect(fill = alpha("black", 0)))
+
+    postscript(file = figfile, paper = "special", width = 10, height = 5, horizontal = FALSE)
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+}
+
+plot_ratio_range_size <- function(bayesfile, svmfile, knnfile) {
+    # install.packages(c("Rmisc", "ggplot2", "plyr"))
+
+    figfile <- "fig2.eps"
+
+    dfb <- read.csv(bayesfile)
+    dfs <- read.csv(svmfile)
+    dfk <- read.csv(knnfile)
+
+    df <- rbind(dfb, dfs, dfk)
+
+    df$ratio <- df$train_size / (df$train_size + df$eval_size)
+
+    # Line graph.
+
+    p <- ggplot(df, aes(x = ratio, y = classifier_size, color = classifier, shape = classifier)) +
+                geom_line() +
+                ylab("classifier size (bytes)") +
+                xlab("training-evaluation ratio") +
+                scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+    # Themes
+                theme_bw() +
+                theme(axis.text = element_text(size = 14),
+                      axis.title = element_text(size = 16),
+                      legend.text = element_text(size = 16),
+                      legend.title = element_text(size = 18),
+                      legend.position = c(1, 0.3),
+                      legend.justification = c(1, 1),
+                      legend.background = element_rect(fill = alpha("black", 0)))
+
+    postscript(file = figfile, paper = "special", width = 10, height = 5, horizontal = FALSE)
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+}
+
 pqplot <- function(csvfile) {
     # install.packages(c("Rmisc", "ggplot2", "plyr"))
 

@@ -142,8 +142,8 @@ R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Swe
 
 \subsection{\annealing}
 
-Evaluation of the \annealing dataset yielded very good results in all circumstances, even
-(and surprisingly, \emph{especially}) without preprocessing.
+Evaluation of the \annealing dataset yielded very good results in all circumstances,
+even without preprocessing.
 
 \begin{figure}[ht]
 \centering
@@ -153,15 +153,64 @@ Classifier & Train. Time (s) & Eval. Time (s) & Accuracy \\
 \midrule
 Bayes (\ratiostd) & 0.0077 & 0.026 & 0.95 \\
 SVM (\ratiostd)   & 0.0224 & 0.024 & 1.0  \\
-Bayes (\tenfold) & 0.0091 & 0.011 & 0.96 \\
-SVM (\tenfold)   & 0.0263 & 0.01 & 1.0  \\
+KNN (\ratiostd)   & 0.016  & 0.143 & 0.97 \\
+Bayes (\tenfold)  & 0.0091 & 0.011 & 0.96 \\
+SVM (\tenfold)    & 0.0263 & 0.01  & 1.0  \\
+KNN (\tenfold)    & 0.0182 & 0.058 & 0.97 \\
 \bottomrule
 \end{tabular}
-\caption{General results for the \annealing dataset. Cross-validation results are averaged over all
+\caption{General results for the \annealing dataset without preprocessing. All instance attributes are
+         treated as strings. Cross-validation results are averaged over all
          partitions. \label{fig:results_annealing_summary}}
 \end{figure}
 
-Figure \ref{fig:results_annealing_summary} gives an overview of % TODO.
+Our main results were obtained entirely
+without preprocessing: all instance attributes (even real-valued ones such as length or thickness)
+were treated as strings, and missing values were simply omitted. Conversion of real-valued attributes
+to \lstinline|float| yielded no change in the Bayes classifier (since Bayes does not
+distinguish between continuous and categorical data), and resulted in a degradation of accuracy of
+between 10\% (KNN) and 20\% (SVM). Subsequent normalization of large real-valued attributes such as
+length and width negated this effect, and caused the accuracy of both KNN and SVM classifiers to
+return to their previous state as shown in Figure \ref{fig:results_annealing_summary}. Replacing missing
+values by a dedicated value resulted in a degradation of 3\% for the Bayes classifier, and negligible
+changes for SVM and KNN. We thus decided
+to perform the remaining experiments without preprocessing, since results seemed optimal and the pipeline
+was simpler.
+
+Figure \ref{fig:results_annealing_summary} gives an overview of classifier performance and accuracy
+for both a 75-25\% split between training and evaluation data, and using 10-fold cross-validation.
+Accuracy is surprisingly high for in all cases, with all classifiers predicting at least 95\% of all
+evaluation instances correctly. The SVM classifier in particular predicts optimally without making a
+single mistake.
+
+Furthermore, it stands out, that:
+
+\begin{itemize}
+\item the Bayes classifier is time-efficient both in training and classification,
+\item and that the SVM is very time-intensive.
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{ccc}
+\toprule
+Bayes & SVM & KNN \\
+\midrule
+24576 & 69632 & 1011712 \\
+\bottomrule
+\end{tabular}
+\caption{Trained classifier sizes in bytes for the \annealing dataset.
+         \label{fig:results_annealing_sizes}}
+\end{figure}
+
+We attempted to determine the space required by the different classifiers by using the python serialization
+module \lstinline|cPickle|, pickling the trained classifiers, and finally determining the produced file's
+size. The results are displayed in Figure \ref{fig:results_annealing_sizes}. In this case, it is especially
+notable that the KNN classifier is larger than the others by over a factor of $14$. It is also somewhat
+surprising that SVM is larger than Bayes, since we clearly obtained the opposite result on the \twitter
+dataset, in which SVM offered a significant size advantage. Figure \ref{fig:results_annealing_split_size}
+reveals that the size of the KNN classifier grows linearly with the number of training instances, while
+SVM and Bayes have much lower growth rates.
 
 \begin{figure}[ht]
 \centering
@@ -178,8 +227,56 @@ U & 5 & 0.45 & 1.0 \\
 \bottomrule
 \end{tabular}
 \caption{Precision and recall results for the \annealing dataset, using the Bayes classifier and
-         \ratiostd partitioning. \label{fig:results_annealing_per_class}}
+         \ratiostd partitioning. Class sizes are given as the number of instances of a particular class
+         within the evaluation set. \label{fig:results_annealing_per_class}}
 \end{figure}
+
+Figure \ref{fig:results_annealing_per_class} shows precision and recall statistics for a particular
+execution of the Bayes classifier. Class 3 is the most common by far, and is predicted very accurately.
+Classes 1 and 4 do not appear at all in this selection of evaluation instances, and the smallest class
+U exhibits poor precision, i.e. over half of the instances classified as U are predicted incorrectly.
+
+Finally, since all classifiers were overwhelmingly positive, we experimented with altering the ratio
+of training to evaluation instances. Figures \ref{fig:results_annealing_split_accuracy} and
+\ref{fig:results_annealing_split_size} show, respectively, the produced accuracy
+and classifier sizes of the SVM, KNN, and Bayes classifiers given a certain training-evaluation ratio
+ranging from 5\% to 95\%. SVM is the clear winner in this dataset, rising to 98\% accuracy for
+training-evaluation ratios as low as 15\% (i.e. training on around 120 instances). SVM reaches
+100\% accuracy at a ratio of 37\%, while both Bayes and KNN keep improving slowly with rising
+ratios.
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_accuracy("../results/annealing_bayes_ratiorange.csv",
+                          "../results/annealing_svm_ratiorange.csv",
+                          "../results/annealing_knn_ratiorange.csv")
+@
+\caption{Classifier accuracy for varying training-evaluation ratios.
+         \label{fig:results_annealing_split_accuracy}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_size("../results/annealing_bayes_ratiorange.csv",
+                      "../results/annealing_svm_ratiorange.csv",
+                      "../results/annealing_knn_ratiorange.csv")
+@
+\caption{Classifier sizes for varying training-evaluation ratios.
+         \label{fig:results_annealing_split_size}}
+\end{figure}
+
+The \annealing dataset is obviously very well suited to classification using machine learning and produces
+exceptional accuracy even with a low number of training instances. The data is skewed heavily towards
+a single class, with 75\% of all instances belonging to class 3 (and, for example, none to class 4).
+We assume that this is a large part of the reason why our classifiers perform so well; in fact, a naive classifier
+that simply predicts class 3 every time would also have 75\% accuracy. It was especially instructive
+to see the different behaviors of the classifiers both in training and evaluation times, and in
+the size of the produced files. Normalization of real-valued attributes also had a larger than expected
+effect on the classifier accuracy.
 
 \subsection{\powerconsumption}
 
