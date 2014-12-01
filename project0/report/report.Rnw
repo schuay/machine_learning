@@ -52,6 +52,8 @@ This assignment consists of:
       artifact right now).
 \end{itemize}
 
+% --------------------------------------------------------------------------------------------------
+
 \section{Dataset Selection}
 
 When selecting our datasets, we selected mainly for diversity in dataset features:
@@ -110,6 +112,8 @@ Result set      & \{Pos, Neg\} & 6 classes      & $\text{Int}^3$ & $\text{Real}^
 
 % TODO
 
+% --------------------------------------------------------------------------------------------------
+
 \section{Tools}
 
 We based our experiments on the machine learning toolkit
@@ -127,18 +131,48 @@ using R and the \verb|ggplot2|\footnote{\url{http://ggplot2.org/}} package.
 Obviously, this report was typeset in \LaTeX (and less obviously, integrated with
 R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Sweave/}}).
 
-\section{Preprocessing} % Maybe we can handle this in results?
-
-% TODO
+% --------------------------------------------------------------------------------------------------
 
 \section{Results}
 
 % TODO: Describe our general toolchain and how to reproduce our experiments.
+% TODO: Describe benching machine specs.
+% TODO: Define \tenfold and \ratiostd.
 
 \subsection{\twitter}
 
-% TODO
-% TODO Define \tenfold and \ratiostd.
+The \twitter dataset is very large in several respects; it not only contains over 1.5 million
+tweets, but by it's very nature has a huge number of feature (at least one per mentioned word).
+Employed alternative feature selection methods such as n-grams, which map each occurring combination
+words of length $\leq n$ to a feature, quickly increases the number of features into infeasable areas.
+Memory and CPU time constraints definitely limit the kinds of experiments which can be conducted
+with this type of dataset.
+
+We employed various methods of preprocessing and feature selection on this dataset:
+
+\begin{itemize}
+\item Spam filtering: \twitter contains a large number of nearly identical spam tweets, which we
+      simply remove at the beginning of the pipeline.
+\item Stopword filtering: Many words of the english language such as 'me', 'you', 'it', 'or',
+      etc., occur frequently but do not contribute any sentiment. Such so called stopwords are removed
+      to decrease the size of the feature set. It is however important that common words which \emph{do}
+      carry sentiment ('no', 'very', 'but').
+\item Emoticon selection: Selection of all emoticons as features.
+\item N-gram selection: Selection of all combination of words of length $\leq n$ as features. N-grams
+      enable handling of phrases such as 'not good', which obviously carries more accurate meaning
+      than both words separately.
+\item URL and user transformers: URLs and usernames are presumed not to carry sentiment. This transformation
+      replaces all such occurrences with a single feature.
+\item Multicharacter normalization: In informal settings such as Twitter, words are often emphasized
+      by repeating letters (i.e. "I'm feeling goooood"). Multicharacter normalization replaces all
+      sequences of more than two repeated characters with exactly two of that character in order to
+      shrink the feature set.
+\end{itemize}
+
+Feature selection results in a specific feature set, all of which may take the integer values 0 or 1
+(one can alternatively see them as booleans).
+
+% --------------------------------------------------------------------------------------------------
 
 \subsection{\annealing}
 
@@ -199,7 +233,7 @@ Bayes & SVM & KNN \\
 24576 & 69632 & 1011712 \\
 \bottomrule
 \end{tabular}
-\caption{Trained classifier sizes in bytes for the \annealing dataset.
+\caption{Trained classifier sizes in bytes for the \annealing dataset and a training-evaluation ratio of 75\%.
          \label{fig:results_annealing_sizes}}
 \end{figure}
 
@@ -210,7 +244,7 @@ notable that the KNN classifier is larger than the others by over a factor of $1
 surprising that SVM is larger than Bayes, since we clearly obtained the opposite result on the \twitter
 dataset, in which SVM offered a significant size advantage. Figure \ref{fig:results_annealing_split_size}
 reveals that the size of the KNN classifier grows linearly with the number of training instances, while
-SVM and Bayes have much lower growth rates.
+SVM and Bayes classifiers stayed more or less at a constant size.
 
 \begin{figure}[ht]
 \centering
@@ -253,7 +287,7 @@ plot_ratio_range_accuracy("../results/annealing_bayes_ratiorange.csv",
                           "../results/annealing_svm_ratiorange.csv",
                           "../results/annealing_knn_ratiorange.csv")
 @
-\caption{Classifier accuracy for varying training-evaluation ratios.
+\caption{Classifier accuracy for varying training-evaluation ratios on the \annealing dataset.
          \label{fig:results_annealing_split_accuracy}}
 \end{figure}
 
@@ -265,7 +299,7 @@ plot_ratio_range_size("../results/annealing_bayes_ratiorange.csv",
                       "../results/annealing_svm_ratiorange.csv",
                       "../results/annealing_knn_ratiorange.csv")
 @
-\caption{Classifier sizes for varying training-evaluation ratios.
+\caption{Classifier sizes for varying training-evaluation ratios on the \annealing dataset.
          \label{fig:results_annealing_split_size}}
 \end{figure}
 
@@ -278,9 +312,13 @@ to see the different behaviors of the classifiers both in training and evaluatio
 the size of the produced files. Normalization of real-valued attributes also had a larger than expected
 effect on the classifier accuracy.
 
+% --------------------------------------------------------------------------------------------------
+
 \subsection{\powerconsumption}
 
 % TODO
+
+% --------------------------------------------------------------------------------------------------
 
 \subsection{\solarflares}
 
