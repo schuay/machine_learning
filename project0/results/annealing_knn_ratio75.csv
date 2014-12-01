@@ -1,0 +1,7 @@
+dataset,classifier,splitter,train_size,train_time,eval_size,eval_time,accuracy,class,class_size,precision,recall
+annealing,knn,ratio75,598,0.01559,200,0.14273,0.975,1,0,,
+annealing,knn,ratio75,598,0.01559,200,0.14273,0.975,3,155,0.9807692307692307,0.9870967741935484
+annealing,knn,ratio75,598,0.01559,200,0.14273,0.975,2,23,0.9545454545454546,0.9130434782608695
+annealing,knn,ratio75,598,0.01559,200,0.14273,0.975,U,5,0.8,0.8
+annealing,knn,ratio75,598,0.01559,200,0.14273,0.975,4,0,,
+annealing,knn,ratio75,598,0.01559,200,0.14273,0.975,5,17,1.0,1.0
