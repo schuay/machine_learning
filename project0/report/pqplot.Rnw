@@ -20,13 +20,15 @@ plot_ratio_range_accuracy <- function(bayesfile, svmfile, knnfile) {
 
     p <- ggplot(df, aes(x = ratio, y = accuracy, color = classifier, shape = classifier)) +
                 geom_line() +
-                ylab("accuracy") +
-                xlab("training-evaluation ratio") +
+                ylab("Accuracy") +
+                xlab("Training-evaluation ratio") +
                 scale_x_continuous(breaks = pretty_breaks(n = 10)) +
     # Themes
                 theme_bw() +
                 theme(axis.text = element_text(size = 14),
                       axis.title = element_text(size = 16),
+                      axis.title.x = element_text(vjust=-0.2),
+                      axis.title.y = element_text(vjust=1),
                       legend.text = element_text(size = 16),
                       legend.title = element_text(size = 18),
                       legend.position = c(1, 0.3),
@@ -56,13 +58,15 @@ plot_ratio_range_size <- function(bayesfile, svmfile, knnfile) {
 
     p <- ggplot(df, aes(x = ratio, y = classifier_size, color = classifier, shape = classifier)) +
                 geom_line() +
-                ylab("classifier size (bytes)") +
-                xlab("training-evaluation ratio") +
+                ylab("Classifier size (bytes)") +
+                xlab("Training-evaluation ratio") +
                 scale_x_continuous(breaks = pretty_breaks(n = 10)) +
     # Themes
                 theme_bw() +
                 theme(axis.text = element_text(size = 14),
                       axis.title = element_text(size = 16),
+                      axis.title.x = element_text(vjust=-0.2),
+                      axis.title.y = element_text(vjust=1),
                       legend.text = element_text(size = 16),
                       legend.title = element_text(size = 18),
                       legend.position = c(1, 0.3),
@@ -107,6 +111,8 @@ pqplot <- function(csvfile) {
                 theme_bw() +
                 theme(axis.text = element_text(size = 16),
                       axis.title = element_text(size = 18),
+                      axis.title.x = element_text(vjust=-0.2),
+                      axis.title.y = element_text(vjust=1),
                       legend.text = element_text(size = 16),
                       legend.title = element_text(size = 18),
                       legend.position = c(1, 1),
