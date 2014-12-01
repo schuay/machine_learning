@@ -6,8 +6,10 @@ import gc
 import getopt
 import math
 import nltk
+import os
 import re
 import sys
+import tempfile
 import time
 
 import dataset_splitter as ds
@@ -24,7 +26,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC
 
 DSETS_DEFAULT  = 'twitter'
-CUTOFF_DEFAULT = 0.75
 CLASS_DEFAULT  = 'svm'
 NGRAM_DEFAULT  = 1
 FEAT_DEFAULT   = 'aes'
@@ -84,6 +85,7 @@ class ClassifierWriter:
                                        , "train_time"
                                        , "eval_size"
                                        , "eval_time"
+                                       , "classifier_size"
                                        , "accuracy"
                                        , "class"
                                        , "class_size"
@@ -94,8 +96,8 @@ class ClassifierWriter:
     def writeheader(self):
         self.__writer.writeheader()
 
-    def writerow(self, train_size, train_time, eval_size, eval_time, accuracy,
-                 cls, cls_size, precision, recall):
+    def writerow(self, train_size, train_time, eval_size, eval_time,
+                 classifier_size, accuracy, cls, cls_size, precision, recall):
         self.__writer.writerow({ "dataset": options.dataset
                                , "classifier": options.classifier
                                , "splitter": options.splitter
@@ -103,6 +105,7 @@ class ClassifierWriter:
                                , "train_time": train_time
                                , "eval_size": eval_size
                                , "eval_time": eval_time
+                               , "classifier_size": classifier_size
                                , "accuracy": accuracy
                                , "class": cls
                                , "class_size": cls_size
@@ -161,6 +164,10 @@ class Classifier:
         tuple_set = None
         gc.collect()
 
+        with tempfile.NamedTemporaryFile() as f:
+            pickle.dump(self, f)
+            classifier_size = os.stat(f.name).st_size
+
         accuracy = nltk.metrics.accuracy(referenceList, testList)
 
         for cl, ix in class_ixs.iteritems():
@@ -170,6 +177,7 @@ class Classifier:
                             round(self.__train_time, 5),
                             len(test_sets.instances()),
                             round(elapsed, 5),
+                            classifier_size,
                             round(accuracy, 5),
                             cl,
                             len(referenceSets[ix]),
