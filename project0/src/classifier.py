@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 import cPickle as pickle
+import csv
 import gc
 import getopt
 import math
@@ -60,10 +61,59 @@ TRANSFORMERS = { 'id':    tr.IdentityTransformer()
                , 'mchar': tr.MulticharTransformer()
                }
 
+class Opts:
+    dataset = DSETS_DEFAULT
+    classifier = CLASS_DEFAULT
+    feature_selector = FEAT_DEFAULT
+    ngram = NGRAM_DEFAULT
+    splitter = SPLIT_DEFAULT
+    transformers = [TRAN_DEFAULT]
+    verbose = False
+
+options = Opts()
+
+class ClassifierWriter:
+    def __init__(self):
+        self.__writer = csv.DictWriter(sys.stdout,
+                                       [ "dataset"
+                                       , "classifier"
+                                       , "splitter"
+                                       , "train_size"
+                                       , "train_time"
+                                       , "eval_size"
+                                       , "eval_time"
+                                       , "accuracy"
+                                       , "class"
+                                       , "class_size"
+                                       , "precision"
+                                       , "recall"
+                                       ])
+
+    def writeheader(self):
+        self.__writer.writeheader()
+
+    def writerow(self, train_size, train_time, eval_size, eval_time, accuracy,
+                 cls, cls_size, precision, recall):
+        self.__writer.writerow({ "dataset": options.dataset
+                               , "classifier": options.classifier
+                               , "splitter": options.splitter
+                               , "train_size": train_size
+                               , "train_time": train_time
+                               , "eval_size": eval_size
+                               , "eval_time": eval_time
+                               , "accuracy": accuracy
+                               , "class": cls
+                               , "class_size": cls_size
+                               , "precision": precision
+                               , "recall": recall
+                               })
+
+
 class Classifier:
-    def __init__(self, classifier, train_size):
+    def __init__(self, classifier, train_size, train_time):
         self.__nltk_classifier = classifier
         self.__train_size = train_size
+        self.__train_time = train_time
 
     @staticmethod
     def load(filename):
@@ -76,10 +126,15 @@ class Classifier:
         tuple_set = [ (x.features(), x.instance_class())
                       for x in training_sets.instances()
                     ]
-        return Classifier(raw_classifier.train(tuple_set), len(tuple_set))
+
+        start = time.clock()
+        trained_classifier = raw_classifier.train(tuple_set)
+        elapsed = time.clock() - start
+
+        return Classifier(trained_classifier, len(tuple_set), elapsed)
 
     """Evaluates the classifier with the given data sets."""
-    def evaluate(self, test_sets):
+    def evaluate(self, test_sets, writer):
         class_ixs = { c: ix for ix, c in enumerate(test_sets.classes()) }
 
         referenceSets = [set() for x in test_sets.classes()]
@@ -104,21 +159,26 @@ class Classifier:
         tuple_set = None
         gc.collect()
 
-        print 'train on %d instances, test on %d instances' % (self.__train_size,
-                len(test_sets.instances()))
-        print 'classified evaluation set in %f seconds' % elapsed
-        print 'accuracy:', nltk.metrics.accuracy(referenceList, testList)
+        accuracy = nltk.metrics.accuracy(referenceList, testList)
 
         for cl, ix in class_ixs.iteritems():
             precision = nltk.metrics.precision(referenceSets[ix], testSets[ix])
             recall = nltk.metrics.recall(referenceSets[ix], testSets[ix])
-            print '%s precision: %s' % (cl, precision)
-            print '%s recall: %s' % (cl, recall) 
+            writer.writerow(self.__train_size,
+                            round(self.__train_time, 5),
+                            len(test_sets.instances()),
+                            round(elapsed, 5),
+                            round(accuracy, 5),
+                            cl,
+                            len(referenceSets[ix]),
+                            precision,
+                            recall)
 
-        try:
-            print self.__nltk_classifier.show_most_informative_features(10)
-        except AttributeError:
-            pass # Not all classifiers provide this function.
+        if options.verbose:
+            try:
+                print self.__nltk_classifier.show_most_informative_features(10)
+            except AttributeError:
+                pass # Not all classifiers provide this function.
 
 
     def classify(self, obj):
@@ -131,21 +191,21 @@ class Classifier:
 def evaluate_features(dataset, splitter, raw_classifier):
     dataset_tuples = splitter.split(dataset)
 
-    for (train_set, test_set) in dataset_tuples:
-        print 'training new classifier'
-        classifier = Classifier.train(raw_classifier, train_set);
+    writer = ClassifierWriter()
+    writer.writeheader()
 
-        print 'testing classifier...'
-        classifier.evaluate(test_set)
+    for (train_set, test_set) in dataset_tuples:
+        classifier = Classifier.train(raw_classifier, train_set);
+        classifier.evaluate(test_set, writer)
 
 def usage():
     print("""USAGE: %s [-d dataset] [-s classifier] [-f type] [-r type] [-t type]
             -d  The dataset to use. One of 'twitter' (default), 'annealing'.
-            -t  Selects the classifier type. One of 'bayes', 'svm' (default).
             -s  Selects the splitter. One of 'ratio75' (default), '10fold'.
+            -t  Selects the classifier type. One of 'bayes', 'svm' (default).
+            -v  Verbose output.
 
             Twitter:
-            -c  Specifies the percentage of training tweets (default = 0.75).
             -f  Selects the feature selector. One of %s (default = '%s').
             -g  Specifies the n for the n-gram feature selector. Can be any positive integer (default = '%s').
             -r  Enables the given transformer. Can be passed multiple times.
@@ -163,42 +223,41 @@ def usage():
     sys.exit(1)
 
 if __name__ == '__main__':
-    dataset_ctor = DATASETS[DSETS_DEFAULT]
-    cutoff = CUTOFF_DEFAULT
-    raw_classifier = CLASSIFIERS[CLASS_DEFAULT]
-    feature_selector = FEATURE_SELECTORS[FEAT_DEFAULT]
-    ngram = NGRAM_DEFAULT
-    splitter = SPLITTERS[SPLIT_DEFAULT]
-    transformers = [TRANSFORMERS[TRAN_DEFAULT]]
-
-    opts, args = getopt.getopt(sys.argv[1:], "c:d:f:g:hr:s:t:")
+    opts, args = getopt.getopt(sys.argv[1:], "d:f:g:hr:s:t:v")
     for o, a in opts:
         if o == "-d":
             if not a in DATASETS:
                 usage()
-            dataset_ctor = DATASETS[a]
-        elif o == "-c":
-            cutoff = float(a)
-        elif o == "-t":
-            if not a in CLASSIFIERS:
-                usage()
-            raw_classifier = CLASSIFIERS[a]
+            options.dataset = a
         elif o == "-f":
             if not a in FEATURE_SELECTORS:
                 usage()
-            feature_selector = FEATURE_SELECTORS[a]
+            options.feature_selector = a
         elif o == "-g":
-            ngram = int(a)
+            options.ngram = int(a)
         elif o == "-r":
             if not a in TRANSFORMERS:
                 usage()
-            transformers.append(TRANSFORMERS[a])
+            options.transformers.append(a)
         elif o == "-s":
             if not a in SPLITTERS:
                 usage()
-            splitter = SPLITTERS[a]
+            options.splitter = a
+        elif o == "-t":
+            if not a in CLASSIFIERS:
+                usage()
+            options.classifier = a
+        elif o == "-v":
+            options.verbose = True
         else:
             usage()
+
+    dataset_ctor = DATASETS[options.dataset]
+    raw_classifier = CLASSIFIERS[options.classifier]
+    feature_selector = FEATURE_SELECTORS[options.feature_selector]
+    ngram = options.ngram
+    splitter = SPLITTERS[options.splitter]
+    transformers = [TRANSFORMERS[tran] for tran in options.transformers]
 
     feature_selector = feature_selector(ngram)
     evaluate_features( dataset_ctor(10000,
