@@ -1,0 +1,7 @@
+dataset,classifier,splitter,train_size,train_time,eval_size,eval_time,accuracy,class,class_size,precision,recall
+annealing,svm,ratio75,598,0.02237,200,0.02443,1.0,1,0,,
+annealing,svm,ratio75,598,0.02237,200,0.02443,1.0,3,155,1.0,1.0
+annealing,svm,ratio75,598,0.02237,200,0.02443,1.0,2,23,1.0,1.0
+annealing,svm,ratio75,598,0.02237,200,0.02443,1.0,U,5,1.0,1.0
+annealing,svm,ratio75,598,0.02237,200,0.02443,1.0,4,0,,
+annealing,svm,ratio75,598,0.02237,200,0.02443,1.0,5,17,1.0,1.0

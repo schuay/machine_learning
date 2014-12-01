@@ -1,0 +1,7 @@
+dataset,classifier,splitter,train_size,train_time,eval_size,eval_time,accuracy,class,class_size,precision,recall
+annealing,bayes,ratio75,598,0.00765,200,0.02591,0.945,1,0,,
+annealing,bayes,ratio75,598,0.00765,200,0.02591,0.945,3,155,0.9675324675324676,0.9612903225806452
+annealing,bayes,ratio75,598,0.00765,200,0.02591,0.945,2,23,1.0,0.782608695652174
+annealing,bayes,ratio75,598,0.00765,200,0.02591,0.945,U,5,0.45454545454545453,1.0
+annealing,bayes,ratio75,598,0.00765,200,0.02591,0.945,4,0,,
+annealing,bayes,ratio75,598,0.00765,200,0.02591,0.945,5,17,1.0,1.0
