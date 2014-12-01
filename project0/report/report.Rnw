@@ -8,6 +8,7 @@
 \usepackage{listings}
 \usepackage{mathtools}
 \usepackage{multirow}
+\usepackage{xspace}
 
 \lstset{
     language=Python,
@@ -26,10 +27,13 @@
 \author{Jakob Gruber, 0203440 \\
         Mino Sharkhawy, 1025887}
 
-\newcommand{\annealing}{\texttt{annealing}}
-\newcommand{\powerconsumption}{\texttt{power\_consumption}}
-\newcommand{\solarflares}{\texttt{solar\_flares}}
-\newcommand{\twitter}{\texttt{twitter}}
+\newcommand{\annealing}{\texttt{annealing}\xspace}
+\newcommand{\powerconsumption}{\texttt{power\_consumption}\xspace}
+\newcommand{\solarflares}{\texttt{solar\_flares}\xspace}
+\newcommand{\twitter}{\texttt{twitter}\xspace}
+
+\newcommand{\tenfold}{\texttt{10fold}\xspace}
+\newcommand{\ratiostd}{\texttt{ratio75}\xspace}
 
 \begin{document}
 
@@ -128,6 +132,60 @@ R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Swe
 % TODO
 
 \section{Results}
+
+% TODO: Describe our general toolchain and how to reproduce our experiments.
+
+\subsection{\twitter}
+
+% TODO
+% TODO Define \tenfold and \ratiostd.
+
+\subsection{\annealing}
+
+Evaluation of the \annealing dataset yielded very good results in all circumstances, even
+(and surprisingly, \emph{especially}) without preprocessing.
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Classifier & Train. Time (s) & Eval. Time (s) & Accuracy \\
+\midrule
+Bayes (\ratiostd) & 0.0077 & 0.026 & 0.95 \\
+SVM (\ratiostd)   & 0.0224 & 0.024 & 1.0  \\
+Bayes (\tenfold) & 0.0091 & 0.011 & 0.96 \\
+SVM (\tenfold)   & 0.0263 & 0.01 & 1.0  \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \annealing dataset. Cross-validation results are averaged over all
+         partitions. \label{fig:results_annealing_summary}}
+\end{figure}
+
+Figure \ref{fig:results_annealing_summary} gives an overview of % TODO.
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Class & Class Size & Precision & Recall \\
+\midrule
+1 & 0 & N/A & N/A \\
+2 & 23 & 1.0 & 0.78 \\
+3 & 155 & 0.97 & 0.96 \\
+4 & 0 & N/A & N/A \\
+5 & 17 & 1.0 & 1.0 \\
+U & 5 & 0.45 & 1.0 \\
+\bottomrule
+\end{tabular}
+\caption{Precision and recall results for the \annealing dataset, using the Bayes classifier and
+         \ratiostd partitioning. \label{fig:results_annealing_per_class}}
+\end{figure}
+
+\subsection{\powerconsumption}
+
+% TODO
+
+\subsection{\solarflares}
 
 % TODO
 
