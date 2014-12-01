@@ -20,6 +20,7 @@ import twitter
 
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC
 
 DSETS_DEFAULT  = 'twitter'
@@ -38,6 +39,7 @@ DATASETS = { 'twitter': lambda mi, fs, tr: twitter.TwitterDataset(
            }
 
 CLASSIFIERS = { 'bayes': NaiveBayesClassifier
+              , 'knn':   SklearnClassifier(KNeighborsClassifier())
               , 'svm':   SklearnClassifier(LinearSVC())
               }
 
@@ -202,7 +204,7 @@ def usage():
     print("""USAGE: %s [-d dataset] [-s classifier] [-f type] [-r type] [-t type]
             -d  The dataset to use. One of 'twitter' (default), 'annealing'.
             -s  Selects the splitter. One of 'ratio75' (default), '10fold'.
-            -t  Selects the classifier type. One of 'bayes', 'svm' (default).
+            -t  Selects the classifier type. One of 'bayes', 'knn', 'svm' (default).
             -v  Verbose output.
 
             Twitter:
