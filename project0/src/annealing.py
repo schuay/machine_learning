@@ -51,11 +51,19 @@ KIND_ANNEALING = classification_dataset.ClassificationDatasetI()
 class AnnealingInstance(classification_dataset.ClassificationInstanceI):
     def __init__(self, line):
         ziplist = zip(ANNEALING_FEATURES, re.split(r',', line))
-        ziplist = filter(lambda (_,fv): fv != '?', ziplist)
+        # ziplist = filter(lambda (_,fv): fv != '?', ziplist)
 
         self.__features = dict(ziplist)
         self.__class = self.__features[ANNEALING_CLASS_FEATURE]
         del self.__features[ANNEALING_CLASS_FEATURE]
+
+        # Float conversion.
+        # for k in ["thick", "width", "len"]:
+        #    self.__features[k] = float(self.__features[k])
+
+        # "Normalization".
+        # self.__features["len"] = self.__features["len"] / 5000
+        # self.__features["width"] = self.__features["width"] / 1000
 
     def instance_class(self):
         return self.__class
