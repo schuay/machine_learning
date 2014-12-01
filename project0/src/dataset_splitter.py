@@ -8,21 +8,32 @@ class DatasetSplitterI:
         """Returns a list of training and evaluation set tuples."""
         raise NotImplementedError("Please implement this yourself.")
 
-class RatioSplitter(DatasetSplitterI):
-    def __init__(self, ratio):
-        self.__ratio = ratio
+class RatioRangeSplitter(DatasetSplitterI):
+    def __init__(self, start, stop, step):
+        self.__start = start
+        self.__stop  = stop
+        self.__step  = step
 
     def split(self, ds):
         instances = ds.instances()
-        cutoff = int(math.floor(len(instances) * self.__ratio))
 
-        trainDataset = copy.copy(ds)
-        trainDataset.set_instances(instances[:cutoff])
+        for ratio in range(self.__start, self.__stop, self.__step):
+            cutoff = int(math.floor(len(instances) * ratio / 100))
 
-        testDataset = copy.copy(ds)
-        testDataset.set_instances(instances[cutoff:])
+            trainDataset = copy.copy(ds)
+            trainDataset.set_instances(instances[:cutoff])
 
-        return [(trainDataset, testDataset)]
+            testDataset = copy.copy(ds)
+            testDataset.set_instances(instances[cutoff:])
+
+            yield (trainDataset, testDataset)
+
+class RatioSplitter(DatasetSplitterI):
+    def __init__(self, percent):
+        self.__splitter = RatioRangeSplitter(percent, percent + 1, 1)
+
+    def split(self, ds):
+        return self.__splitter.split(ds)
 
 class CrossfoldSplitter(DatasetSplitterI):
     def __init__(self, k):

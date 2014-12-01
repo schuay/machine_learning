@@ -54,7 +54,8 @@ FEATURE_SELECTORS = { 'aes': lambda n: fs.AllFeatures(
                     , 'as':  lambda n: fs.NGram(fs.StopWordFilter(fs.AllWords()), n)
                     }
 
-SPLITTERS = { 'ratio75': ds.RatioSplitter(0.75)
+SPLITTERS = { 'ratio75': ds.RatioSplitter(75)
+            , 'ratiorange': ds.RatioRangeSplitter(5, 96, 1)
             , '10fold':  ds.CrossfoldSplitter(10)
             }
 
