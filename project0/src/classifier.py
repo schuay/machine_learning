@@ -207,7 +207,12 @@ def evaluate_features(dataset, splitter, raw_classifier):
 
     for (train_set, test_set) in dataset_tuples:
         classifier = Classifier.train(raw_classifier, train_set);
+        train_set = None
+        gc.collect()
+
         classifier.evaluate(test_set, writer)
+        classifier, test_set = None, None
+        gc.collect()
 
 def usage():
     print("""USAGE: %s [-d dataset] [-s classifier] [-f type] [-r type] [-t type]
@@ -271,7 +276,7 @@ if __name__ == '__main__':
     transformers = [TRANSFORMERS[tran] for tran in options.transformers]
 
     feature_selector = feature_selector(ngram)
-    evaluate_features( dataset_ctor(10000,
+    evaluate_features( dataset_ctor(None,
                                     feature_selector,
                                     tr.SequenceTransformer(transformers))
                      , splitter
