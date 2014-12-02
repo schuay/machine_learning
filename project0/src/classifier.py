@@ -55,7 +55,7 @@ FEATURE_SELECTORS = { 'aes': lambda n: fs.AllFeatures(
                     }
 
 SPLITTERS = { 'ratio75': ds.RatioSplitter(75)
-            , 'ratiorange': ds.RatioRangeSplitter(5, 96, 1)
+            , 'ratiorange': ds.RatioRangeSplitter(5, 96, 5)
             , '10fold':  ds.CrossfoldSplitter(10)
             }
 
