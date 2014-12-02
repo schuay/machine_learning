@@ -4,15 +4,18 @@ library(plyr)
 library(scales)
 
 plot_ratio_range_accuracy <- function(bayesfile, svmfile, knnfile) {
-    # install.packages(c("Rmisc", "ggplot2", "plyr"))
-
-    figfile <- "fig.eps"
+    figbasename = strsplit(basename(bayesfile), "\\.")[[1]][1]
+    figfile <- paste(figbasename, "_accuracy.eps", sep = "")
 
     dfb <- read.csv(bayesfile)
     dfs <- read.csv(svmfile)
-    dfk <- read.csv(knnfile)
 
-    df <- rbind(dfb, dfs, dfk)
+    if (is.null(knnfile)) {
+        df <- rbind(dfb, dfs)
+    } else {
+        dfk <- read.csv(knnfile)
+        df <- rbind(dfb, dfs, dfk)
+    }
 
     df$ratio <- df$train_size / (df$train_size + df$eval_size)
 
@@ -20,6 +23,7 @@ plot_ratio_range_accuracy <- function(bayesfile, svmfile, knnfile) {
 
     p <- ggplot(df, aes(x = ratio, y = accuracy, color = classifier, shape = classifier)) +
                 geom_line() +
+                geom_point() +
                 ylab("Accuracy") +
                 xlab("Training-evaluation ratio") +
                 scale_x_continuous(breaks = pretty_breaks(n = 10)) +
@@ -42,15 +46,18 @@ plot_ratio_range_accuracy <- function(bayesfile, svmfile, knnfile) {
 }
 
 plot_ratio_range_size <- function(bayesfile, svmfile, knnfile) {
-    # install.packages(c("Rmisc", "ggplot2", "plyr"))
-
-    figfile <- "fig2.eps"
+    figbasename = strsplit(basename(bayesfile), "\\.")[[1]][1]
+    figfile <- paste(figbasename, "_size.eps", sep = "")
 
     dfb <- read.csv(bayesfile)
     dfs <- read.csv(svmfile)
-    dfk <- read.csv(knnfile)
 
-    df <- rbind(dfb, dfs, dfk)
+    if (is.null(knnfile)) {
+        df <- rbind(dfb, dfs)
+    } else {
+        dfk <- read.csv(knnfile)
+        df <- rbind(dfb, dfs, dfk)
+    }
 
     df$ratio <- df$train_size / (df$train_size + df$eval_size)
 
@@ -58,6 +65,7 @@ plot_ratio_range_size <- function(bayesfile, svmfile, knnfile) {
 
     p <- ggplot(df, aes(x = ratio, y = classifier_size, color = classifier, shape = classifier)) +
                 geom_line() +
+                geom_point() +
                 ylab("Classifier size (bytes)") +
                 xlab("Training-evaluation ratio") +
                 scale_x_continuous(breaks = pretty_breaks(n = 10)) +

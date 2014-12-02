@@ -101,16 +101,37 @@ Nr. of samples  & Huge         & Medium         & Medium         & Huge         
 Nr. of features & Huge         & Medium         & Low            & Low               \\
 Feature types   & Binary       & Cat, Int, Real & Categorical    & Date, Real        \\
 Missing values  & No           & Yes            & No             & Yes               \\
-Preprocessing   & Beneficial   & TODO           & TODO           & TODO              \\
+Preprocessing   & Beneficial   & Optional       & TODO           & TODO              \\
 Result set      & \{Pos, Neg\} & 6 classes      & $\text{Int}^3$ & $\text{Real}^3$   \\
 \bottomrule
 \end{tabular}
-\caption{Dataset details. Feature types are abbreviated as: Bin = binary, Cat = categorical, Int = integral. \label{fig:datasets}}
+\caption{Dataset details. Feature types are abbreviated as: Bin = binary, Cat = categorical,
+         Int = integral. \label{fig:datasets}}
 \end{figure}
 
 \section{Classifier Selection}
 
-% TODO
+We selected our classification techniques for familiarity (i.e. we preferred techniques covered
+in the lecture) and suitability for our classification datasets.
+
+The first classifier is a Support Vector Machine\footnote{\lstinline|sklearn.svm.LinearSVC|}, which attempts
+to learn a function maximizing its margin from so-called support vectors. SVM's are effective
+for datasets with high dimensions and a large number of attributes, and reduce classifier sizes by
+relying only on a subset of data points (the support vectors). However, they can be expensive
+both to train and apply.
+
+Naive bayes\footnote{\lstinline|nltk.classify.NaiveBayesClassifier|} was selected as the second classifier
+due both to its simplicity and the fact that it seems to be a popular standard baseline classifier.
+It assumes feature independence, and is known to perform well in document classification. Both training
+and evaluation are time-efficient.
+
+Finally, we chose k-nearest neighbors\footnote{\lstinline|sklearn.neighbors.KNeighborsClassifier|} as our
+third classification technique. Nearest neighbors is a non-generalizing classifier, i.e. it does not
+attempt to learn a general function, but instead simply memorizes all seen training data points.
+Prediction consists simply of examining the $k$ nearest neighbors. This classifier again performs
+surprisingly well despite its simplicity, but obviously grows linearly in the training set size.
+
+% TODO: Regression selection.
 
 % --------------------------------------------------------------------------------------------------
 
@@ -139,40 +160,8 @@ R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Swe
 % TODO: Describe benching machine specs.
 % TODO: Define \tenfold and \ratiostd.
 
-\subsection{\twitter}
-
-The \twitter dataset is very large in several respects; it not only contains over 1.5 million
-tweets, but by it's very nature has a huge number of feature (at least one per mentioned word).
-Employed alternative feature selection methods such as n-grams, which map each occurring combination
-words of length $\leq n$ to a feature, quickly increases the number of features into infeasable areas.
-Memory and CPU time constraints definitely limit the kinds of experiments which can be conducted
-with this type of dataset.
-
-We employed various methods of preprocessing and feature selection on this dataset:
-
-\begin{itemize}
-\item Spam filtering: \twitter contains a large number of nearly identical spam tweets, which we
-      simply remove at the beginning of the pipeline.
-\item Stopword filtering: Many words of the english language such as 'me', 'you', 'it', 'or',
-      etc., occur frequently but do not contribute any sentiment. Such so called stopwords are removed
-      to decrease the size of the feature set. It is however important that common words which \emph{do}
-      carry sentiment ('no', 'very', 'but').
-\item Emoticon selection: Selection of all emoticons as features.
-\item N-gram selection: Selection of all combination of words of length $\leq n$ as features. N-grams
-      enable handling of phrases such as 'not good', which obviously carries more accurate meaning
-      than both words separately.
-\item URL and user transformers: URLs and usernames are presumed not to carry sentiment. This transformation
-      replaces all such occurrences with a single feature.
-\item Multicharacter normalization: In informal settings such as Twitter, words are often emphasized
-      by repeating letters (i.e. "I'm feeling goooood"). Multicharacter normalization replaces all
-      sequences of more than two repeated characters with exactly two of that character in order to
-      shrink the feature set.
-\end{itemize}
-
-Feature selection results in a specific feature set, all of which may take the integer values 0 or 1
-(one can alternatively see them as booleans).
-
-% --------------------------------------------------------------------------------------------------
+Benchmarks for the classification datasets \annealing and \twitter were performed on a a machine
+with 8 GB of RAM and an Intel Core i7-3770 CPU at 3.40 GHz, running Linux 3.17.4.
 
 \subsection{\annealing}
 
@@ -311,6 +300,116 @@ that simply predicts class 3 every time would also have 75\% accuracy. It was es
 to see the different behaviors of the classifiers both in training and evaluation times, and in
 the size of the produced files. Normalization of real-valued attributes also had a larger than expected
 effect on the classifier accuracy.
+
+% --------------------------------------------------------------------------------------------------
+
+\subsection{\twitter}
+
+The \twitter dataset is very large in several respects; it not only contains over 1.5 million
+tweets, but by it's very nature has a huge number of feature (at least one per mentioned word).
+Employed alternative feature selection methods such as n-grams, which map each occurring combination
+words of length $\leq n$ to a feature, quickly increases the number of features into infeasable areas.
+Memory and CPU time constraints definitely limit the kinds of experiments which can be conducted
+with this type of dataset.
+
+We employed various methods of preprocessing and feature selection on this dataset:
+
+\begin{itemize}
+\item Spam filtering: \twitter contains a large number of nearly identical spam tweets, which we
+      simply remove at the beginning of the pipeline.
+\item Stopword filtering: Many words of the english language such as 'me', 'you', 'it', 'or',
+      etc., occur frequently but do not contribute any sentiment. Such so called stopwords are removed
+      to decrease the size of the feature set. It is however important that common words which \emph{do}
+      carry sentiment ('no', 'very', 'but').
+\item Emoticon selection: Selection of all emoticons as features.
+\item N-gram selection: Selection of all combination of words of length $\leq n$ as features. N-grams
+      enable handling of phrases such as 'not good', which obviously carries more accurate meaning
+      than both words separately.
+\item URL and user transformers: URLs and usernames are presumed not to carry sentiment. This transformation
+      replaces all such occurrences with a single feature.
+\item Multicharacter normalization: In informal settings such as Twitter, words are often emphasized
+      by repeating letters (i.e. "I'm feeling goooood"). Multicharacter normalization replaces all
+      sequences of more than two repeated characters with exactly two of that character in order to
+      shrink the feature set.
+\end{itemize}
+
+Feature selection results in a specific feature set, all of which may take the integer values 0 or 1
+(one can alternatively see them as booleans).
+
+Through experimental evaluation, we determined that a combination of multicharacter normalization,
+user transformer, and n-gram as well as emoticon selection produced the best accuracy on the \twitter
+dataset. Both the stopword filter and the URL transformer resulted in a slight decrease of accuracy.
+While larger n-grams increased accuracy, they caused the size of the feature set to grow explosively
+and ultimately led to us running out of memory with $n = 3$. Unless stated otherwise, the following
+benchmarks are run using the aforementioned configuration of feature selectors and transformers; even
+though larger n-grams improved accuracy, we used 1-grams in order to avoid running out of memory and
+vastly increased runtimes. The KNN classifier had to be left out of larger experiments since it
+would not finish executing even after over 12 hours.
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_accuracy("../results/twitter_bayes_ratiorange.csv",
+                          "../results/twitter_svm_ratiorange.csv",
+                          NULL)
+@
+\caption{Classifier accuracy for varying training-evaluation ratios on the \twitter dataset.
+         \label{fig:results_twitter_split_accuracy}}
+\end{figure}
+
+Figures \ref{fig:results_twitter_split_accuracy} and \ref{fig:results_twitter_split_size} display
+classifier accuracy and serialization sizes for varying training-evaluation ratios. Results for
+benchmarks using the stopwords filter and no transformers are included for the sake of comparison
+and are labelled with a \texttt{\_aes\_id} suffix. % TODO: Correctly relabel in files.
+The accuracy of
+both SVM and Bayes behaves similarly, increasing steadily up to a ratio of 90\%. Accuracy decreases
+again at 95\%; we were not able to determine the cause conclusively, but speculate that this was caused
+by properties of the dataset. According to the literature\footnote{A. Go, R. Bhayani, and L. Huang.
+Twitter sentiment classification using distant supervision. CS224N Project Report, Stanford, pages 1-12, 2009.
+}\footnote{J. Lin and A. Kolcz. Large-scale machine learning at twitter. In Proceedings of the 2012
+ACM SIGMOD International Conference on Management of Data, SGIMOD '12, pages 793-804, New York, NY,
+USA, 2012. ACM.}, 80\% accuracy compares favorably to best result achieved by others within the same area.
+This demonstrates that good results may be achieved by very simple means, in this case the SVM classifier
+provided by \texttt{scikit-learn} and basic preprocessing.
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_size("../results/twitter_bayes_ratiorange.csv",
+                      "../results/twitter_svm_ratiorange.csv",
+                      NULL)
+@
+\caption{Classifier sizes for varying training-evaluation ratios on the \twitter dataset.
+         \label{fig:results_twitter_split_size}}
+\end{figure}
+
+Classifier sizes differ significantly between Bayes and SVM, with the serialized Bayes classifier
+being larger than the SVM classifier by a factor of around 4. This result is very much expected,
+since the SVM classifier keeps only the support vectors and discards all other data points. Given the
+classifier results from \annealing dataset in Figure \ref{fig:results_annealing_split_size}, we expect
+the KNN classifier to have grown prohibitively large and thus see classifier size as the likely cause
+for KNN's failure to complete.
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Classifier & Train. Time (s) & Eval. Time (s) & Accuracy \\
+\midrule
+Bayes (\ratiostd) & 0.0077 & 0.026 & 0.95 \\ % TODO: Fill in correct data.
+SVM (\ratiostd)   & 0.0224 & 0.024 & 1.0  \\
+Bayes (\tenfold)  & 0.0091 & 0.011 & 0.96 \\
+SVM (\tenfold)    & 0.0263 & 0.01  & 1.0  \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \twitter dataset. Cross-validation results are averaged over all
+         partitions. \label{fig:results_twitter_summary}}
+\end{figure}
+
+Finally, training- as well as evaluation times and accuracy are again given in Figure
+\ref{fig:results_twitter_summary} for both \ratiostd and \tenfold evaluation methods.
 
 % --------------------------------------------------------------------------------------------------
 
