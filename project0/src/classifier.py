@@ -25,12 +25,13 @@ from nltk.classify import SklearnClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC
 
-DSETS_DEFAULT  = 'twitter'
 CLASS_DEFAULT  = 'svm'
+DSETS_DEFAULT  = 'twitter'
+FEAT_DEFAULT   = 'ae'
+LIMIT_DEFAULT  = None
 NGRAM_DEFAULT  = 1
-FEAT_DEFAULT   = 'aes'
 SPLIT_DEFAULT  = 'ratio75'  
-TRAN_DEFAULT   = 'id'
+TRAN_DEFAULT   = 'mchar,user'
 
 DATASETS = { 'twitter': lambda mi, fs, tr: twitter.TwitterDataset(
                     '../data/twitter/Sentiment-Analysis-Dataset.zip',
@@ -67,11 +68,12 @@ TRANSFORMERS = { 'id':    tr.IdentityTransformer()
 
 class Opts:
     dataset = DSETS_DEFAULT
+    limit = LIMIT_DEFAULT
     classifier = CLASS_DEFAULT
     feature_selector = FEAT_DEFAULT
     ngram = NGRAM_DEFAULT
     splitter = SPLIT_DEFAULT
-    transformers = [TRAN_DEFAULT]
+    transformers = TRAN_DEFAULT.split(",")
     verbose = False
 
 options = Opts()
@@ -215,7 +217,7 @@ def evaluate_features(dataset, splitter, raw_classifier):
         gc.collect()
 
 def usage():
-    print("""USAGE: %s [-d dataset] [-s classifier] [-f type] [-r type] [-t type]
+    print("""USAGE: %s [options]
             -d  The dataset to use. One of 'twitter' (default), 'annealing'.
             -s  Selects the splitter. One of 'ratio75' (default), '10fold'.
             -t  Selects the classifier type. One of 'bayes', 'knn', 'svm' (default).
@@ -224,8 +226,9 @@ def usage():
             Twitter:
             -f  Selects the feature selector. One of %s (default = '%s').
             -g  Specifies the n for the n-gram feature selector. Can be any positive integer (default = '%s').
-            -r  Enables the given transformer. Can be passed multiple times.
+            -r  Enables the given transformers, passed as a comma-separated list.
                 One of %s (default = '%s').
+            -l  Limit the number of rows loaded.
                 
             Annealing:
             TODO""" %
@@ -239,7 +242,7 @@ def usage():
     sys.exit(1)
 
 if __name__ == '__main__':
-    opts, args = getopt.getopt(sys.argv[1:], "d:f:g:hr:s:t:v")
+    opts, args = getopt.getopt(sys.argv[1:], "d:f:g:hl:r:s:t:v")
     for o, a in opts:
         if o == "-d":
             if not a in DATASETS:
@@ -251,10 +254,14 @@ if __name__ == '__main__':
             options.feature_selector = a
         elif o == "-g":
             options.ngram = int(a)
+        elif o == "-l":
+            options.limit = int(a)
         elif o == "-r":
-            if not a in TRANSFORMERS:
-                usage()
-            options.transformers.append(a)
+            transformers = a.split(",")
+            for t in transformers:
+                if not t in TRANSFORMERS:
+                    usage()
+            options.transformers = transformers
         elif o == "-s":
             if not a in SPLITTERS:
                 usage()
@@ -276,7 +283,7 @@ if __name__ == '__main__':
     transformers = [TRANSFORMERS[tran] for tran in options.transformers]
 
     feature_selector = feature_selector(ngram)
-    evaluate_features( dataset_ctor(None,
+    evaluate_features( dataset_ctor(options.limit,
                                     feature_selector,
                                     tr.SequenceTransformer(transformers))
                      , splitter
