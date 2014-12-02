@@ -1,3 +1,6 @@
 dataset,classifier,splitter,train_size,train_time,eval_size,eval_time,classifier_size,accuracy,class,class_size,precision,recall
 twitter,svm_aes_id,ratio75,1183970,164.66229,394657,45.83356,53735424,0.79268,0,220076,0.8215837512444292,0.8024773260146495
 twitter,svm_aes_id,ratio75,1183970,164.66229,394657,45.83356,53735424,0.79268,1,174581,0.7580954818891591,0.7803197369702316
+dataset,classifier,splitter,train_size,train_time,eval_size,eval_time,classifier_size,accuracy,class,class_size,precision,recall
+twitter,svm,ratio75,1183970,272.87012,394657,49.11171,24387584,0.79991,0,220076,0.8228736694703508,0.8170631963503517
+twitter,svm,ratio75,1183970,272.87012,394657,49.11171,24387584,0.79991,1,174581,0.7714253271638232,0.7782920249053448

@@ -1,3 +1,6 @@
 dataset,classifier,splitter,train_size,train_time,eval_size,eval_time,classifier_size,accuracy,class,class_size,precision,recall
 twitter,bayes_aes_id,ratio75,1183970,29.62739,394657,20.6923,191401984,0.78223,0,220076,0.7767036757394594,0.8553954088587579
 twitter,bayes_aes_id,ratio75,1183970,29.62739,394657,20.6923,191401984,0.78223,1,174581,0.7910220377715321,0.6899949020798368
+dataset,classifier,splitter,train_size,train_time,eval_size,eval_time,classifier_size,accuracy,class,class_size,precision,recall
+twitter,bayes,ratio75,1183970,27.36434,394657,29.26817,88227840,0.77768,0,220076,0.751759772922707,0.897762591104891
+twitter,bayes,ratio75,1183970,27.36434,394657,29.26817,88227840,0.77768,1,174581,0.8293372977646979,0.626293812041402
