@@ -18,27 +18,8 @@ COLUMNS = [ "Date"
 
 KIND_POWER_CONSUMPTION = rd.RegressionDatasetI()
 
-class IdentityTransformer:
-    def transform(self, obj):
-        return obj
-
-class ZScoreTransformer:
-    def __init__(self, mu, sigma):
-        self.__mu = mu
-        self.__sigma = sigma
-
-    def transform(self, obj):
-        return (obj - self.__mu) / self.__sigma
-
-def calc_mu(xs):
-    return sum(xs)/len(xs)
-
-def calc_sigma(xs):
-    mu = calc_mu(xs)
-    return sum([(x - mu)**2 for x in xs])/len(xs)
-
 class PowerConsumptionInstance(rd.RegressionInstanceI):
-    def __init__(self, row, hourTrans, minTrans):
+    def __init__(self, row):
         self.__features = list()
 
         day, month, year = row[0].split("/")
@@ -47,8 +28,8 @@ class PowerConsumptionInstance(rd.RegressionInstanceI):
             self.__features.append(1 if (date.weekday() == i) else 0)
 
         hours, minutes, seconds = row[1].split(":")
-        self.__features.append(hourTrans.transform(float(hours)))
-        self.__features.append(minTrans.transform(float(minutes)))
+        self.__features.append(float(hours))
+        self.__features.append(float(minutes))
 
         # TODO: use the mean for missing values
         self.__features += [0.0 if (c == '?' or c == '') else float(c) for c in row[2:]]
@@ -66,37 +47,19 @@ class PowerConsumptionInstance(rd.RegressionInstanceI):
         return "%s" % self.features()
 
 class PowerConsumptionDataset(rd.RegressionDatasetI):
-    def __init__(self, data_archive, max_instances, zScoreTime=True):
+    def __init__(self, data_archive, max_instances):
         self.__instances = []
 
         instance_count = 0
-        rows = list()
         with zipfile.ZipFile(data_archive, 'r') as f:
             datafile = f.open(COMPRESSED_FILENAME, "rU")
             datareader = csv.reader(datafile, delimiter = ";")
             next(datareader)
             for row in datareader:
-                rows.append(row)
+                self.__instances.append(PowerConsumptionInstance(row))
                 instance_count += 1
                 if max_instances is not None and instance_count >= max_instances:
                     break
-
-        if zScoreTime:
-            hMu = calc_mu([float(row[1].split(":")[0]) for row in rows])
-            hSigma = calc_sigma([float(row[1].split(":")[0]) for row in rows])
-            mMu = calc_mu([float(row[1].split(":")[1]) for row in rows])
-            mSigma = calc_sigma([float(row[1].split(":")[1]) for row in rows])
-
-        for row in rows:
-            if zScoreTime:
-                hourTrans = ZScoreTransformer(hMu, hSigma)
-                minTrans = ZScoreTransformer(mMu, mSigma)
-                inst = PowerConsumptionInstance(row, hourTrans, minTrans)
-            else:
-                inst = PowerConsumptionInstance(row, IdentityTransformer(),
-                        IdentityTransformer())
-
-            self.__instances.append(inst)
 
     def instances(self):
         return self.__instances
