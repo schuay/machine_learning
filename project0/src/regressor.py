@@ -60,6 +60,10 @@ class Regressor:
             squares.append([(y - py)**2 for y,py in zip(inst.y(), predictions)])
         print map(lambda l: sum(l)/len(l), zip(*squares))
 
+        xs = [ inst.x() for inst in test_sets.instances() ]
+        ys = [ inst.y() for inst in test_sets.instances() ]
+        print self.__clf.score(xs,ys)
+
     def classify(self, obj):
         return self.__nltk_classifier.classify(obj)
 
