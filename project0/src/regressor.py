@@ -19,7 +19,7 @@ REGRE_DEFAULT  = 'linear'
 DSETS_DEFAULT  = 'power_consumption'
 SPLIT_DEFAULT  = 'ratio75'
 MVALS_DEFAULT  = 'mean'
-LIMIT_DEFAULT  = 50000
+LIMIT_DEFAULT  = 20000
 
 DATASETS = { 'power_consumption': lambda mi: pc.PowerConsumptionDataset(
                     '../data/power_consumption/household_power_consumption.zip',
