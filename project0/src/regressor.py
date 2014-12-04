@@ -7,8 +7,6 @@ import time
 from sklearn.linear_model import LinearRegression
 from sklearn.neighbors import RadiusNeighborsRegressor
 from sklearn.preprocessing import Imputer
-from sklearn.preprocessing import Normalizer
-from sklearn.pipeline import Pipeline
 from sklearn import metrics
 
 import dataset_splitter as ds
@@ -88,7 +86,6 @@ class Regressor:
 
 def evaluate_features(dataset, splitter, raw_regressor, mvals):
     dataset_tuples = splitter.split(dataset)
-    raw_regressor = Pipeline([('norm',Normalizer()), ('regr', raw_regressor)])
 
     for (train_set, test_set) in dataset_tuples:
         print 'training new regressor'
