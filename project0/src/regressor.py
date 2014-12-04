@@ -7,6 +7,8 @@ import time
 from sklearn.linear_model import LinearRegression
 from sklearn.neighbors import RadiusNeighborsRegressor
 from sklearn.preprocessing import Imputer
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.svm import SVR
 from sklearn import metrics
 
 import dataset_splitter as ds
@@ -26,8 +28,23 @@ DATASETS = { 'power_consumption': lambda mi: pc.PowerConsumptionDataset(
                     '../data/solar_flares/flare.data2')
            }
 
+class SVRegressor:
+    def __init__(self, raw_svr):
+        self.__svr = raw_svr
+
+    def fit(self, X, y):
+        y = [ targets[0] for targets in y ]
+        self.__svr.fit(X, y)
+        return self
+
+    def predict(self, X):
+        ps = self.__svr.predict(X)
+        return [ [p] for p in ps ]
+
 REGRESSORS = { 'linear': LinearRegression()
              , 'knnradius': RadiusNeighborsRegressor(radius=1)
+             , 'rforest': RandomForestRegressor()
+             , 'svr': SVRegressor(SVR())
              }
 
 SPLITTERS = { 'ratio75': ds.RatioSplitter(75)
