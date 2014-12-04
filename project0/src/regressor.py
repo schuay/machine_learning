@@ -97,6 +97,7 @@ class Regressor:
         print map(lambda (y, p): metrics.mean_absolute_error(y,p), yp)
         print map(lambda (y, p): metrics.mean_squared_error(y,p), yp)
         print map(lambda (y, p): metrics.r2_score(y,p), yp)
+        print map(lambda (y, p): metrics.explained_variance_score(y,p), yp)
 
     def classify(self, obj):
         return self.__nltk_classifier.classify(obj)
