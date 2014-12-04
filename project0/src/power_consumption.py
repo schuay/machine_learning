@@ -31,8 +31,7 @@ class PowerConsumptionInstance(rd.RegressionInstanceI):
         self.__features.append(float(hours))
         self.__features.append(float(minutes))
 
-        # TODO: use the mean for missing values
-        self.__features += [0.0 if (c == '?' or c == '') else float(c) for c in row[2:]]
+        self.__features += [float('nan') if (c == '?' or c == '') else float(c) for c in row[2:]]
 
     def features(self):
         return self.__features
