@@ -1,0 +1,9 @@
+The tic dataset is available from:
+http://archive.ics.uci.edu/ml/datasets/Insurance+Company+Benchmark+%28COIL+2000%29
+
+Number of samples: Medium
+Number of attributes: Large
+Types of attributes: Categorical, Integer
+Preprocessing: ?
+Classification: Integer
+Missing values: None
