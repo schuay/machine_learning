@@ -66,7 +66,7 @@ REGRESSORS = { 'linear': LinearRegression()
              , 'knnradius': RadiusNeighborsRegressor(radius=1)
              , 'rforest': RandomForestRegressor()
              , 'svr': SingleRegressorWrapper(SVR())
-             , 'sgd': SingleRegressorWrapper(SGDRegressor(loss='huber'))
+             , 'sgd': SingleRegressorWrapper(SGDRegressor())
              }
 
 SPLITTERS = { 'ratio75': ds.RatioSplitter(75)
