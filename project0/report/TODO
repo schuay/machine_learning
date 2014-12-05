@@ -27,3 +27,4 @@ Household Power Consumption:
 * check effects of preprocessing.
 * try random splits
 * deal with missing values (mean, random, nearest neighbor, remove sample)
+* regressors suck if we don't shufle the dataset
