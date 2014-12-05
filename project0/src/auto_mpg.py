@@ -7,7 +7,11 @@ KIND_AutoMPG = rd.RegressionDatasetI()
 class AutoMPGInstance(rd.RegressionInstanceI):
     def __init__(self, row):
         row = [float('nan') if (c == '?' or c == '') else float(c) for c in row[:8]]
-        self.__features = [ float(col) for col in row[:8] ]
+
+        float_features = [ float(col) for col in row[:7] ]
+        origin_features = [ 1.0 if int(row[7]) == o else 0 for o in range(1, 4) ]
+
+        self.__features = float_features + origin_features
 
     def features(self):
         return self.__features

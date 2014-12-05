@@ -130,9 +130,6 @@ class Regressor:
         print map(lambda (y, p): metrics.r2_score(y,p), yp)
         print map(lambda (y, p): metrics.explained_variance_score(y,p), yp)
 
-    def classify(self, obj):
-        return self.__nltk_classifier.classify(obj)
-
 def evaluate_features(dataset, splitter, raw_regressor, mvals):
     dataset_tuples = splitter.split(dataset)
 
