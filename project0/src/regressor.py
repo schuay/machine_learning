@@ -14,6 +14,7 @@ from sklearn import metrics
 import dataset_splitter as ds
 import power_consumption as pc
 import solar_flares as sf
+import tic
 
 REGRE_DEFAULT  = 'linear'
 DSETS_DEFAULT  = 'power_consumption'
@@ -26,6 +27,8 @@ DATASETS = { 'power_consumption': lambda mi: pc.PowerConsumptionDataset(
                     mi)
            , 'solar_flares': lambda mi: sf.SolarFlaresDataset(
                     '../data/solar_flares/flare.data2')
+           , 'tic': lambda mi: tic.TICDataset(
+                    '../data/tic/ticdata2000_f.txt', mi)
            }
 
 class SVRegressor:
