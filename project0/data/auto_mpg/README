@@ -1,0 +1,9 @@
+The auto-mpg dataset is available from:
+http://archive.ics.uci.edu/ml/datasets/Auto+MPG
+
+Number of samples: Small
+Number of attributes: Small
+Types of attributes: Categorical, Real
+Preprocessing: ?
+Classification: Real
+Missing values: Yes

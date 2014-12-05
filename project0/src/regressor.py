@@ -21,6 +21,7 @@ import power_consumption as pc
 import solar_flares as sf
 import tic
 import housing as hs
+import auto_mpg as am
 
 REGRE_DEFAULT  = 'linear'
 DSETS_DEFAULT  = 'power_consumption'
@@ -38,6 +39,8 @@ DATASETS = { 'power_consumption': lambda mi: pc.PowerConsumptionDataset(
                     '../data/tic/ticdata2000_f.txt', mi)
            , 'housing': lambda mi: hs.HousingDataset(
                     '../data/housing/housing.data', mi)
+           , 'auto_mpg': lambda mi: am.AutoMPGDataset(
+                    '../data/auto_mpg/auto-mpg.data', mi)
            }
 
 class SingleRegressorWrapper:
