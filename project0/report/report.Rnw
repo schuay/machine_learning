@@ -1,6 +1,7 @@
 \documentclass[a4paper,10pt]{article}
 
 \usepackage{amsmath}
+\usepackage{bashful}
 \usepackage{booktabs}
 \usepackage{comment}
 \usepackage[pdfborder={0 0 0}]{hyperref}
@@ -20,9 +21,6 @@
     showtabs=false,
     numbers=left,
 }
-
-\usepackage{bashful}
-%\usepackage[usenames,dvipsnames]{xcolor}
 
 \lstdefinestyle{BashInputStyle}{
   language=bash,
