@@ -75,7 +75,7 @@ class SolarFlaresInstance(rd.RegressionInstanceI):
         return self.__preprocessor.x(self.__features)
 
     def y(self):
-        return self.__preprocessor.y(self.__features)
+        return [self.__preprocessor.y(self.__features)[0]]
 
     def __str__(self):
         return "%s" % self.features()

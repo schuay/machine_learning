@@ -40,7 +40,7 @@ class PowerConsumptionInstance(rd.RegressionInstanceI):
         return self.features()[:9]
 
     def y(self):
-        return self.features()[9:]
+        return [self.features()[9]]
 
     def __str__(self):
         return "%s" % self.features()
