@@ -139,12 +139,17 @@ def evaluate_features(dataset, splitter, raw_regressor, mvals):
 
 def usage():
     print("""USAGE: %s [options]
-            -d  The dataset to use. One of 'power_consumption' (default), 'solar_flares'.
+            -d  The dataset to use. One of 'power_consumption' (default), 'solar_flares', 'tic'.
             -s  Selects the splitter. One of 'ratio75' (default), '10fold', 'ratiorange'.
-            -t  Selects the regressor type. One of 'linear' (default).
+            -t  Selects the regressor type. One of 'linear' (default), 'knnradius', 'rforest', 'svr', 'sgd'.
+            -m  Selects the strategy for replacing missing values. One of 'mean' (default), 'median'.
+            -r  Enables the given transformers, passed as a comma-separated list.
+                One of %s (default = '%s').
             -l  Limit the number of rows loaded.
             -v  Verbose output.""" %
             ( sys.argv[0]
+            , ", ".join(["'" + t + "'" for t in TRANSFORMERS.keys()])
+            , TRANS_DEFAULT
             ))
     sys.exit(1)
 
