@@ -74,8 +74,8 @@ SPLITTERS = { 'ratio75': ds.RatioSplitter(75)
             , '10fold':  ds.CrossfoldSplitter(10)
             }
 
-MISSING_VALUES_STRATEGY = { 'mean': Imputer(strategy='mean')
-                          , 'median': Imputer(strategy='median')
+MISSING_VALUES_STRATEGY = { 'mean': lambda: Imputer(strategy='mean')
+                          , 'median': lambda: Imputer(strategy='median')
                           }
 
 TRANSFORMERS = { 'scale': StandardScaler()
@@ -191,7 +191,7 @@ if __name__ == '__main__':
         else:
             usage()
 
-    pipe = list()
+    pipe = [('imputer', MISSING_VALUES_STRATEGY[options.mvals]())]
     for t in options.transformers:
         pipe.append((t, TRANSFORMERS[t]))
     pipe.append(('regressor', REGRESSORS[options.regressor]))
@@ -199,5 +199,5 @@ if __name__ == '__main__':
     evaluate_features( DATASETS[options.dataset](options.limit)
                      , SPLITTERS[options.splitter]
                      , Pipeline(pipe)
-                     , MISSING_VALUES_STRATEGY[options.mvals]
+                     , MISSING_VALUES_STRATEGY[options.mvals]()
                      )
