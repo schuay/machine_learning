@@ -5,6 +5,7 @@ import sys
 import time
 
 from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import SGDRegressor
 from sklearn.neighbors import RadiusNeighborsRegressor
 from sklearn.preprocessing import Imputer
 from sklearn.ensemble import RandomForestRegressor
@@ -31,23 +32,23 @@ DATASETS = { 'power_consumption': lambda mi: pc.PowerConsumptionDataset(
                     '../data/tic/ticdata2000_f.txt', mi)
            }
 
-class SVRegressor:
-    def __init__(self, raw_svr):
-        self.__svr = raw_svr
+class SingleRegressorWrapper:
+    def __init__(self, raw_reg):
+        self.__reg = raw_reg
 
     def fit(self, X, y):
         y = [ targets[0] for targets in y ]
-        self.__svr.fit(X, y)
+        self.__reg.fit(X, y)
         return self
 
     def predict(self, X):
-        ps = self.__svr.predict(X)
-        return [ [p] for p in ps ]
+        return self.__reg.predict(X)
 
 REGRESSORS = { 'linear': LinearRegression()
              , 'knnradius': RadiusNeighborsRegressor(radius=1)
              , 'rforest': RandomForestRegressor()
-             , 'svr': SVRegressor(SVR())
+             , 'svr': SingleRegressorWrapper(SVR())
+             , 'sgd': SingleRegressorWrapper(SGDRegressor(loss='huber'))
              }
 
 SPLITTERS = { 'ratio75': ds.RatioSplitter(75)
@@ -90,7 +91,10 @@ class Regressor:
         xs = [ inst.x() for inst in test_sets.instances() ]
         ys = [ inst.y() for inst in test_sets.instances() ]
         ys = self.__mvals.transform(ys)
+
         ps = self.__clf.predict(xs)
+        if not hasattr(ps[0], "__len__"):
+            ps = [ [p] for p in ps ]
 
         if options.verbose:
             for x, y, p in zip(xs, ys, ps):
