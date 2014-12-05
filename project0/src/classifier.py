@@ -19,6 +19,7 @@ import tweet
 
 import annealing
 import twitter
+import tic
 
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
@@ -38,6 +39,8 @@ DATASETS = { 'twitter': lambda mi, fs, tr: twitter.TwitterDataset(
                     mi, fs, tr)
            , 'annealing': lambda mi, fs, tr: annealing.AnnealingDataset(
                     '../data/annealing/anneal.data')
+           , 'tic': lambda mi, fs, tr: tic.TICDatasetClass(
+                    '../data/tic/ticdata2000.txt', mi)
            }
 
 CLASSIFIERS = { 'bayes': NaiveBayesClassifier
