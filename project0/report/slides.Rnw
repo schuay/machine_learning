@@ -1,0 +1,175 @@
+\documentclass[usenames,dvipsnames]{beamer}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{comment}
+%\usepackage[pdfborder={0 0 0}]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{xspace}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    showspaces=false,
+    showtabs=false,
+    numbers=left,
+}
+
+\title{Exercise 1 \\
+       Machine Learning WS 2014/2015 \\
+       Technical University of Vienna}
+\author{Jakob Gruber, 0203440 \\
+        Mino Sharkhawy, 1025887}
+
+\newcommand{\annealing}{\texttt{annealing}\xspace}
+\newcommand{\powerconsumption}{\texttt{power\_consumption}\xspace}
+\newcommand{\solarflares}{\texttt{solar\_flares}\xspace}
+\newcommand{\twitter}{\texttt{twitter}\xspace}
+
+\newcommand{\tenfold}{\texttt{10fold}\xspace}
+\newcommand{\ratiostd}{\texttt{ratio75}\xspace}
+
+\newcommand{\aesid}{\texttt{aes\_id}\xspace}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction} \label{sec:introduction}
+
+\begin{frame}[fragile,allowframebreaks]{\nameref{sec:introduction}}
+This assignment consists of:
+
+\begin{itemize}
+\item picking a good, diverse selection of datasets,
+\item choosing several suitable classifier and regression techniques,
+\item analyzing the behavior of the latter when run on the former,
+\item while experimenting with different preprocessing techniques,
+\item and finally reporting on the results (you are feasting your eyes on this
+      artifact right now).
+\end{itemize}
+\end{frame}
+
+\section{Datasets, Classifiers and Regressors}  \label{sec:materials_and_methods}
+
+\section{Results} \label{sec:results}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\annealing: General results}
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Classifier & Train. Time (s) & Eval. Time (s) & Accuracy \\
+\midrule
+Bayes (\ratiostd) & 0.0077 & 0.026 & 0.95 \\
+SVM (\ratiostd)   & 0.0224 & 0.024 & 1.0  \\
+KNN (\ratiostd)   & 0.016  & 0.143 & 0.97 \\
+Bayes (\tenfold)  & 0.0091 & 0.011 & 0.96 \\
+SVM (\tenfold)    & 0.0263 & 0.01  & 1.0  \\
+KNN (\tenfold)    & 0.0182 & 0.058 & 0.97 \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \annealing dataset without preprocessing. All instance attributes are
+         treated as strings. Cross-validation results are averaged over all
+         partitions. \label{fig:results_annealing_summary}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\annealing: Accuracy}
+
+\begin{figure}
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_accuracy("../results/annealing_bayes_ratiorange.csv",
+                          "../results/annealing_svm_ratiorange.csv",
+                          "../results/annealing_knn_ratiorange.csv")
+@
+\caption{Classifier accuracy for varying training-evaluation ratios on the \annealing dataset.
+         \label{fig:results_annealing_split_accuracy}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\annealing: Classifier Size}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_size("../results/annealing_bayes_ratiorange.csv",
+                      "../results/annealing_svm_ratiorange.csv",
+                      "../results/annealing_knn_ratiorange.csv")
+@
+\caption{Classifier sizes for varying training-evaluation ratios on the \annealing dataset.
+         \label{fig:results_annealing_split_size}}
+\end{figure}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\twitter: General results}
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Classifier & Train. T. (s) & Eval. T. (s) & Acc. \\
+\midrule
+Bayes (\ratiostd) & 27.36 & 29.268 & 0.78 \\
+Bayes (\aesid, \ratiostd) & 29.63 & 20.69 & 0.78 \\
+SVM (\ratiostd)   & 272.87 & 49.11 & 0.8  \\
+SVM (\aesid, \ratiostd)   & 164.66 & 45.83 & 0.79  \\
+Bayes (\tenfold)  & 31.87 & 12.0 & 0.77 \\
+Bayes (\aesid, \tenfold)  & 33.9 & 8.24 & 0.77 \\
+SVM (\tenfold)    & 322.89 & 20.02  & 0.79  \\
+SVM (\aesid, \tenfold)    & 185.28 & 18.29  & 0.78  \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \twitter dataset. Cross-validation results are averaged over all
+         partitions. \label{fig:results_twitter_summary}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\twitter: Accuracy}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_accuracy("../results/twitter_bayes_ratiorange.csv",
+                          "../results/twitter_svm_ratiorange.csv",
+                          NULL)
+@
+\caption{Classifier accuracy for varying training-evaluation ratios on the \twitter dataset.
+         \label{fig:results_twitter_split_accuracy}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\twitter: Classifier Size}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_size("../results/twitter_bayes_ratiorange.csv",
+                      "../results/twitter_svm_ratiorange.csv",
+                      NULL)
+@
+\caption{Classifier sizes for varying training-evaluation ratios on the \twitter dataset.
+         \label{fig:results_twitter_split_size}}
+\end{figure}
+\end{frame}
+
+\end{document}
