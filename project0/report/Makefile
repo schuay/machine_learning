@@ -2,11 +2,12 @@ all: build
 
 build: report.Rnw
 	R CMD Sweave $<
-	pdflatex report.tex
-	pdflatex report.tex
+	pdflatex -shell-escape report.tex
+	pdflatex -shell-escape report.tex
 
 clean:
-	rm -rf report.{aux,log,out,tex}
+	rm -rf report.{aux,log,out,tex,sh,exitCode,stderr,stdout}
+	rm -rf classifier.tex regressor.tex
 
 dist-clean: clean
 	rm -rf report.pdf

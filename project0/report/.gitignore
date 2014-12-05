@@ -5,3 +5,9 @@ report.aux
 report.log
 report.out
 report.tex
+report.sh
+report.exitCode
+report.stderr
+report.stdout
+classifier.tex
+regressor.tex

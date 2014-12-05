@@ -21,6 +21,31 @@
     numbers=left,
 }
 
+\usepackage{bashful}
+%\usepackage[usenames,dvipsnames]{xcolor}
+
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  firstline=2,% Supress the first line that begins with `%`
+  basicstyle=\small\sffamily,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
+
+\lstdefinestyle{BashOutputStyle}{
+  basicstyle=\small\ttfamily,
+  numbers=none,
+  frame=tblr,
+  columns=fullflexible,
+  backgroundcolor=\color{gray!10},
+}
+
 \title{Exercise 1 \\
        Machine Learning WS 2014/2015 \\
        Technical University of Vienna}
@@ -164,6 +189,33 @@ R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Swe
 
 Benchmarks for the classification datasets \annealing and \twitter were performed on a a machine
 with 8 GB of RAM and an Intel Core i7-3770 CPU at 3.40 GHz, running Linux 3.17.4.
+The \powerconsumption and \solarflares benchmarks were performed on a machine with 64 GB of RAM and
+2 Intel Xeon processors. % TODO add exact CPU type and kernel version
+
+\subsection{Toolchain}
+
+The \lstinline|data| directory contains subdirectories for the used datasets. By executing \lstinline|make| in
+\lstinline|data| all datasets are downloaded to their respective directories. Each dataset is represented by a
+class in the \lstinline|src| directory.
+
+To evaluate our classifiers and regressors, the \lstinline|classifier.py| and \lstinline|regressor.py| scripts
+in \lstinline|src| are used. Both scripts allow the user to specify a dataset, a model, an evaluation strategy
+(here called splitter) and a limit on the number of samples to use from the dataset.
+
+Listing~\ref{lst:classifier} and Listing~\ref{lst:regressor} show the call syntax of \lstinline|classifier.py|
+and \lstinline|regressor.py| respectively.
+
+\bash[stdoutFile=classifier.tex]
+../src/classifier.py -h
+\END
+
+\lstinputlisting[label=lst:classifier,style=BashOutputStyle,caption=classifier.py usage]{classifier.tex}
+
+\bash[stdoutFile=regressor.tex]
+../src/regressor.py -h
+\END
+
+\lstinputlisting[label=lst:regressor,style=BashOutputStyle,caption=regressor.py usage]{regressor.tex}
 
 \subsection{\annealing}
 
