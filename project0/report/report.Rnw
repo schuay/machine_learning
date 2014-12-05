@@ -35,6 +35,8 @@
 \newcommand{\tenfold}{\texttt{10fold}\xspace}
 \newcommand{\ratiostd}{\texttt{ratio75}\xspace}
 
+\newcommand{\aesid}{\texttt{aes\_id}\xspace}
+
 \begin{document}
 
 \maketitle
@@ -361,17 +363,21 @@ plot_ratio_range_accuracy("../results/twitter_bayes_ratiorange.csv",
 Figures \ref{fig:results_twitter_split_accuracy} and \ref{fig:results_twitter_split_size} display
 classifier accuracy and serialization sizes for varying training-evaluation ratios. Results for
 benchmarks using the stopwords filter and no transformers are included for the sake of comparison
-and are labelled with a \texttt{\_aes\_id} suffix. % TODO: Correctly relabel in files.
+and are labelled with a \aesid suffix.
+
 The accuracy of
 both SVM and Bayes behaves similarly, increasing steadily up to a ratio of 90\%. Accuracy decreases
 again at 95\%; we were not able to determine the cause conclusively, but speculate that this was caused
-by properties of the dataset. According to the literature\footnote{A. Go, R. Bhayani, and L. Huang.
+by properties of the dataset. We reached an accuracy of 80.9\% with the SVM classifier, which, according to the literature\footnote{A. Go, R. Bhayani, and L. Huang.
 Twitter sentiment classification using distant supervision. CS224N Project Report, Stanford, pages 1-12, 2009.
 }\footnote{J. Lin and A. Kolcz. Large-scale machine learning at twitter. In Proceedings of the 2012
 ACM SIGMOD International Conference on Management of Data, SGIMOD '12, pages 793-804, New York, NY,
-USA, 2012. ACM.}, 80\% accuracy compares favorably to best result achieved by others within the same area.
+USA, 2012. ACM.}, compares favorably to top results achieved by others within the same area.
 This demonstrates that good results may be achieved by very simple means, in this case the SVM classifier
-provided by \texttt{scikit-learn} and basic preprocessing.
+provided by \texttt{scikit-learn} and basic preprocessing. It is especially
+interesting that while all classifiers and configurations produce similar results,
+\aesid is straddled by the standard configuration instead of having both
+Bayes and SVM produce either better or worse accuracies.
 
 \begin{figure}[ht]
 \centering
@@ -390,7 +396,8 @@ being larger than the SVM classifier by a factor of around 4. This result is ver
 since the SVM classifier keeps only the support vectors and discards all other data points. Given the
 classifier results from \annealing dataset in Figure \ref{fig:results_annealing_split_size}, we expect
 the KNN classifier to have grown prohibitively large and thus see classifier size as the likely cause
-for KNN's failure to complete.
+for KNN's failure to complete. Compared to \aesid, the standard configuration produces
+smaller classifiers (by around a factor of 2) due to feature reduction through user and multicharacter transformers.
 
 \begin{figure}[ht]
 \centering
@@ -398,10 +405,14 @@ for KNN's failure to complete.
 \toprule
 Classifier & Train. Time (s) & Eval. Time (s) & Accuracy \\
 \midrule
-Bayes (\ratiostd) & 0.0077 & 0.026 & 0.95 \\ % TODO: Fill in correct data.
-SVM (\ratiostd)   & 0.0224 & 0.024 & 1.0  \\
-Bayes (\tenfold)  & 0.0091 & 0.011 & 0.96 \\
-SVM (\tenfold)    & 0.0263 & 0.01  & 1.0  \\
+Bayes (\ratiostd) & 27.36 & 29.268 & 0.78 \\
+Bayes (\aesid, \ratiostd) & 29.63 & 20.69 & 0.78 \\
+SVM (\ratiostd)   & 272.87 & 49.11 & 0.8  \\
+SVM (\aesid, \ratiostd)   & 164.66 & 45.83 & 0.79  \\
+Bayes (\tenfold)  & 31.87 & 12.0 & 0.77 \\
+Bayes (\aesid, \tenfold)  & 33.9 & 8.24 & 0.77 \\
+SVM (\tenfold)    & 322.89 & 20.02  & 0.79  \\
+SVM (\aesid, \tenfold)    & 185.28 & 18.29  & 0.78  \\
 \bottomrule
 \end{tabular}
 \caption{General results for the \twitter dataset. Cross-validation results are averaged over all
@@ -410,6 +421,20 @@ SVM (\tenfold)    & 0.0263 & 0.01  & 1.0  \\
 
 Finally, training- as well as evaluation times and accuracy are again given in Figure
 \ref{fig:results_twitter_summary} for both \ratiostd and \tenfold evaluation methods.
+Accuracy is as expected after being thoroughly examined in Figure
+\ref{fig:results_twitter_split_accuracy}. Bayes once again proves to be very
+time-efficient both during training and evaluation (even though the produced
+classifier is much larger than the SVM classifier). Training an SVM classifier
+is expensive, taking between a factor of 5 and 10 longer than Bayes training.
+
+Most surprising though was the effect that the stopword filter had on SVM training
+times, adding over 100 seconds to the runtime in both \ratiostd and \tenfold
+benchmarks. Even though both multichar and user transformers impacted the number
+of features, they did not have this magnitude of effect by far. The difference
+between the transformers and the stopword filter is that while transformers
+significantly reduce the number of features with few occurrences each,
+the stopword filter strips a small number of features with each having a very
+large number of occurrences.
 
 % --------------------------------------------------------------------------------------------------
 
