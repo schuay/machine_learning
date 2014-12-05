@@ -12,6 +12,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn import metrics
 
+from sklearn.preprocessing import Normalizer
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
 import dataset_splitter as ds
 import power_consumption as pc
 import solar_flares as sf
@@ -22,6 +26,7 @@ DSETS_DEFAULT  = 'power_consumption'
 SPLIT_DEFAULT  = 'ratio75'
 MVALS_DEFAULT  = 'mean'
 LIMIT_DEFAULT  = 20000
+TRANS_DEFAULT  = 'scale'
 
 DATASETS = { 'power_consumption': lambda mi: pc.PowerConsumptionDataset(
                     '../data/power_consumption/household_power_consumption.zip',
@@ -44,6 +49,13 @@ class SingleRegressorWrapper:
     def predict(self, X):
         return self.__reg.predict(X)
 
+class IdTransformer:
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return X
+
 REGRESSORS = { 'linear': LinearRegression()
              , 'knnradius': RadiusNeighborsRegressor(radius=1)
              , 'rforest': RandomForestRegressor()
@@ -60,12 +72,18 @@ MISSING_VALUES_STRATEGY = { 'mean': Imputer(strategy='mean')
                           , 'median': Imputer(strategy='median')
                           }
 
+TRANSFORMERS = { 'scale': StandardScaler()
+               , 'normalize': Normalizer()
+               , 'id': IdTransformer()
+               }
+
 class Opts:
     dataset = DSETS_DEFAULT
     limit = LIMIT_DEFAULT
     regressor = REGRE_DEFAULT
     splitter = SPLIT_DEFAULT
     mvals = MVALS_DEFAULT
+    transformers = TRANS_DEFAULT.split(",")
     verbose = False
 
 options = Opts()
@@ -131,7 +149,7 @@ def usage():
     sys.exit(1)
 
 if __name__ == '__main__':
-    opts, args = getopt.getopt(sys.argv[1:], "d:l:t:s:m:vh")
+    opts, args = getopt.getopt(sys.argv[1:], "d:l:t:s:m:r:vh")
     for o, a in opts:
         if o == "-d":
             if not a in DATASETS:
@@ -151,13 +169,24 @@ if __name__ == '__main__':
             if not a in MISSING_VALUES_STRATEGY:
                 usage()
             options.mvals = a
+        elif o == "-r":
+            transformers = a.split(",")
+            for t in transformers:
+                if not t in TRANSFORMERS:
+                    usage()
+            options.transformers = transformers
         elif o == "-v":
             options.verbose = True
         else:
             usage()
 
+    pipe = list()
+    for t in options.transformers:
+        pipe.append((t, TRANSFORMERS[t]))
+    pipe.append(('regressor', REGRESSORS[options.regressor]))
+
     evaluate_features( DATASETS[options.dataset](options.limit)
                      , SPLITTERS[options.splitter]
-                     , REGRESSORS[options.regressor]
+                     , Pipeline(pipe)
                      , MISSING_VALUES_STRATEGY[options.mvals]
                      )
