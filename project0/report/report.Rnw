@@ -156,6 +156,16 @@ attempt to learn a general function, but instead simply memorizes all seen train
 Prediction consists simply of examining the $k$ nearest neighbors. This classifier again performs
 surprisingly well despite its simplicity, but obviously grows linearly in the training set size.
 
+\section{Regressor Selection}
+
+The first regressor we chose\footnote{\lstinline|sklearn.linear_model.SGDRegressor|} uses Stochastic Gradient Descent.
+This technique attempts to minimize a loss function. %TODO
+This regressor is particularly useful for large datasets and is faster than many of the alternatives. Additionally,
+we were already familiar with Stochastic Gradient Descent from the lecture.
+
+Our second regressor is again a Support Vector Machine\footnote{\lstinline|sklearn.svm.SVR|}.
+Everything said for the SVM classifier also applies here. This regressor is very time comsuming when compared to the
+SGD regressor above and using it on large datasets is very time consuming.
 % TODO: Regression selection.
 
 % --------------------------------------------------------------------------------------------------
