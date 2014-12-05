@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 
+import collections
 import re
 import tweet
 
@@ -33,7 +34,7 @@ class AllWords(FeatureSelectionI):
         """Breaks up text into list of words. Takes a string and returns a dictionary mapping
         word keys to True values."""
         words = re.findall(r"[\w']+|[.,!?;]", t[tweet.TEXT])
-        return dict([(word.lower(), True) for word in words])
+        return collections.OrderedDict([(word.lower(), True) for word in words])
 
     def select_features(self, obj):
         return AllWords.__get_tweet_features(obj)
@@ -56,8 +57,8 @@ class StopWordFilter(FeatureSelectionI):
 
     def select_features(self, obj):
         fs = self.__selection.select_features(obj);
-        return {f: m for f, m in fs.iteritems()
-                if (not isinstance(f, basestring) or f.lower() not in self.__stopset)}
+        return collections.OrderedDict([(f, m) for f, m in fs.iteritems()
+                if (not isinstance(f, basestring) or f.lower() not in self.__stopset)])
 
     @staticmethod
     def __stopset():
