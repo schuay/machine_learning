@@ -1,7 +1,11 @@
 #!/usr/bin/env python2
 
+import cPickle as pickle
+import csv
 import getopt
+import os
 import sys
+import tempfile
 import time
 
 from sklearn.linear_model import LinearRegression
@@ -83,6 +87,38 @@ TRANSFORMERS = { 'scale': StandardScaler()
                , 'id': IdTransformer()
                }
 
+class RegressorWriter:
+    def __init__(self):
+        self.__writer = csv.DictWriter(sys.stdout,
+                                       [ "dataset"
+                                       , "regressor"
+                                       , "splitter"
+                                       , "train_size"
+                                       , "train_time"
+                                       , "eval_size"
+                                       , "eval_time"
+                                       , "regressor_size"
+                                       , "mse"
+                                       , "r2_score"
+                                       ])
+
+    def writeheader(self):
+        self.__writer.writeheader()
+
+    def writerow(self, train_size, train_time, eval_size, eval_time,
+                 regressor_size, mse, r2_score):
+        self.__writer.writerow({ "dataset": options.dataset
+                               , "regressor": options.regressor
+                               , "splitter": options.splitter
+                               , "train_size": train_size
+                               , "train_time": train_time
+                               , "eval_size": eval_size
+                               , "eval_time": eval_time
+                               , "regressor_size": regressor_size
+                               , "mse": mse
+                               , "r2_score": r2_score
+                               })
+
 class Opts:
     dataset = DSETS_DEFAULT
     limit = LIMIT_DEFAULT
@@ -95,10 +131,11 @@ class Opts:
 options = Opts()
 
 class Regressor:
-    def __init__(self, clf, mvals, train_size):
+    def __init__(self, clf, mvals, train_size, train_time):
         self.__clf = clf
         self.__mvals = mvals
         self.__train_size = train_size
+        self.__train_time = train_time
 
     @staticmethod
     def train(clf, mvals, training_sets):
@@ -108,15 +145,21 @@ class Regressor:
         mvals = mvals.fit(ys)
         ys = mvals.transform(ys)
 
-        return Regressor(clf.fit(xs, ys), mvals, len(xs))
+        start = time.clock()
+        trained_regressor = clf.fit(xs, ys)
+        elapsed = time.clock() - start
+
+        return Regressor(trained_regressor, mvals, len(xs), elapsed)
 
     """Evaluates the classifier with the given data sets."""
-    def evaluate(self, test_sets):
+    def evaluate(self, test_sets, writer):
         xs = [ inst.x() for inst in test_sets.instances() ]
         ys = [ inst.y() for inst in test_sets.instances() ]
         ys = self.__mvals.transform(ys)
 
+        start = time.clock()
         ps = self.__clf.predict(xs)
+        elapsed = time.clock() - start
         if not hasattr(ps[0], "__len__"):
             ps = [ [p] for p in ps ]
 
@@ -124,21 +167,31 @@ class Regressor:
             for x, y, p in zip(xs, ys, ps):
                 print("ACTUAL: %s PREDICTED: %s FEATURES: %s" % (y, p, x))
 
+        with tempfile.NamedTemporaryFile() as f:
+            pickle.dump(self, f)
+            regressor_size = os.stat(f.name).st_size
+
         yp = zip(zip(*ys), zip(*ps))
-        print map(lambda (y, p): metrics.mean_absolute_error(y,p), yp)
-        print map(lambda (y, p): metrics.mean_squared_error(y,p), yp)
-        print map(lambda (y, p): metrics.r2_score(y,p), yp)
-        print map(lambda (y, p): metrics.explained_variance_score(y,p), yp)
+        mse = metrics.mean_squared_error(yp[0][0], yp[0][1])
+        r2_score = metrics.r2_score(yp[0][0], yp[0][1])
+
+        writer.writerow(self.__train_size,
+                        round(self.__train_time, 5),
+                        len(test_sets.instances()),
+                        round(elapsed, 5),
+                        regressor_size,
+                        round(mse, 5),
+                        round(r2_score, 5))
 
 def evaluate_features(dataset, splitter, raw_regressor, mvals):
     dataset_tuples = splitter.split(dataset)
 
-    for (train_set, test_set) in dataset_tuples:
-        print 'training new regressor'
-        regressor = Regressor.train(raw_regressor, mvals, train_set);
+    writer = RegressorWriter()
+    writer.writeheader()
 
-        print 'testing regressor...'
-        regressor.evaluate(test_set)
+    for (train_set, test_set) in dataset_tuples:
+        regressor = Regressor.train(raw_regressor, mvals, train_set);
+        regressor.evaluate(test_set, writer)
 
 def usage():
     print("""USAGE: %s [options]
