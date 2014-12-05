@@ -1,5 +1,6 @@
 import copy
 import math
+import random
 
 import classification_dataset as cd
 
@@ -16,6 +17,10 @@ class RatioRangeSplitter(DatasetSplitterI):
 
     def split(self, ds):
         instances = ds.instances()
+
+        # Reproducible random shuffle to avoid sequential splits in test/eval.
+        random.seed(0)
+        random.shuffle(instances)
 
         for ratio in range(self.__start, self.__stop, self.__step):
             cutoff = int(math.floor(len(instances) * ratio / 100))
@@ -42,6 +47,10 @@ class CrossfoldSplitter(DatasetSplitterI):
     def split(self, ds):
         instances = ds.instances()
         cutoff = int(math.floor(len(instances) / self.__k))
+
+        # Reproducible random shuffle to avoid sequential splits in test/eval.
+        random.seed(0)
+        random.shuffle(instances)
 
         for i in range(self.__k):
             test  = instances[:cutoff]
