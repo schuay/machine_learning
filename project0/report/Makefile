@@ -14,9 +14,12 @@ slides: slides.Rnw pqplot.Rnw
 
 clean:
 	rm -f {report,slides}.{aux,log,out,tex,sh,exitCode,stderr,stdout}
+	rm -f slides.{nav,snm,toc,vrb}
+	rm -f *-eps-converted-to.pdf
+	rm -f *.eps
 	rm -f classifier.tex regressor.tex
 
 dist-clean: clean
-	rm -rf report.pdf
+	rm -rf {report,slides}.pdf
 
 .PHONY: clean dist-clean

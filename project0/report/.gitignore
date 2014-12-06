@@ -11,4 +11,5 @@
 *.stderr
 *.stdout
 *.tex
+*.toc
 *.vrb
