@@ -221,20 +221,19 @@ def evaluate_features(dataset, splitter, raw_classifier):
 
 def usage():
     print("""USAGE: %s [options]
-            -d  The dataset to use. One of 'twitter' (default), 'annealing'.
-            -s  Selects the splitter. One of 'ratio75' (default), '10fold'.
+            -d  The dataset to use. One of 'twitter' (default), 'annealing', 'tic'.
+            -s  Selects the splitter. One of 'ratio75' (default), '10fold',
+                'ratiorange'.
             -t  Selects the classifier type. One of 'bayes', 'knn', 'svm' (default).
             -v  Verbose output.
 
             Twitter:
             -f  Selects the feature selector. One of %s (default = '%s').
-            -g  Specifies the n for the n-gram feature selector. Can be any positive integer (default = '%s').
+            -g  Specifies the n for the n-gram feature selector.
+                Can be any positive integer (default = '%s').
             -r  Enables the given transformers, passed as a comma-separated list.
                 One of %s (default = '%s').
-            -l  Limit the number of rows loaded.
-                
-            Annealing:
-            TODO""" %
+            -l  Limit the number of rows loaded.""" %
             ( sys.argv[0]
             , ", ".join(["'" + t + "'" for t in FEATURE_SELECTORS.keys()])
             , FEAT_DEFAULT
