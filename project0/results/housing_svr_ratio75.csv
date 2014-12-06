@@ -1,0 +1,2 @@
+dataset,regressor,splitter,train_size,train_time,eval_size,eval_time,regressor_size,mse,r2_score
+housing,svr,ratio75,379,0.0142,127,0.00237,131072,27.67327,0.68346

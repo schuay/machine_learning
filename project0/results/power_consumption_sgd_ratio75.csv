@@ -1,0 +1,2 @@
+dataset,regressor,splitter,train_size,train_time,eval_size,eval_time,regressor_size,mse,r2_score
+power_consumption,sgd,ratio75,75000,0.27284,25000,0.03055,0,1.53938,0.14235
