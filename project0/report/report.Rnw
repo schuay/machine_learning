@@ -634,6 +634,84 @@ separately, failed to produce better results.
 
 \subsection{\housing}
 
-% TODO
+The \housing dataset contains various features of housing areas. Given these features, we
+aim to predict the median value of owner-occupied homes in that area.
+
+We use all features this dataset provides. As all attributes already are real or integer
+values and the only categorical attribute is binary, to preprocessing other than scaling
+to a Gaussian standard distribution has been attempted. Omitting this scaling leads to
+very bad results and therefore not \noscale regressor was used for this dataset.
+
+As with the \powerconsumption dataset above, the results for this dataset are poor if the
+dataset is not shuffled prior to being passed to the regressor.
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_mse("../results/housing_sgd_ratiorange.csv",
+                     "../results/housing_svr_ratiorange.csv",
+		    NULL)
+@
+\caption{Mean squared error for varying training-evaluation ratios on the \housing dataset.
+         \label{fig:results_housing_split_mse}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_r2("../results/housing_sgd_ratiorange.csv",
+                    "../results/housing_svr_ratiorange.csv",
+		    NULL)
+@
+\caption{$R^2$ score for varying training-evaluation ratios on the \housing dataset.
+         \label{fig:results_housing_split_r2}}
+\end{figure}
+
+Figures \ref{fig:results_housing_split_mse} and \ref{fig:results_housing_split_r2} show
+the MSE and $R^2$ score of the regressors for different training-evaluations ratios.
+
+Both SGD and SVR perform similarly for large training sets. However, as with the
+\powerconsumption dataset SVR performs very bad if the training set is too small.
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_size("../results/housing_svr_ratiorange.csv",
+                      NULL, NULL, "regressor")
+@
+\caption{Regressor sizes for varying training-evaluation ratios on the \housing dataset.
+         \label{fig:results_housing_split_size}}
+\end{figure}
+
+We can see in Figure~\ref{fig:results_housing_split_size} that the serialization size for
+the SVR model grows, as before, linearly with the size of the training set. Again, the SGD
+regressor could not be properly serialized.
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Regressor & Train. Time (s) & Eval. Time (s) & MSE & $R^2$ \\
+\midrule
+SGD (\ratiostd) & 0.00243 & 0.00036 & 26.60676 & 0.69566 \\
+SVR (\ratiostd) & 0.0142 & 0.00237 & 27.67327 & 0.68346 \\
+SGD (\tenfold) & 0.002535 & 0.000234 & 24.6665 & 0.680654 \\
+SVR (\tenfold) & 0.019568 & 0.001218 & 28.3543 & 0.65123 \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \housing dataset. Cross-validation results are averaged over all
+         partitions. \label{fig:results_housing_summary}}
+\end{figure}
+
+The training and evaluation times, the MSE and the $R^2$ score for SGD and SVR are shown
+in Table~\ref{fig:results_housing_summary}. We used both the \ratiostd and \tenfold
+evaluation methods to obtain these results. Even with this very small dataset, the SGD
+regressor is faster than SVR and delivered slightly better results.
+
+Overall, we obtained an $R^2$ score close to 70\% without performing any preprocessing
+other than feature scaling.
 
 \end{document}
