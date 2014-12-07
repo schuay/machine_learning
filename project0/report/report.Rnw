@@ -625,6 +625,11 @@ Furthermore, the table shows consistently with the Figures
 \ref{fig:results_powerconsumption_split_r2} that the SVR without scaling performs much
 better than SVR and SGD with scaling.
 
+In general, the results we obtained are relatively bad. Even with SVR without scaling, the
+$R^2$ score is only about 25\%. However, several attempts to improve these results, like
+different representations of time, or performing the regression for each weekday
+separately, failed to produce better results.
+
 % --------------------------------------------------------------------------------------------------
 
 \subsection{\housing}
