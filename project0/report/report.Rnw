@@ -535,6 +535,10 @@ Additionally, we scale all feature values to fit a Gaussian standard distributio
 necessary for some Regressors to work properly. If we omit this standardization, this is
 indicated by the \noscale keyword.
 
+We deal with missing values in this dataset by replacing them with the mean of all other
+samples. We also tried to use the median but did not notice any significant differences in
+the results.
+
 Due to the poor runtime performance of the SVR model, we were unable to test our
 regressors with the entire dataset and therefore only used the first $100.000$ entries.
 
