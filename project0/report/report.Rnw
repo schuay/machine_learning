@@ -159,14 +159,13 @@ surprisingly well despite its simplicity, but obviously grows linearly in the tr
 \section{Regressor Selection}
 
 The first regressor we chose\footnote{\lstinline|sklearn.linear_model.SGDRegressor|} uses Stochastic Gradient Descent.
-This technique attempts to minimize a loss function. %TODO
+This technique attempts to minimize a loss function that is written as a sum of differentiable functions.
 This regressor is particularly useful for large datasets and is faster than many of the alternatives. Additionally,
-we were already familiar with Stochastic Gradient Descent from the lecture.
+we were already familiar with Gradient Descent from the lecture.
 
 Our second regressor is again a Support Vector Machine\footnote{\lstinline|sklearn.svm.SVR|}.
 Everything said for the SVM classifier also applies here. This regressor is very time comsuming when compared to the
 SGD regressor above and using it on large datasets is very time consuming.
-% TODO: Regression selection.
 
 % --------------------------------------------------------------------------------------------------
 
