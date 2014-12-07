@@ -673,8 +673,8 @@ plot_ratio_range_r2("../results/housing_sgd_ratiorange.csv",
 Figures \ref{fig:results_housing_split_mse} and \ref{fig:results_housing_split_r2} show
 the MSE and $R^2$ score of the regressors for different training-evaluations ratios.
 
-Both SGD and SVR perform similarly for large training sets. However, as with the
-\powerconsumption dataset SVR performs very bad if the training set is too small.
+Both SGD and SVR perform similarly for large training sets. However, SGD performs very bad
+if the training set is too small.
 
 \begin{figure}[ht]
 \centering
