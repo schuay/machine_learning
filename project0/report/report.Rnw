@@ -57,6 +57,7 @@
 
 \newcommand{\tenfold}{\texttt{10fold}\xspace}
 \newcommand{\ratiostd}{\texttt{ratio75}\xspace}
+\newcommand{\ratiorange}{\texttt{ratiorange}\xspace}
 
 \newcommand{\aesid}{\texttt{aes\_id}\xspace}
 
@@ -223,6 +224,27 @@ and \lstinline|regressor.py| respectively.
 \END
 
 \lstinputlisting[label=lst:regressor,style=BashOutputStyle,caption=regressor.py usage]{regressor.tex}
+
+Once finished, \lstinline|classifier.py| and \lstinline|regressor.py| will print their
+results in a CSV format. The output contains the dataset, the name of the classifier or
+regressor, the splitter, the size of the training and evaluation datasets, the time needed
+for training and evaluation and the size of the model as well as several performance
+metrics.
+
+\subsection{Evaluation strategies}
+
+We used three different evaluation strategies which we called splitters due to the fact
+that they are used to split a given dataset into a training and an evaluation set.
+
+\begin{description}
+    \item[\ratiorange] This method was primarilary used to generate the graphs. First the
+    dataset is split such that 5\% are used as training data and the rest is used for
+    evaluation. Then the split is increased by 5\% and the experiment is repeated. This
+    continues until 95\% of the dataset are used for training purposes.
+    \item[\ratiostd] In this evaluation method, a single experiment is run. 75\% of the
+    dataset serve as training data, the remaining 25\% are used for evaluation.
+    \item[\tenfold] This strategy performs 10-fold cross-validation.
+\end{description}
 
 \subsection{\annealing}
 
