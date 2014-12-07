@@ -124,7 +124,7 @@ Nr. of samples  & Huge         & Medium         & Small          & Huge         
 Nr. of features & Huge         & Medium         & Medium         & Low               \\
 Feature types   & Binary       & Cat, Int, Real & Cat, Int, Real & Date, Real        \\
 Missing values  & No           & Yes            & No             & Yes               \\
-Preprocessing   & Beneficial   & Optional       & None           & Reqired           \\
+Preprocessing   & Beneficial   & Optional       & None           & Required          \\
 Result set      & \{Pos, Neg\} & 6 classes      & Real           & Real              \\
 \bottomrule
 \end{tabular}
@@ -144,7 +144,7 @@ relying only on a subset of data points (the support vectors). However, they can
 both to train and apply.
 
 Naive bayes\footnote{\lstinline|nltk.classify.NaiveBayesClassifier|} was selected as the second classifier
-due both to its simplicity and the fact that it seems to be a popular standard baseline classifier.
+due to both its simplicity and the fact that it seems to be a popular standard baseline classifier.
 It assumes feature independence, and is known to perform well in document classification. Both training
 and evaluation are time-efficient.
 
@@ -156,14 +156,15 @@ surprisingly well despite its simplicity, but obviously grows linearly in the tr
 
 \subsection{Regressor Selection}
 
-The first regressor we chose uses Stochastic Gradient Descent\footnote{\lstinline|sklearn.linear_model.SGDRegressor|}.
-This technique attempts to minimize a loss function that is written as a sum of differentiable functions.
+The first regressor we chose uses Stochastic Gradient Descent\footnote{\lstinline|sklearn.linear_model.SGDRegressor|}
+(SGD). This technique attempts to minimize a loss function that is written as a sum of differentiable functions.
 This regressor is particularly useful for large datasets and is faster than many of the alternatives. Additionally,
 we were already familiar with Gradient Descent from the lecture.
 
 Our second regressor is again a Support Vector Machine\footnote{\lstinline|sklearn.svm.SVR|}.
 Everything said for the SVM classifier also applies here. This regressor is very time consuming when compared to the
-SGD regressor above and using it on large datasets is now always feasible.
+SGD regressor above and using it on large datasets is now always feasible. To avoid confusion with the classifier we
+will call this regressor SVR.
 
 % --------------------------------------------------------------------------------------------------
 
@@ -181,8 +182,8 @@ maximal flexibility.
 Results were exported to CSV files, which were then used to generate graphs
 using R and the \verb|ggplot2|\footnote{\url{http://ggplot2.org/}} package.
 
-Obviously, this report was typeset in \LaTeX (and less obviously, integrated with
-R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Sweave/}}).
+Obviously, this report was typeset in \LaTeX\space and (less obviously) integrated with
+R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Sweave/}}.
 
 \subsection{Toolchain}
 
@@ -282,7 +283,7 @@ was simpler.
 
 Figure \ref{fig:results_annealing_summary} gives an overview of classifier performance and accuracy
 for both a 75-25\% split between training and evaluation data, and using 10-fold cross-validation.
-Accuracy is surprisingly high for in all cases, with all classifiers predicting at least 95\% of all
+Accuracy is surprisingly high in all cases, with all classifiers predicting at least 95\% of all
 evaluation instances correctly. The SVM classifier in particular predicts optimally without making a
 single mistake.
 
@@ -386,7 +387,7 @@ effect on the classifier accuracy.
 \subsection{\twitter}
 
 The \twitter dataset is very large in several respects; it not only contains over 1.5 million
-tweets, but by it's very nature has a huge number of feature (at least one per mentioned word).
+tweets, but by it's very nature has a huge number of features (at least one per mentioned word).
 Employed alternative feature selection methods such as n-grams, which map each occurring combination
 words of length $\leq n$ to a feature, quickly increases the number of features into infeasable areas.
 Memory and CPU time constraints definitely limit the kinds of experiments which can be conducted
@@ -400,7 +401,7 @@ We employed various methods of preprocessing and feature selection on this datas
 \item Stopword filtering: Many words of the english language such as 'me', 'you', 'it', 'or',
       etc., occur frequently but do not contribute any sentiment. Such so called stopwords are removed
       to decrease the size of the feature set. It is however important that common words which \emph{do}
-      carry sentiment ('no', 'very', 'but').
+      carry sentiment ('no', 'very', 'but') are kept.
 \item Emoticon selection: Selection of all emoticons as features.
 \item N-gram selection: Selection of all combination of words of length $\leq n$ as features. N-grams
       enable handling of phrases such as 'not good', which obviously carries more accurate meaning
@@ -524,7 +525,7 @@ in a single household over a period of almost four years. We try to estimate the
 active power for a given point in time. The dataset contains several other values, but
 they are dependent on the global active power and thus we omitted them.
 
-The time of a power measurement is given as a data string (e.g. 16/12/2006) and the clock
+The time of a power measurement is given as a date string (e.g. 16/12/2006) and the clock
 time (e.g. 17:24:00). Since the regressors expect numerical features, preprocessing is
 necessary. Attempting to express the date and time as integers (i.e. the number of seconds
 since the Unix epoch) yielded bad results. Therefore we settled with replacing the date
@@ -633,7 +634,7 @@ separately, failed to produce better results.
 While the 1000-fold speed advantage of the SGD regressor over SVR is surprising, it is
 worth noting that Scikit's documentation specifically suggests using the SGD regressor for
 datasets with more than 100.000
-samples\footnote{http://scikit-learn.org/stable/tutorial/machine_learning_map/index.html}.
+samples\footnote{\url{http://scikit-learn.org/stable/tutorial/machine\_learning\_map/index.html}}.
 
 % --------------------------------------------------------------------------------------------------
 
@@ -645,7 +646,7 @@ aim to predict the median value of owner-occupied homes in that area.
 We use all features this dataset provides. As all attributes already are real or integer
 values and the only categorical attribute is binary, no preprocessing other than scaling
 to a Gaussian standard distribution has been attempted. Omitting this scaling leads to
-very bad results and therefore \noscale regressor was not used for this dataset.
+very bad results and therefore no \noscale regressor was used for this dataset.
 
 As with the \powerconsumption dataset above, the results for this dataset are poor if the
 dataset is not shuffled prior to being passed to the regressor.
