@@ -107,15 +107,6 @@ while the others are real values.
 
 For further dataset details, see Figure \ref{fig:datasets}.
 
-\begin{comment}
-solar flares:
-* interesting since regression on categorical data
-
-powerconsumption:
-* coupled attributes -> reduce only to time. choice of preprocessing important.
-\end{comment}
-
-
 \begin{figure}[h]
 \centering
 \begin{tabular}{lcccc}
@@ -160,14 +151,14 @@ surprisingly well despite its simplicity, but obviously grows linearly in the tr
 
 \section{Regressor Selection}
 
-The first regressor we chose\footnote{\lstinline|sklearn.linear_model.SGDRegressor|} uses Stochastic Gradient Descent.
+The first regressor we chose uses Stochastic Gradient Descent\footnote{\lstinline|sklearn.linear_model.SGDRegressor|}.
 This technique attempts to minimize a loss function that is written as a sum of differentiable functions.
 This regressor is particularly useful for large datasets and is faster than many of the alternatives. Additionally,
 we were already familiar with Gradient Descent from the lecture.
 
 Our second regressor is again a Support Vector Machine\footnote{\lstinline|sklearn.svm.SVR|}.
-Everything said for the SVM classifier also applies here. This regressor is very time comsuming when compared to the
-SGD regressor above and using it on large datasets is very time consuming.
+Everything said for the SVM classifier also applies here. This regressor is very time consuming when compared to the
+SGD regressor above and using it on large datasets is now always feasible.
 
 % --------------------------------------------------------------------------------------------------
 
@@ -542,8 +533,8 @@ indicated by the \noscale keyword.
 Due to the poor runtime performance of the SVR model, we were unable to test our
 regressors with the entire dataset and therefore only used the first $100.000$ entries.
 
-All regression algorithms performed pooly when the dataset was read in chonological order.
-A possible explanation for this bahaviour is that by using a simple split between training
+All regression algorithms performed poorly when the dataset was read in chonological order.
+A possible explanation for this behaviour is that by using a simple split between training
 and evaluation data set, trends continue into the evaluation data set and can not be
 anticipated by the model. To mitigate this problem, the dataset is shuffled before use.
 
@@ -605,12 +596,12 @@ training set. Curiously, the SGD regressor could not be properly serialized.
 \toprule
 Regressor & Train. Time (s) & Eval. Time (s) & MSE & $R^2$ \\
 \midrule
-SGD (\ratiostd) & 0.27284 & 0.03055 & 1.53938 & 0.14235 \\
-SVR (\ratiostd) & 376.3459 & 53.3727 & 1.55024 & 0.1363 \\
-SVR (\noscale, \ratiostd) & 561.47152 & 54.24232 & 1.35956 & 0.24254 \\
-SGD (\tenfold) & 0.363914 & 0.0111 & 1.54207 & 0.145796 \\
-SVR (\tenfold) & 516.374 & 25.7114 & 1.55244 & 0.140111 \\
-SVR (\noscale, \tenfold) & 807.875 & 24.9298 & 1.35017 & 0.252097 \\
+SGD (\ratiostd) & 0.27 & 0.03 & 1.54 & 0.14 \\
+SVR (\ratiostd) & 376.35 & 53.37 & 1.55 & 0.14 \\
+SVR (\noscale, \ratiostd) & 561.47 & 54.24 & 1.36 & 0.24 \\
+SGD (\tenfold) & 0.36 & 0.01 & 1.54 & 0.15 \\
+SVR (\tenfold) & 516.37 & 25.71 & 1.55 & 0.14 \\
+SVR (\noscale, \tenfold) & 807.86 & 24.93 & 1.35 & 0.25 \\
 \bottomrule
 \end{tabular}
 \caption{General results for the \powerconsumption dataset. Cross-validation results are averaged over all
@@ -638,9 +629,9 @@ The \housing dataset contains various features of housing areas. Given these fea
 aim to predict the median value of owner-occupied homes in that area.
 
 We use all features this dataset provides. As all attributes already are real or integer
-values and the only categorical attribute is binary, to preprocessing other than scaling
+values and the only categorical attribute is binary, no preprocessing other than scaling
 to a Gaussian standard distribution has been attempted. Omitting this scaling leads to
-very bad results and therefore not \noscale regressor was used for this dataset.
+very bad results and therefore \noscale regressor was not used for this dataset.
 
 As with the \powerconsumption dataset above, the results for this dataset are poor if the
 dataset is not shuffled prior to being passed to the regressor.
