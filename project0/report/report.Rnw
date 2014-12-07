@@ -66,6 +66,10 @@
 
 \maketitle
 
+\newpage
+\tableofcontents
+
+\newpage
 \section{Introduction}
 
 This assignment consists of:
@@ -81,7 +85,8 @@ This assignment consists of:
 
 % --------------------------------------------------------------------------------------------------
 
-\section{Dataset Selection}
+\section{Materials and Methods}
+\subsection{Dataset Selection}
 
 When selecting our datasets, we selected mainly for diversity in dataset features:
 if one dataset had few instances, we preferred sets with a huge number of instances
@@ -127,7 +132,7 @@ Result set      & \{Pos, Neg\} & 6 classes      & Real           & Real         
          Int = integral. \label{fig:datasets}}
 \end{figure}
 
-\section{Classifier Selection}
+\subsection{Classifier Selection}
 
 We selected our classification techniques for familiarity (i.e. we preferred techniques covered
 in the lecture) and suitability for our classification datasets.
@@ -149,7 +154,7 @@ attempt to learn a general function, but instead simply memorizes all seen train
 Prediction consists simply of examining the $k$ nearest neighbors. This classifier again performs
 surprisingly well despite its simplicity, but obviously grows linearly in the training set size.
 
-\section{Regressor Selection}
+\subsection{Regressor Selection}
 
 The first regressor we chose uses Stochastic Gradient Descent\footnote{\lstinline|sklearn.linear_model.SGDRegressor|}.
 This technique attempts to minimize a loss function that is written as a sum of differentiable functions.
@@ -162,7 +167,7 @@ SGD regressor above and using it on large datasets is now always feasible.
 
 % --------------------------------------------------------------------------------------------------
 
-\section{Tools}
+\subsection{Tools}
 
 We based our experiments on the machine learning toolkit
 \verb|scikit-learn 0.15.2|\footnote{\url{http://scikit-learn.org/stable/}}
@@ -178,15 +183,6 @@ using R and the \verb|ggplot2|\footnote{\url{http://ggplot2.org/}} package.
 
 Obviously, this report was typeset in \LaTeX (and less obviously, integrated with
 R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Sweave/}}).
-
-% --------------------------------------------------------------------------------------------------
-
-\section{Results}
-
-Benchmarks for the classification datasets \annealing and \twitter were performed on a a machine
-with 8 GB of RAM and an Intel Core i7-3770 CPU at 3.40 GHz, running Linux 3.17.4.
-The \powerconsumption and \housing benchmarks were performed on a machine with 64 GB of RAM and
-2 Intel Xeon E5-2687W processors, running Linux 3.14.3.
 
 \subsection{Toolchain}
 
@@ -237,6 +233,15 @@ that they are used to split a given dataset into a training and an evaluation se
 In addition to splitting the dataset into a training and an evaluation set, a splitter
 also shuffles the data to prevent problems like the one described in the beginning of
 Section~\ref{sec:powerconsumption}
+
+% --------------------------------------------------------------------------------------------------
+
+\section{Results}
+
+Benchmarks for the classification datasets \annealing and \twitter were performed on a a machine
+with 8 GB of RAM and an Intel Core i7-3770 CPU at 3.40 GHz, running Linux 3.17.4.
+The \powerconsumption and \housing benchmarks were performed on a machine with 64 GB of RAM and
+2 Intel Xeon E5-2687W processors, running Linux 3.14.3.
 
 \subsection{\annealing}
 
@@ -533,7 +538,7 @@ indicated by the \noscale keyword.
 Due to the poor runtime performance of the SVR model, we were unable to test our
 regressors with the entire dataset and therefore only used the first $100.000$ entries.
 
-All regression algorithms performed poorly when the dataset was read in chonological order.
+All regression algorithms performed poorly when the dataset was read in chronological order.
 A possible explanation for this behaviour is that by using a simple split between training
 and evaluation data set, trends continue into the evaluation data set and can not be
 anticipated by the model. To mitigate this problem, the dataset is shuffled before use.
@@ -572,7 +577,7 @@ scaling is used, however SVR without scaling performs much better than both.
 Unfortunately, the SGD model did not produce any results with \noscale.
 
 While the SGD regressor performs similarly regardless of the size of the training set, the
-SVR shows a drastic decrease of the MSE and an increase or the $R^2$ score when the ratio
+SVR shows a drastic decrease of the MSE and an increase of the $R^2$ score when the ratio
 rises from 5\% to 10\%. The SVR's performance then improves slightly as the ratio rises.
 
 \begin{figure}[ht]
@@ -608,7 +613,7 @@ SVR (\noscale, \tenfold) & 807.86 & 24.93 & 1.35 & 0.25 \\
          partitions. \label{fig:results_powerconsumption_summary}}
 \end{figure}
 
-Table~\ref{fig:results_powerconsumption_summary} shows the training and evaluation times
+Figure~\ref{fig:results_powerconsumption_summary} shows the training and evaluation times
 as well as the MSE and $R^2$ score for our three models using the \ratiostd and \tenfold
 evaluation methods. We can easily see that the SGD regressor is much faster than SVR.
 Furthermore, the table shows consistently with the Figures
@@ -698,11 +703,25 @@ SVR (\tenfold) & 0.019568 & 0.001218 & 28.3543 & 0.65123 \\
 \end{figure}
 
 The training and evaluation times, the MSE and the $R^2$ score for SGD and SVR are shown
-in Table~\ref{fig:results_housing_summary}. We used both the \ratiostd and \tenfold
+in Figure~\ref{fig:results_housing_summary}. We used both the \ratiostd and \tenfold
 evaluation methods to obtain these results. Even with this very small dataset, the SGD
 regressor is faster than SVR and delivered slightly better results.
 
 Overall, we obtained an $R^2$ score close to 70\% without performing any preprocessing
 other than feature scaling.
+
+\section{Conclusion}
+
+Our experiments with supervised machine learning methods have shown that
+attention to detail is absolutely crucial: classifier and regressor selection
+must be done with care in order to avoid non-performing predictions or
+inaccurate classifications, while preprocessing can also make a significant
+difference in the acquired results. There is often no obvious best way: for
+example, choosing a different approach to preprocessing in the \twitter dataset
+caused Bayes classifier accuracy to improve while SVM accuracy deteriorated.
+Secondary aspects such as classifier size should not be ignored either, as they
+can become very important especially for larger datasets.  Finally, it is also
+important to select the training set such that it represents the entire data
+range well.
 
 \end{document}
