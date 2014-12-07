@@ -626,6 +626,11 @@ $R^2$ score is only about 25\%. However, several attempts to improve these resul
 different representations of time, or performing the regression for each weekday
 separately, failed to produce better results.
 
+While the 1000-fold speed advantage of the SGD regressor over SVR is surprising, it is
+worth noting that Scikit's documentation specifically suggests using the SGD regressor for
+datasets with more than 100.000
+samples\footnote{http://scikit-learn.org/stable/tutorial/machine_learning_map/index.html}.
+
 % --------------------------------------------------------------------------------------------------
 
 \subsection{\housing}
