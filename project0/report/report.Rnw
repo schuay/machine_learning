@@ -52,7 +52,7 @@
 
 \newcommand{\annealing}{\texttt{annealing}\xspace}
 \newcommand{\powerconsumption}{\texttt{power\_consumption}\xspace}
-\newcommand{\solarflares}{\texttt{solar\_flares}\xspace}
+\newcommand{\housing}{\texttt{housing}\xspace}
 \newcommand{\twitter}{\texttt{twitter}\xspace}
 
 \newcommand{\tenfold}{\texttt{10fold}\xspace}
@@ -96,10 +96,10 @@ of a tweet, i.e. if the tweet carries a positive or negative emotion.
 Full disclosure: we have previously experimented on this dataset
 in the \emph{Advanced Internet Computing} lecture.
 
-Our regression datasets are \solarflares, with a medium number of both
-instances and categorical features, and predicts the number of solar flares in
-three potential classes. Finally, the \powerconsumption dataset contains
-a huge number of instances, and a low number of  attributes (with missing values).
+Our regression datasets are \housing, with a small number of instances and a medium number
+of categorical, integer and real features, which predicts the median value of
+owner-occupied homes. Finally, the \powerconsumption dataset contains
+a huge number of instances, and a low number of attributes (with missing values).
 Some of the attributes are time-based, leading to interesting choices in preprocessing,
 while the others are real values.
 
@@ -120,14 +120,14 @@ powerconsumption:
 \toprule
 \multirow{2}[4]{*}{Datasets} & \multicolumn{2}{c}{Classification} & \multicolumn{2}{c}{Regression} \\
 \cmidrule(l){2-3} \cmidrule(l){4-5}
-                & \twitter     & \annealing     & \solarflares   & \powerconsumption \\
+                & \twitter     & \annealing     & \housing       & \powerconsumption \\
 \midrule
-Nr. of samples  & Huge         & Medium         & Medium         & Huge              \\
-Nr. of features & Huge         & Medium         & Low            & Low               \\
-Feature types   & Binary       & Cat, Int, Real & Categorical    & Date, Real        \\
+Nr. of samples  & Huge         & Medium         & Small          & Huge              \\
+Nr. of features & Huge         & Medium         & Medium         & Low               \\
+Feature types   & Binary       & Cat, Int, Real & Cat, Int, Real & Date, Real        \\
 Missing values  & No           & Yes            & No             & Yes               \\
-Preprocessing   & Beneficial   & Optional       & TODO           & TODO              \\
-Result set      & \{Pos, Neg\} & 6 classes      & $\text{Int}^3$ & $\text{Real}^3$   \\
+Preprocessing   & Beneficial   & Optional       & None           & Reqired           \\
+Result set      & \{Pos, Neg\} & 6 classes      & Real           & Real              \\
 \bottomrule
 \end{tabular}
 \caption{Dataset details. Feature types are abbreviated as: Bin = binary, Cat = categorical,
@@ -504,7 +504,7 @@ large number of occurrences.
 
 % --------------------------------------------------------------------------------------------------
 
-\subsection{\solarflares}
+\subsection{\housing}
 
 % TODO
 
