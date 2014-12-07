@@ -13,8 +13,8 @@ slides: slides.Rnw pqplot.Rnw
 	pdflatex -shell-escape slides.tex
 
 clean:
-	rm -f {report,slides}.{aux,log,out,tex,sh,exitCode,stderr,stdout}
-	rm -f slides.{nav,snm,toc,vrb}
+	rm -f {report,slides}.{aux,log,out,tex,sh,exitCode,stderr,stdout,toc}
+	rm -f slides.{nav,snm,vrb}
 	rm -f *-eps-converted-to.pdf
 	rm -f *.eps
 	rm -f classifier.tex regressor.tex
