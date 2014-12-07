@@ -60,6 +60,7 @@
 \newcommand{\ratiorange}{\texttt{ratiorange}\xspace}
 
 \newcommand{\aesid}{\texttt{aes\_id}\xspace}
+\newcommand{\noscale}{\texttt{noscale}\xspace}
 
 \begin{document}
 
@@ -241,6 +242,10 @@ that they are used to split a given dataset into a training and an evaluation se
     dataset serve as training data, the remaining 25\% are used for evaluation.
     \item[\tenfold] This strategy performs 10-fold cross-validation.
 \end{description}
+
+In addition to splitting the dataset into a training and an evaluation set, a splitter
+also shuffles the data to prevent problems like the one described in the beginning of
+Section~\ref{sec:powerconsumption}
 
 \subsection{\annealing}
 
@@ -516,8 +521,109 @@ large number of occurrences.
 % --------------------------------------------------------------------------------------------------
 
 \subsection{\powerconsumption}
+\label{sec:powerconsumption}
 
-% TODO
+The \powerconsumption dataset contains minute-by-minute records of the power consumption
+in a single household over a period of almost four years. We try to estimate the gobal
+active power for a given point in time. The dataset contains several other values, but
+they are dependent on the global active power and thus we omitted them.
+
+The time of a power measurement is given as a data string (e.g. 16/12/2006) and the clock
+time (e.g. 17:24:00). Since the regressors expect numerical features, preprocessing is
+necessary. Attempting to express the date and time as integers (i.e. the number of seconds
+since the Unix epoch) yielded bad results. Therefore we settled with replacing the date
+with seven binary features, each representing one day of the week. We use the hours and
+minutes of the clock time as two separate integer features.
+
+Additionally, we scale all feature values to fit a Gaussian standard distribution. This is
+necessary for some Regressors to work properly. If we omit this standardization, this is
+indicated by the \noscale keyword.
+
+Due to the poor runtime performance of the SVR model, we were unable to test our
+regressors with the entire dataset and therefore only used the first $100.000$ entries.
+
+All regression algorithms performed pooly when the dataset was read in chonological order.
+A possible explanation for this bahaviour is that by using a simple split between training
+and evaluation data set, trends continue into the evaluation data set and can not be
+anticipated by the model. To mitigate this problem, the dataset is shuffled before use.
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_mse("../results/power_consumption_sgd_ratiorange.csv",
+                     "../results/power_consumption_svr_ratiorange.csv",
+                     "../results/power_consumption_svr_ratiorange_noscale.csv")
+@
+\caption{Mean squared error for varying training-evaluation ratios on the \powerconsumption dataset.
+         \label{fig:results_powerconsumption_split_mse}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_r2("../results/power_consumption_sgd_ratiorange.csv",
+                    "../results/power_consumption_svr_ratiorange.csv",
+                    "../results/power_consumption_svr_ratiorange_noscale.csv")
+@
+\caption{$R^2$ score for varying training-evaluation ratios on the \powerconsumption dataset.
+         \label{fig:results_powerconsumption_split_r2}}
+\end{figure}
+
+Figures \ref{fig:results_powerconsumption_split_mse} and
+\ref{fig:results_powerconsumption_split_r2} show the mean squared error (MSE) and the
+$R^2$ score of our two regressors for varying training-evaluation ratios. These two
+metrics are commonly used to measure regression performance.
+
+Both figures show that SGD performs consistently better than SVR when the aforementioned
+scaling is used, however SVR without scaling performs much better than both.
+Unfortunately, the SGD model did not produce any results with \noscale.
+
+While the SGD regressor performs similarly regardless of the size of the training set, the
+SVR shows a drastic decrease of the MSE and an increase or the $R^2$ score when the ratio
+rises from 5\% to 10\%. The SVR's performance then improves slightly as the ratio rises.
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_size("../results/power_consumption_svr_ratiorange.csv",
+                      NULL, NULL, "regressor")
+@
+\caption{Regressor sizes for varying training-evaluation ratios on the \powerconsumption dataset.
+         \label{fig:results_powerconsumption_split_size}}
+\end{figure}
+
+Figure~\ref{fig:results_powerconsumption_split_size} shows the serialization size for the
+SVR model for different training-evaluation ratios. It grows linearly with the size of the
+training set. Curiously, the SGD regressor could not be properly serialized.
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Regressor & Train. Time (s) & Eval. Time (s) & MSE & $R^2$ \\
+\midrule
+SGD (\ratiostd) & 0.27284 & 0.03055 & 1.53938 & 0.14235 \\
+SVR (\ratiostd) & 376.3459 & 53.3727 & 1.55024 & 0.1363 \\
+SVR (\noscale, \ratiostd) & 561.47152 & 54.24232 & 1.35956 & 0.24254 \\
+SGD (\tenfold) & 0.363914 & 0.0111 & 1.54207 & 0.145796 \\
+SVR (\tenfold) & 516.374 & 25.7114 & 1.55244 & 0.140111 \\
+SVR (\noscale, \tenfold) & 807.875 & 24.9298 & 1.35017 & 0.252097 \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \powerconsumption dataset. Cross-validation results are averaged over all
+         partitions. \label{fig:results_powerconsumption_summary}}
+\end{figure}
+
+Table~\ref{fig:results_powerconsumption_summary} shows the training and evaluation times
+as well as the MSE and $R^2$ score for our three models using the \ratiostd and \tenfold
+evaluation methods. We can easily see that the SGD regressor is much faster than SVR.
+Furthermore, the table shows consistently with the Figures
+\ref{fig:results_powerconsumption_split_mse} and
+\ref{fig:results_powerconsumption_split_r2} that the SVR without scaling performs much
+better than SVR and SGD with scaling.
 
 % --------------------------------------------------------------------------------------------------
 
