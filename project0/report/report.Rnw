@@ -51,7 +51,7 @@
         Mino Sharkhawy, 1025887}
 
 \newcommand{\annealing}{\texttt{annealing}\xspace}
-\newcommand{\powerconsumption}{\texttt{power\_consumption}\xspace}
+\newcommand{\powerconsumption}{\texttt{power}\xspace}
 \newcommand{\housing}{\texttt{housing}\xspace}
 \newcommand{\twitter}{\texttt{twitter}\xspace}
 
