@@ -1,0 +1,11 @@
+dataset,regressor,splitter,train_size,train_time,eval_size,eval_time,regressor_size,mse,r2_score
+power_consumption,svr_noscale,10fold,90000,796.67573,10000,25.02064,24334336,1.3207,0.24998
+power_consumption,svr_noscale,10fold,90000,793.36915,10000,24.04209,24309760,1.3242,0.2715
+power_consumption,svr_noscale,10fold,90000,795.8038,10000,24.26176,24326144,1.35344,0.24997
+power_consumption,svr_noscale,10fold,90000,827.87926,10000,25.79267,24326144,1.34409,0.25541
+power_consumption,svr_noscale,10fold,90000,851.01917,10000,25.60656,24346624,1.33456,0.26618
+power_consumption,svr_noscale,10fold,90000,807.33365,10000,24.94823,24358912,1.35138,0.25602
+power_consumption,svr_noscale,10fold,90000,827.51345,10000,24.97222,24354816,1.39797,0.24122
+power_consumption,svr_noscale,10fold,90000,801.067,10000,24.19111,24305664,1.34759,0.24273
+power_consumption,svr_noscale,10fold,90000,783.16193,10000,25.25578,24297472,1.35175,0.23531
+power_consumption,svr_noscale,10fold,90000,794.92881,10000,25.20659,24338432,1.37606,0.25265
