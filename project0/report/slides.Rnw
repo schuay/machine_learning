@@ -28,14 +28,15 @@
         Mino Sharkhawy, 1025887}
 
 \newcommand{\annealing}{\texttt{annealing}\xspace}
-\newcommand{\powerconsumption}{\texttt{power\_consumption}\xspace}
-\newcommand{\solarflares}{\texttt{solar\_flares}\xspace}
+\newcommand{\housing}{\texttt{housing}\xspace}
+\newcommand{\powerconsumption}{\texttt{power}\xspace}
 \newcommand{\twitter}{\texttt{twitter}\xspace}
 
 \newcommand{\tenfold}{\texttt{10fold}\xspace}
 \newcommand{\ratiostd}{\texttt{ratio75}\xspace}
 
 \newcommand{\aesid}{\texttt{aes\_id}\xspace}
+\newcommand{\noscale}{\texttt{noscale}\xspace}
 
 \begin{document}
 
@@ -220,6 +221,212 @@ plot_ratio_range_size("../results/twitter_bayes_ratiorange.csv",
 @
 \caption{Classifier sizes for varying training-evaluation ratios on the \twitter dataset.
          \label{fig:results_twitter_split_size}}
+\end{figure}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{Regressors}
+
+\begin{itemize}
+\item \texttt{scikit-learn, python2-nltk, R}, \LaTeX
+\item Stochastic Gradient Descent (SGD): Very fast, works on huge datasets.
+\item Support Vector Machine (SVR): as with SVM classifier, very expensive
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\powerconsumption}
+
+\begin{itemize}
+\item \powerconsumption contains minute-by-minute records of power consumption in one
+      household.
+\item For example: \texttt{Date: 16/12/2006, Time: 17:24:00, Global\_active\_power: 4.216,
+      Global\_passive\_power: 0.418, Voltage: 234.840, Global\_intensity: 18.400,
+      Sub\_metering\_1: 0.000, Sub\_metering\_2: 1.000, Sub\_metering\_3: 17.000}.
+\item Over 2 million instances, date and time, real features, some missing values.
+\item Predict Global\_active\_power using date and time.
+\item Missing values replaced with mean.
+\item Features scaled to fit Gaussian standard distribution.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\powerconsumption: Main results}
+
+\begin{itemize}
+\item Poor results, $R^2$ score only around 25\%
+\item Preprocessing was necessary to deal with date and time. Date was split into 7 binary
+      features, one for each weekday. Time was split into hours and minutes.
+\item SGD performs better than SVR when scaling is used. Without scaling SVR is much
+      better.
+\item SVR model is extremely slow with large training dataset. We could only test with
+      100.000 instances.
+\item Different preprocessing methods yielded no better results.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\powerconsumption: Mean squared error, $R^2$ score and runtime}
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Regressor & Train. T. (s) & Eval. T. (s) & MSE & $R^2$ \\
+\midrule
+SGD (\ratiostd) & 0.27 & 0.03 & 1.54 & 0.14 \\
+SVR (\ratiostd) & 376.35 & 53.37 & 1.55 & 0.14 \\
+SVR (\noscale, \ratiostd) & 561.47 & 54.24 & 1.36 & 0.24 \\
+SGD (\tenfold) & 0.36 & 0.01 & 1.54 & 0.15 \\
+SVR (\tenfold) & 516.37 & 25.71 & 1.55 & 0.14 \\
+SVR (\noscale, \tenfold) & 807.86 & 24.93 & 1.35 & 0.25 \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \powerconsumption dataset, with binary weekday features.
+         All attributes are scaled to fit a Gaussian standard distribution, unless they
+	 use \noscale. Cross-validation results are averaged over all partitions.
+	 \label{fig:results_powerconsumption_summary}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\powerconsumption: Mean squared error}
+
+\begin{figure}
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_mse("../results/power_consumption_sgd_ratiorange.csv",
+                     "../results/power_consumption_svr_ratiorange.csv",
+                     "../results/power_consumption_svr_ratiorange_noscale.csv")
+@
+\caption{Mean squared error for varying training-evaluation ratios on the \powerconsumption dataset.
+         \label{fig:results_powerconsumption_split_mse}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\powerconsumption: $R^2$ score}
+
+\begin{figure}
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_r2("../results/power_consumption_sgd_ratiorange.csv",
+                    "../results/power_consumption_svr_ratiorange.csv",
+                    "../results/power_consumption_svr_ratiorange_noscale.csv")
+@
+\caption{$R^2$ score for varying training-evaluation ratios on the \powerconsumption dataset.
+         \label{fig:results_powerconsumption_split_r2}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\powerconsumption: Regressor Size}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_size("../results/power_consumption_svr_ratiorange.csv",
+                      NULL, NULL, "regressor")
+@
+\caption{Regressor sizes for varying training-evaluation ratios on the \powerconsumption dataset.
+         The SGD regressor could not be measured.
+         \label{fig:results_powerconsumption_split_size}}
+\end{figure}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\housing}
+
+\begin{itemize}
+\item \housing contains information of different suburban areas.
+\item For example: \texttt{CRIM: 0.00632, ZN: 18.00, INDUS: 2.310, CHAS: 0, NOX: 0.5380,
+      RM: 6.5750, AGE: 65.20, DIS: 4.0900, RAD: 1, TAX: 296.0, PTRATIO: 15.30, B: 396.90,
+      LSTAT: 4.98, MEDV: 24.00}.
+\item Attempt to predict median housing value (MEDV) in such an area.
+\item Only 506 instances, 14 features, categorical, integer and real.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\housing: Main results}
+
+\begin{itemize}
+\item Almost no preprocessing required as all features can be represented by numbers.
+\item Scaling to Gaussian standard distribution vastly improves performance. Results here
+      use scaling.
+\item Almost no difference between SGD and SVR for large training sets.
+\item SGD very bad with small training sets.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\housing: Mean squared error, $R^2$ score and runtime}
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Regressor & Train. T. (s) & Eval. T. (s) & MSE & $R^2$ \\
+\midrule
+SGD (\ratiostd) & 0.00243 & 0.00036 & 26.60676 & 0.69566 \\
+SVR (\ratiostd) & 0.0142 & 0.00237 & 27.67327 & 0.68346 \\
+SGD (\tenfold) & 0.002535 & 0.000234 & 24.6665 & 0.680654 \\
+SVR (\tenfold) & 0.019568 & 0.001218 & 28.3543 & 0.65123 \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \housing dataset. Cross-validation results are averaged over all
+         partitions. \label{fig:results_housing_summary}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\housing: Mean squared error}
+
+\begin{figure}
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_mse("../results/housing_sgd_ratiorange.csv",
+                     "../results/housing_svr_ratiorange.csv",
+		    NULL)
+@
+\caption{Mean squared error for varying training-evaluation ratios on the \housing dataset.
+         \label{fig:results_housing_split_mse}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\housing: $R^2$ score}
+
+\begin{figure}
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_r2("../results/housing_sgd_ratiorange.csv",
+                    "../results/housing_svr_ratiorange.csv",
+		    NULL)
+@
+\caption{$R^2$ score for varying training-evaluation ratios on the \housing dataset.
+         \label{fig:results_housing_split_r2}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\housing: Regressor Size}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_ratio_range_size("../results/housing_svr_ratiorange.csv",
+                      NULL, NULL, "regressor")
+@
+\caption{Regressor sizes for varying training-evaluation ratios on the \housing dataset.
+         The SGD regressor could not be measured.
+         \label{fig:results_housing_split_size}}
 \end{figure}
 \end{frame}
 
