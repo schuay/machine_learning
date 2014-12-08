@@ -41,27 +41,51 @@
 
 \maketitle
 
-\section{Introduction} \label{sec:introduction}
-
-\begin{frame}[fragile,allowframebreaks]{\nameref{sec:introduction}}
-This assignment consists of:
-
-\begin{itemize}
-\item picking a good, diverse selection of datasets,
-\item choosing several suitable classifier and regression techniques,
-\item analyzing the behavior of the latter when run on the former,
-\item while experimenting with different preprocessing techniques,
-\item and finally reporting on the results (you are feasting your eyes on this
-      artifact right now).
-\end{itemize}
-\end{frame}
-
-\section{Datasets, Classifiers and Regressors}  \label{sec:materials_and_methods}
 
 \section{Results} \label{sec:results}
 
 \begin{frame}{\nameref{sec:results}}
-\framesubtitle{\annealing: General results}
+\framesubtitle{Classifiers}
+
+\begin{itemize}
+\item \texttt{scikit-learn, python2-nltk, R}, \LaTeX
+\item Naive Bayes: Popular baseline classifier, efficient, effective.
+\item Support Vector Machine: effective for many attributes, small classifier size,
+      expensive to train and evaluate.
+\item K-nearest Neighbors: Remembers all training instances, simple but effective.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\annealing}
+
+\begin{itemize}
+\item \annealing ties properties of the steal annealing process to the resulting
+      steel class.
+\item For example: \texttt{Family: TN, Product type: C, Shape: COIL, Thickness: 1.6}
+      results in a steel class of \texttt{5}.
+\item Around 800 instances, 40 categorical, integer, and real features with many
+      missing values, 6 classes.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\annealing: Main results}
+
+\begin{itemize}
+\item \emph{Very} effective: 100\% accuracy reached with small training sets.
+\item Preprocessing was unnecessary: classifiers performed as well with all
+      features as strings (even reals and integers).
+\item If features converted to numerics, then some classifiers (SVM) require normalization.
+\item In general, Bayes is very efficient to train and evaluate, but not as
+      accurate as SVM.
+\item SVM is expensive, but very accurate.
+\item KNN is decent in all areas, but classifier size grows linearly with training set.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\annealing: Accuracy and runtime}
 
 \begin{figure}[ht]
 \centering
@@ -117,7 +141,34 @@ plot_ratio_range_size("../results/annealing_bayes_ratiorange.csv",
 % ------------------------------------------------------------------------------
 
 \begin{frame}{\nameref{sec:results}}
-\framesubtitle{\twitter: General results}
+\framesubtitle{\twitter}
+
+\begin{itemize}
+\item \twitter are categorized into positive and negative sentiments.
+\item For example: \texttt{"HUGE roll of thunder just now...SO scary!!!!"} is \texttt{Negative}.
+\item N-gram features: \texttt{(HUGE, roll), (roll, of), \ldots}
+\item Preprocessing: Spam filtering, multicharacter normalization
+      (\texttt{HUUUUUGE} $\rightarrow$ \texttt{HUUGE}), user tokenization (\texttt{@JohnWayne} $\rightarrow$ \texttt{USER\_TOKEN}), \ldots
+\item 1.5 million instances, very large feature set, no missing values, binary classification.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\twitter: Main results}
+
+\begin{itemize}
+\item Results comparable to best of literature: more than 80\% accuracy reached.
+\item Feature set explosion, very demanding on classifiers (KNN unusable).
+\item Preprocessing helps some classifiers, hurts others.
+\item Bayes much larger than SVM classifier.
+\item Stopword filter (filters common sentiment-less words) has small impact
+      on accuracy, huge impact on SVM training time.
+\item SVM wins again on classifier size and accuracy.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:results}}
+\framesubtitle{\twitter: Accuracy and runtime}
 
 \begin{figure}[ht]
 \centering
