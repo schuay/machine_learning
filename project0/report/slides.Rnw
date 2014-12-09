@@ -43,10 +43,9 @@
 \maketitle
 
 
-\section{Results} \label{sec:results}
+\section{Classifiers} \label{sec:classifiers}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{Classifiers}
+\begin{frame}{\nameref{sec:classifiers}}
 
 \begin{itemize}
 \item \texttt{scikit-learn, python2-nltk, R}, \LaTeX
@@ -57,8 +56,8 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\annealing}
+\section{\annealing} \label{sec:annealing}
+\begin{frame}{\nameref{sec:annealing}}
 
 \begin{itemize}
 \item \annealing ties properties of the steal annealing process to the resulting
@@ -70,8 +69,8 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\annealing: Main results}
+\begin{frame}{\nameref{sec:annealing}}
+\framesubtitle{Main results}
 
 \begin{itemize}
 \item \emph{Very} effective: 100\% accuracy reached with small training sets.
@@ -85,31 +84,8 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\annealing: Accuracy and runtime}
-
-\begin{figure}[ht]
-\centering
-\begin{tabular}{lccc}
-\toprule
-Classifier & Train. Time (s) & Eval. Time (s) & Accuracy \\
-\midrule
-Bayes (\ratiostd) & 0.0077 & 0.026 & 0.95 \\
-SVM (\ratiostd)   & 0.0224 & 0.024 & 1.0  \\
-KNN (\ratiostd)   & 0.016  & 0.143 & 0.97 \\
-Bayes (\tenfold)  & 0.0091 & 0.011 & 0.96 \\
-SVM (\tenfold)    & 0.0263 & 0.01  & 1.0  \\
-KNN (\tenfold)    & 0.0182 & 0.058 & 0.97 \\
-\bottomrule
-\end{tabular}
-\caption{General results for the \annealing dataset without preprocessing. All instance attributes are
-         treated as strings. Cross-validation results are averaged over all
-         partitions. \label{fig:results_annealing_summary}}
-\end{figure}
-\end{frame}
-
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\annealing: Accuracy}
+\begin{frame}{\nameref{sec:annealing}}
+\framesubtitle{Accuracy}
 
 \begin{figure}
 <<results = tex, echo = FALSE>>=
@@ -123,8 +99,8 @@ plot_ratio_range_accuracy("../results/annealing_bayes_ratiorange.csv",
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\annealing: Classifier Size}
+\begin{frame}{\nameref{sec:annealing}}
+\framesubtitle{Classifier Size}
 
 \begin{figure}[ht]
 \centering
@@ -141,8 +117,8 @@ plot_ratio_range_size("../results/annealing_bayes_ratiorange.csv",
 
 % ------------------------------------------------------------------------------
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\twitter}
+\section{\twitter} \label{sec:twitter}
+\begin{frame}{\nameref{sec:twitter}}
 
 \begin{itemize}
 \item \twitter are categorized into positive and negative sentiments.
@@ -154,11 +130,13 @@ plot_ratio_range_size("../results/annealing_bayes_ratiorange.csv",
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\twitter: Main results}
+\begin{frame}{\nameref{sec:twitter}}
+\framesubtitle{Main results}
 
 \begin{itemize}
 \item Results comparable to best of literature: more than 80\% accuracy reached.
+\item Two variations: \aesid (Stopword filter) and standard (No stopword filter,
+      multicharacter normalization, user tokenization).
 \item Feature set explosion, very demanding on classifiers (KNN unusable).
 \item Preprocessing helps some classifiers, hurts others.
 \item Bayes much larger than SVM classifier.
@@ -168,8 +146,8 @@ plot_ratio_range_size("../results/annealing_bayes_ratiorange.csv",
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\twitter: Accuracy and runtime}
+\begin{frame}{\nameref{sec:twitter}}
+\framesubtitle{Accuracy and runtime}
 
 \begin{figure}[ht]
 \centering
@@ -178,13 +156,13 @@ plot_ratio_range_size("../results/annealing_bayes_ratiorange.csv",
 Classifier & Train. T. (s) & Eval. T. (s) & Acc. \\
 \midrule
 Bayes (\ratiostd) & 27.36 & 29.268 & 0.78 \\
-Bayes (\aesid, \ratiostd) & 29.63 & 20.69 & 0.78 \\
+Bayes (\ratiostd, \aesid) & 29.63 & 20.69 & 0.78 \\
 SVM (\ratiostd)   & 272.87 & 49.11 & 0.8  \\
-SVM (\aesid, \ratiostd)   & 164.66 & 45.83 & 0.79  \\
+SVM (\ratiostd, \aesid)   & 164.66 & 45.83 & 0.79  \\
 Bayes (\tenfold)  & 31.87 & 12.0 & 0.77 \\
-Bayes (\aesid, \tenfold)  & 33.9 & 8.24 & 0.77 \\
-SVM (\tenfold)    & 322.89 & 20.02  & 0.79  \\
-SVM (\aesid, \tenfold)    & 185.28 & 18.29  & 0.78  \\
+Bayes (\tenfold, \aesid)  & \textbf{33.9} & 8.24 & 0.77 \\
+SVM (\tenfold)    & \textbf{322.89} & 20.02  & 0.79  \\
+SVM (\tenfold, \aesid)    & \textbf{185.28} & 18.29  & 0.78  \\
 \bottomrule
 \end{tabular}
 \caption{General results for the \twitter dataset. Cross-validation results are averaged over all
@@ -192,8 +170,8 @@ SVM (\aesid, \tenfold)    & 185.28 & 18.29  & 0.78  \\
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\twitter: Accuracy}
+\begin{frame}{\nameref{sec:twitter}}
+\framesubtitle{Accuracy}
 
 \begin{figure}[ht]
 \centering
@@ -208,8 +186,8 @@ plot_ratio_range_accuracy("../results/twitter_bayes_ratiorange.csv",
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\twitter: Classifier Size}
+\begin{frame}{\nameref{sec:twitter}}
+\framesubtitle{Classifier Size}
 
 \begin{figure}[ht]
 \centering
@@ -226,8 +204,8 @@ plot_ratio_range_size("../results/twitter_bayes_ratiorange.csv",
 
 % ------------------------------------------------------------------------------
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{Regressors}
+\section{Regressors} \label{sec:regressors}
+\begin{frame}{\nameref{sec:regressors}}
 
 \begin{itemize}
 \item \texttt{scikit-learn, python2-nltk, R}, \LaTeX
@@ -236,8 +214,8 @@ plot_ratio_range_size("../results/twitter_bayes_ratiorange.csv",
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\powerconsumption}
+\section{\powerconsumption} \label{sec:powerconsumption}
+\begin{frame}{\nameref{sec:powerconsumption}}
 
 \begin{itemize}
 \item \powerconsumption contains minute-by-minute records of power consumption in one
@@ -252,8 +230,8 @@ plot_ratio_range_size("../results/twitter_bayes_ratiorange.csv",
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\powerconsumption: Main results}
+\begin{frame}{\nameref{sec:powerconsumption}}
+\framesubtitle{Main results}
 
 \begin{itemize}
 \item Poor results, $R^2$ score only around 25\%
@@ -267,8 +245,8 @@ plot_ratio_range_size("../results/twitter_bayes_ratiorange.csv",
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\powerconsumption: Mean squared error, $R^2$ score and runtime}
+\begin{frame}{\nameref{sec:powerconsumption}}
+\framesubtitle{Mean squared error, $R^2$ score and runtime}
 
 \begin{figure}[ht]
 \centering
@@ -291,8 +269,8 @@ SVR (\noscale, \tenfold) & 807.86 & 24.93 & 1.35 & 0.25 \\
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\powerconsumption: Mean squared error}
+\begin{frame}{\nameref{sec:powerconsumption}}
+\framesubtitle{Mean squared error}
 
 \begin{figure}
 <<results = tex, echo = FALSE>>=
@@ -306,8 +284,8 @@ plot_ratio_range_mse("../results/power_consumption_sgd_ratiorange.csv",
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\powerconsumption: $R^2$ score}
+\begin{frame}{\nameref{sec:powerconsumption}}
+\framesubtitle{$R^2$ score}
 
 \begin{figure}
 <<results = tex, echo = FALSE>>=
@@ -321,8 +299,8 @@ plot_ratio_range_r2("../results/power_consumption_sgd_ratiorange.csv",
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\powerconsumption: Regressor Size}
+\begin{frame}{\nameref{sec:powerconsumption}}
+\framesubtitle{Regressor Size}
 
 \begin{figure}[ht]
 \centering
@@ -339,8 +317,8 @@ plot_ratio_range_size("../results/power_consumption_svr_ratiorange.csv",
 
 % ------------------------------------------------------------------------------
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\housing}
+\section{\housing} \label{sec:housing}
+\begin{frame}{\nameref{sec:housing}}
 
 \begin{itemize}
 \item \housing contains information of different suburban areas.
@@ -352,8 +330,8 @@ plot_ratio_range_size("../results/power_consumption_svr_ratiorange.csv",
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\housing: Main results}
+\begin{frame}{\nameref{sec:housing}}
+\framesubtitle{Main results}
 
 \begin{itemize}
 \item Almost no preprocessing required as all features can be represented by numbers.
@@ -364,8 +342,8 @@ plot_ratio_range_size("../results/power_consumption_svr_ratiorange.csv",
 \end{itemize}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\housing: Mean squared error, $R^2$ score and runtime}
+\begin{frame}{\nameref{sec:housing}}
+\framesubtitle{Mean squared error, $R^2$ score and runtime}
 
 \begin{figure}[ht]
 \centering
@@ -384,8 +362,8 @@ SVR (\tenfold) & 0.019568 & 0.001218 & 28.3543 & 0.65123 \\
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\housing: Mean squared error}
+\begin{frame}{\nameref{sec:housing}}
+\framesubtitle{Mean squared error}
 
 \begin{figure}
 <<results = tex, echo = FALSE>>=
@@ -399,8 +377,8 @@ plot_ratio_range_mse("../results/housing_sgd_ratiorange.csv",
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\housing: $R^2$ score}
+\begin{frame}{\nameref{sec:housing}}
+\framesubtitle{$R^2$ score}
 
 \begin{figure}
 <<results = tex, echo = FALSE>>=
@@ -414,8 +392,8 @@ plot_ratio_range_r2("../results/housing_sgd_ratiorange.csv",
 \end{figure}
 \end{frame}
 
-\begin{frame}{\nameref{sec:results}}
-\framesubtitle{\housing: Regressor Size}
+\begin{frame}{\nameref{sec:housing}}
+\framesubtitle{Regressor Size}
 
 \begin{figure}[ht]
 \centering
@@ -429,5 +407,42 @@ plot_ratio_range_size("../results/housing_svr_ratiorange.csv",
          \label{fig:results_housing_split_size}}
 \end{figure}
 \end{frame}
+
+% ------------------------------------------------------------------------------
+
+\section{Conclusion} \label{sec:conclusion}
+
+\begin{frame}{Q \& A}
+\centering
+Questions?
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\section{Additional Material} \label{sec:addl_material}
+
+\begin{frame}{\nameref{sec:annealing}}
+\framesubtitle{Accuracy and runtime}
+
+\begin{figure}[ht]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Classifier & Train. Time (s) & Eval. Time (s) & Accuracy \\
+\midrule
+Bayes (\ratiostd) & 0.0077 & 0.026 & 0.95 \\
+SVM (\ratiostd)   & 0.0224 & 0.024 & 1.0  \\
+KNN (\ratiostd)   & 0.016  & 0.143 & 0.97 \\
+Bayes (\tenfold)  & 0.0091 & 0.011 & 0.96 \\
+SVM (\tenfold)    & 0.0263 & 0.01  & 1.0  \\
+KNN (\tenfold)    & 0.0182 & 0.058 & 0.97 \\
+\bottomrule
+\end{tabular}
+\caption{General results for the \annealing dataset without preprocessing. All instance attributes are
+         treated as strings. Cross-validation results are averaged over all
+         partitions. \label{fig:results_annealing_summary}}
+\end{figure}
+\end{frame}
+
 
 \end{document}
