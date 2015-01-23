@@ -1,0 +1,11 @@
+The Twitter dataset is available from:
+http://thinknook.com/twitter-sentiment-analysis-training-corpus-dataset-2012-09-22/
+
+It consists of around 1.5 million pre-classified tweets.
+
+Number of samples: Huge
+Number of attributes: Very large
+Types of attributes: 0/1
+Preprocessing: Beneficial
+Classification: Binary
+Missing values: None

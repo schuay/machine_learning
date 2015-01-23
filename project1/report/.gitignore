@@ -1,0 +1,15 @@
+*.aux
+*.backup
+*.eps
+*.exitCode
+*.log
+*.nav
+*.out
+*.pdf
+*.sh
+*.snm
+*.stderr
+*.stdout
+*.tex
+*.toc
+*.vrb

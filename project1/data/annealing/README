@@ -1,0 +1,9 @@
+The annealing data set is available from:
+http://archive.ics.uci.edu/ml/datasets/Annealing
+
+Number of samples: Low
+Number of attributes: Medium
+Types of attributes: Categorical, Integer, Real
+Preprocessing: ?
+Classification: 6 classes
+Missing values: Very frequent
