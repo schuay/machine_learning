@@ -12,6 +12,9 @@ import getopt
 import sys
 import ConfigParser
 
+import classifier as cl
+import dataset_splitter as ds
+
 from nltk.classify import NaiveBayesClassifier
 from nltk.classify import SklearnClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -23,15 +26,6 @@ class Opts:
     verbose = False
 
 options = Opts()
-
-DATASETS = { 'twitter': lambda mi, fs, tr: twitter.TwitterDataset(
-                    '../data/twitter/Sentiment-Analysis-Dataset.zip',
-                    mi, fs, tr)
-           , 'annealing': lambda mi, fs, tr: annealing.AnnealingDataset(
-                    '../data/annealing/anneal.data')
-           , 'tic': lambda mi, fs, tr: tic.TICDatasetClass(
-                    '../data/tic/ticdata2000.txt', mi)
-           }
 
 def usage():
     print("""USAGE: %s [options]
@@ -46,7 +40,7 @@ def usage():
             option = value
             [...]""" %
             ( sys.argv[0]
-            , DATASETS.keys()
+            , cl.DATASETS.keys()
             )
          )
     sys.exit(1)
@@ -86,12 +80,16 @@ def load_classifiers(config_file):
     for cl_instance in cp.sections():
         cl_options = dict(cp.items(cl_instance))
 
-        if options.verbose:
-            print "%s: %s" % (cl_instance, cl_options)
-
+        # TODO: Figure out if string -> {int,float} conversions are done implicitly
+        # (e.g. for svm: C = '1.0').
         classifiers.append(RawClassifierFactory.new(cl_instance, cl_options))
 
     return classifiers
+
+
+def verbose(message):
+    if options.verbose:
+        print message
 
 if __name__ == '__main__':
     opts, args = getopt.getopt(sys.argv[1:], "c:d:hv")
@@ -99,7 +97,7 @@ if __name__ == '__main__':
         if o == "-c":
             options.config_file = a
         elif o == "-d":
-            if not a in DATASETS:
+            if not a in cl.DATASETS:
                 usage()
             options.dataset = a
         elif o == "-v":
@@ -108,7 +106,20 @@ if __name__ == '__main__':
             usage()
 
     classifiers = load_classifiers(options.config_file)
-    for c in classifiers:
-        print "%s: %s" % (c.name, c.options)
 
-    print 'Accuracy: 100%'
+    splitter = ds.CrossfoldSplitter(5)
+    for raw_classifier in classifiers:
+        verbose("Evaluating classifier '%s': %s" %
+                (raw_classifier.name, raw_classifier.options))
+        dataset = cl.DATASETS[options.dataset]
+
+        # TODO: CSV output still relies on classifier.py global options.
+        # We will need to alter this to output accuracy only (precision & recall
+        # mess up the CSV too much and we won't be able to present this well),
+        # to properly insert only a single header row at the beginning of the file,
+        # and to return the resulting averaged accuracy. It might be best to move
+        # CSV writing out here and simply return a result list.
+        cl.evaluate_features( dataset
+                            , splitter
+                            , raw_classifier.raw_classifier
+                            )

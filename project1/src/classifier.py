@@ -34,13 +34,9 @@ NGRAM_DEFAULT  = 1
 SPLIT_DEFAULT  = 'ratio75'  
 TRAN_DEFAULT   = 'mchar,user'
 
-DATASETS = { 'twitter': lambda mi, fs, tr: twitter.TwitterDataset(
-                    '../data/twitter/Sentiment-Analysis-Dataset.zip',
-                    mi, fs, tr)
-           , 'annealing': lambda mi, fs, tr: annealing.AnnealingDataset(
+DATASETS = { 'annealing': annealing.AnnealingDataset(
                     '../data/annealing/anneal.data')
-           , 'tic': lambda mi, fs, tr: tic.TICDatasetClass(
-                    '../data/tic/ticdata2000.txt', mi)
+           , 'tic': tic.TICDatasetClass('../data/tic/ticdata2000.txt', None)
            }
 
 CLASSIFIERS = { 'bayes': NaiveBayesClassifier
