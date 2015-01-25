@@ -127,8 +127,7 @@ class Classifier:
         gc.collect()
 
         accuracy = nltk.metrics.accuracy(referenceList, testList)
-
-        print accuracy
+        return accuracy
 
     def classify(self, obj):
         return self.__nltk_classifier.classify(obj)
@@ -136,14 +135,12 @@ class Classifier:
 def evaluate_features(dataset, splitter, raw_classifier):
     dataset_tuples = splitter.split(dataset)
 
-    writer = ClassifierWriter()
-    writer.writeheader()
+#    writer = ClassifierWriter()
+#    writer.writeheader()
 
+    accuracies = []
     for (train_set, test_set) in dataset_tuples:
         classifier = Classifier.train(raw_classifier, train_set);
-        train_set = None
-        gc.collect()
+        accuracies.append(classifier.evaluate(test_set, None))
 
-        classifier.evaluate(test_set, writer)
-        classifier, test_set = None, None
-        gc.collect()
+    return accuracies

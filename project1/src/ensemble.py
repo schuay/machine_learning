@@ -27,6 +27,11 @@ class Opts:
 
 options = Opts()
 
+# Add float and integer options for classifiers here.
+OPTION_CONVERSIONS = { ('svm', 'C'): lambda o: float(o)
+                     , ('knn', 'n_neighbors'): lambda o: int(o)
+                     }
+
 def usage():
     print("""USAGE: %s [options]
             -c  The configuration file to load.`
@@ -51,6 +56,13 @@ class RawClassifierFactory:
         assert 'kind' in options, "%s: missing 'kind' attribute." % name
 
         kind = options.pop('kind')
+
+        # Perform option format conversions.
+        for opt in options.keys():
+            convert = OPTION_CONVERSIONS.get((kind, opt)
+                                           , lambda o: o) # Default to identity.
+            options[opt] = convert(options[opt])
+
         if kind == 'naive_bayes':
             return RawClassifier(NaiveBayesClassifier, name, options)
         elif kind == 'knn':
@@ -79,9 +91,6 @@ def load_classifiers(config_file):
     classifiers = []
     for cl_instance in cp.sections():
         cl_options = dict(cp.items(cl_instance))
-
-        # TODO: Figure out if string -> {int,float} conversions are done implicitly
-        # (e.g. for svm: C = '1.0').
         classifiers.append(RawClassifierFactory.new(cl_instance, cl_options))
 
     return classifiers
@@ -119,7 +128,9 @@ if __name__ == '__main__':
         # to properly insert only a single header row at the beginning of the file,
         # and to return the resulting averaged accuracy. It might be best to move
         # CSV writing out here and simply return a result list.
-        cl.evaluate_features( dataset
-                            , splitter
-                            , raw_classifier.raw_classifier
-                            )
+        accuracies = cl.evaluate_features( dataset
+                                         , splitter
+                                         , raw_classifier.raw_classifier
+                                         )
+
+        verbose("Accuracies: %s" % accuracies)
