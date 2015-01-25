@@ -95,6 +95,38 @@ def load_classifiers(config_file):
 
     return classifiers
 
+class EnsembleClassifier:
+    """An ensemble classifier combines the results of several different classifiers."""
+    def __init__(self, raw_classifiers, majority_function):
+        self.__raw_classifiers = raw_classifiers
+        self.__majority_function = majority_function
+
+    def train(self, tuple_set):
+        self.__trained_classifiers = list()
+        for c in self.__raw_classifiers:
+            classifier = c.raw_classifier.train(tuple_set)
+            self.__trained_classifiers.append(classifier)
+
+        return self
+
+    def classify(self, instance):
+        predictions = dict()
+        for classifier in self.__trained_classifiers:
+            predictions[classifier] = classifier.classify(instance)
+
+        return self.__majority_function(predictions)
+
+def simple_majority(predictions):
+    counts = dict()
+    for p in predictions.itervalues():
+        counts[p] = counts[p] + 1 if p in counts else 0
+
+    winner = counts.iterkeys().next()
+    for p, c in counts.iteritems():
+        if (c > counts[winner]):
+            winner = p
+
+    return winner
 
 def verbose(message):
     if options.verbose:
@@ -115,6 +147,13 @@ if __name__ == '__main__':
             usage()
 
     classifiers = load_classifiers(options.config_file)
+
+    ensemble = RawClassifier(
+            EnsembleClassifier(list(classifiers), simple_majority),
+            "MajorityClassifier",
+            "majority function = 'simple_majority'"
+            )
+    classifiers.append(ensemble)
 
     splitter = ds.CrossfoldSplitter(5)
     for raw_classifier in classifiers:
