@@ -3,12 +3,11 @@
 # TODO: The spec mentions analyzing runtime (trivial for ensembles as the sum of its
 # parts) and using a validation set (which sklearn documentation says is not required
 # with crossfold validation).
-# TODO: Can we do an ensemble of classifiers trained on random subsets of the training
-# set (random forest)?
 
 import csv
 import getopt
 import numpy
+import random
 import sys
 import ConfigParser
 
@@ -70,6 +69,8 @@ class RawClassifierFactory:
         assert 'kind' in options, "%s: missing 'kind' attribute." % name
 
         kind = options.pop('kind')
+        subset_ratio = options.pop('training_subset_ratio', None)
+        subset_seed  = options.pop('training_subset_seed', None)
 
         # Perform option format conversions.
         for opt in options.keys():
@@ -78,21 +79,52 @@ class RawClassifierFactory:
             options[opt] = convert(options[opt])
 
         if kind == 'naive_bayes':
-            return RawClassifier(GaussianNB(**options), name, options)
+            c = RawClassifier(GaussianNB(**options), name, options)
         elif kind == 'knn':
-            return RawClassifier(KNeighborsClassifier(**options),
+            c = RawClassifier(KNeighborsClassifier(**options),
                                  name, options)
         elif kind == 'svm':
-            return RawClassifier(LinearSVC(**options),
+            c = RawClassifier(LinearSVC(**options),
                                  name, options)
         elif kind == 'tree':
-            return RawClassifier(DecisionTreeClassifier(**options),
+            c = RawClassifier(DecisionTreeClassifier(**options),
                                  name, options)
         elif kind == 'extra_tree':
-            return RawClassifier(ExtraTreeClassifier(**options),
+            c = RawClassifier(ExtraTreeClassifier(**options),
                                  name, options)
         else:
             assert False, "%s: invalid 'kind' attribute." % name
+
+        if subset_ratio is not None:
+            c = RawClassifier( SubsetClassifier( float(subset_ratio)
+                                               , int(subset_seed)
+                                               , c.raw_classifier
+                                               )
+                             , c.name
+                             , c.options
+                             )
+
+        return c
+
+class SubsetClassifier:
+    def __init__(self, ratio, seed, inner_classifier):
+        self.__ratio = ratio
+        self.__seed = seed
+        self.__inner_classifier = inner_classifier
+
+    def fit(self, X, y):
+        rows, cols = X.shape
+
+        random.seed(self.__seed)
+        m = [ 0 if random.random() <= self.__ratio else 1 for _ in xrange(rows) ]
+
+        my = numpy.ma.compressed(numpy.ma.masked_array(y, mask = m))
+        mX = numpy.ma.compress_rows(
+                numpy.ma.masked_array(X, mask = [ [z] * cols for z in m ]))
+
+        self.__inner_classifier.fit(mX, my)
+
+        return self.__inner_classifier
 
 # TODO: Rename to something more appropriate, as this is more of a classifier
 # wrapper than a raw classifier.
