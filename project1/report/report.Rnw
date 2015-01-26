@@ -50,7 +50,17 @@
 \author{Jakob Gruber, 0203440 \\
         Mino Sharkhawy, 1025887}
 
+\newcommand{\breastcancer}{\texttt{breast-cancer\_scale}\xspace}
+\newcommand{\vehicle}{\texttt{vehicle.scale}\xspace}
+\newcommand{\randomtwo}{\texttt{random2}\xspace}
+\newcommand{\hastie}{\texttt{hastie}\xspace}
+\newcommand{\digits}{\texttt{digits}\xspace}
+\newcommand{\iris}{\texttt{iris}\xspace}
+\newcommand{\heart}{\texttt{heart\_scale}\xspace}
+\newcommand{\connectfour}{\texttt{connect-4}\xspace}
+\newcommand{\vowel}{\texttt{vowel.scale}\xspace}
 \newcommand{\annealing}{\texttt{annealing}\xspace}
+\newcommand{\randomten}{\texttt{random10}\xspace}
 
 \newcommand{\simplemaj}{\texttt{simple\_majority}\xspace}
 \newcommand{\weightedmaj}{\texttt{weighted\_majority}\xspace}
@@ -86,10 +96,23 @@ This assignment consists of:
 \subsection{Classifier Selection}
 
 %TODO
+We selected the following classifiers and configuration options:
+\begin{itemize}
+	\item KNN
+	\item Naive Bayes
+	\item SVM
+	\item Descision Tree:
+\end{itemize}
 
 \subsection{Ensemble Selection}
 
 %TODO
+The methods to combine our classifiers were given in the specification. We implemented one
+ensemble classifier which performs a simple majority vote on the predictions of the
+classifiers (called \simplemaj) and one which uses a weighted majority vote (called
+\weightedmaj).
+
+However, we were free to choose which combinations of classifiers we should evaluate.
 
 % --------------------------------------------------------------------------------------------------
 
