@@ -3,101 +3,62 @@
 import gc
 import getopt
 import math
-import nltk
+import numpy as np
 import os
 import re
+import sklearn
 import sys
 import time
 
-import dataset_splitter as ds
-
 import annealing
 
-from nltk.classify import NaiveBayesClassifier
-from nltk.classify import SklearnClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import LinearSVC
-
-CLASS_DEFAULT  = 'svm'
-DSETS_DEFAULT  = 'annealing'
-SPLIT_DEFAULT  = 'ratio75'  
+from sklearn.cross_validation import KFold
 
 DATASETS = { 'annealing': annealing.AnnealingDataset(
                     '../data/annealing/anneal.data')
 #           , 'tic': tic.TICDatasetClass('../data/tic/ticdata2000.txt', None)
            }
 
-CLASSIFIERS = { 'bayes': NaiveBayesClassifier
-              , 'knn':   SklearnClassifier(KNeighborsClassifier())
-              , 'svm':   SklearnClassifier(LinearSVC())
-              }
-
-SPLITTERS = { 'ratio75': ds.RatioSplitter(75)
-            , 'ratiorange': ds.RatioRangeSplitter(5, 96, 5)
-            , '10fold':  ds.CrossfoldSplitter(10)
-            }
-
-class Opts:
-    dataset = DSETS_DEFAULT
-    classifier = CLASS_DEFAULT
-    splitter = SPLIT_DEFAULT
-    verbose = False
-
-options = Opts()
-
 class Classifier:
     def __init__(self, classifier, train_size, train_time):
-        self.__nltk_classifier = classifier
+        self.__classifier = classifier
         self.__train_size = train_size
         self.__train_time = train_time
 
     """Returns a classifier object trained on the given training sets."""
     @staticmethod
-    def train(raw_classifier, training_sets):
-        tuple_set = [ (x.features(), x.instance_class())
-                      for x in training_sets.instances()
-                    ]
-
+    def train(raw_classifier, X, y):
         start = time.clock()
-        trained_classifier = raw_classifier.train(tuple_set)
+        trained_classifier = raw_classifier.fit(X, y)
         elapsed = time.clock() - start
 
-        return Classifier(trained_classifier, len(tuple_set), elapsed)
+        return Classifier(trained_classifier, len(X), elapsed)
 
     """Evaluates the classifier with the given data sets."""
-    def evaluate(self, test_sets, writer):
-        class_ixs = { c: ix for ix, c in enumerate(test_sets.classes()) }
-
-        referenceList = []
-        testList = []
+    def evaluate(self, X, y):
+        predicted_y = []
 
         start = time.clock()
-        for i, inst in enumerate(test_sets.instances()):
-            label = inst.instance_class()
-            label_ix = class_ixs[label]
-            referenceList.append(label_ix)
-
-            predicted = self.classify(inst.features())
-            predicted_ix = class_ixs[predicted]
-            testList.append(predicted_ix)
-
+        predicted_y = [ self.classify(xs) for xs in X ]
         elapsed = time.clock() - start
 
-        tuple_set = None
-        gc.collect()
+        return sklearn.metrics.accuracy_score(y, predicted_y)
 
-        accuracy = nltk.metrics.accuracy(referenceList, testList)
-        return accuracy
+    def classify(self, X):
+        return self.__classifier.predict(X)
 
-    def classify(self, obj):
-        return self.__nltk_classifier.classify(obj)
+def evaluate_features(dataset, raw_classifier):
+    data = dataset.data()
+    target = dataset.target()
 
-def evaluate_features(dataset, splitter, raw_classifier):
-    dataset_tuples = splitter.split(dataset)
+    kf = KFold(len(data), n_folds = 5)
 
     accuracies = []
-    for (train_set, test_set) in dataset_tuples:
-        classifier = Classifier.train(raw_classifier, train_set);
-        accuracies.append(classifier.evaluate(test_set, None))
+    for train, test in kf:
+        X_train, X_test = data[train], data[test]
+        y_train, y_test = target[train], target[test]
+
+        classifier = Classifier.train(raw_classifier, X_train, y_train);
+        accuracies.append(classifier.evaluate(X_test, y_test))
 
     return accuracies

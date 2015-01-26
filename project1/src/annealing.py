@@ -1,100 +1,50 @@
+import numpy as np
 import re
 
-import classification_dataset
+from sklearn.preprocessing import LabelEncoder
 
-ANNEALING_CLASS_FEATURE = "class"
-ANNEALING_FEATURES = [
-    "family",
-    "product-type",
-    "steel",
-    "carbon",
-    "hardness",
-    "temper_rolling",
-    "condition",
-    "formability",
-    "strength",
-    "non-ageing",
-    "surface-finish",
-    "surface-quality",
-    "enamelability",
-    "bc",
-    "bf",
-    "bt",
-    "bw",
-    "bl",
-    "m",
-    "chrom",
-    "phos",
-    "cbond",
-    "marvi",
-    "exptl",
-    "ferro",
-    "corr",
-    "blue",
-    "lustre",
-    "jurofm",
-    "s",
-    "p",
-    "shape",
-    "thick",
-    "width",
-    "len",
-    "oil",
-    "bore",
-    "packing",
-    "class"
-    ]
+import dataset
 
-KIND_ANNEALING = classification_dataset.ClassificationDatasetI()
-
-# TODO: Float, int attributes, filter to most informative attributes.
-class AnnealingInstance(classification_dataset.ClassificationInstanceI):
-    def __init__(self, line):
-        ziplist = zip(ANNEALING_FEATURES, re.split(r',', line))
-        # ziplist = filter(lambda (_,fv): fv != '?', ziplist)
-
-        self.__features = dict(ziplist)
-        self.__class = self.__features[ANNEALING_CLASS_FEATURE]
-        del self.__features[ANNEALING_CLASS_FEATURE]
-
-        # Float conversion.
-        # for k in ["thick", "width", "len"]:
-        #    self.__features[k] = float(self.__features[k])
-
-        # "Normalization".
-        # self.__features["len"] = self.__features["len"] / 5000
-        # self.__features["width"] = self.__features["width"] / 1000
-
-    def instance_class(self):
-        return self.__class
-
-    def features(self):
-        return self.__features
-
-class AnnealingDataset(classification_dataset.ClassificationDatasetI):
+class AnnealingDataset(dataset.DatasetI):
     def __init__(self, filename):
         with open(filename, "r") as f:
             lines = re.split(r'\n', f.read())[0:-1]
-            self.__instances = [ AnnealingInstance(l) for l in lines ]
 
-    def classes(self):
-        return [ "1", "2", "3", "4", "5", "U" ]
+        data = []
+        target = []
 
-    def instances(self):
-        return self.__instances
+        for line in lines:
+            fields = re.split(r',', line)
+            data.append(fields[:-1])
+            target.append(fields[-1])
 
-    def set_instances(self, instances):
-        self.__instances = instances
+        npdata = np.array(data)
+        nptarget = np.array(target)
+
+        # Scikit-learn requires numeric values.
+
+        le = LabelEncoder()
+        le.fit(nptarget)
+        self.__target = le.transform(nptarget)
+
+        nrows, ncols = npdata.shape
+        self.__data = np.zeros((nrows, ncols), dtype = np.int64)
+        for ix in xrange(ncols):
+            col = npdata[:, ix]
+            le.fit(col)
+            self.__data[:, ix] = le.transform(col)
+
+    def data(self):
+        return self.__data
+
+    def target(self):
+        return self.__target
 
     def name(self):
         return "annealing"
 
-    def kind(self):
-        return KIND_ANNEALING
-
 if __name__ == '__main__':
     a = AnnealingDataset("../data/annealing/anneal.data")
-    for i in a.instances():
-        print i.features(), i.instance_class()
     print a.name()
-    print a.classes()
+    print a.data()
+    print a.target()

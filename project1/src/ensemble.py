@@ -1,17 +1,25 @@
 #!/usr/bin/env python2
 
+# TODO: Tree classifiers do not work yet (they complain about sparse feature matrices).
+# TODO: The spec mentions analyzing runtime (trivial for ensembles as the sum of its
+# parts) and using a validation set (which sklearn documentation says is not required
+# with crossfold validation).
+# TODO: Can we do an ensemble of classifiers trained on random subsets of the training
+# set (random forest)?
+
 import csv
 import getopt
+import numpy
 import sys
 import ConfigParser
 
 import classifier as cl
-import dataset_splitter as ds
 
-from nltk.classify import NaiveBayesClassifier
-from nltk.classify import SklearnClassifier
+from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import LinearSVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import ExtraTreeClassifier
 
 class Opts:
     config_file = "conf/default.conf"
@@ -45,17 +53,23 @@ class RawClassifierFactory:
 
         # Perform option format conversions.
         for opt in options.keys():
-            convert = OPTION_CONVERSIONS.get((kind, opt)
-                                           , lambda o: o) # Default to identity.
+            convert = OPTION_CONVERSIONS.get(
+                    (kind, opt), lambda o: o) # Default to identity.
             options[opt] = convert(options[opt])
 
         if kind == 'naive_bayes':
-            return RawClassifier(NaiveBayesClassifier, name, options)
+            return RawClassifier(GaussianNB(**options), name, options)
         elif kind == 'knn':
-            return RawClassifier(SklearnClassifier(KNeighborsClassifier(**options)),
+            return RawClassifier(KNeighborsClassifier(**options),
                                  name, options)
         elif kind == 'svm':
-            return RawClassifier(SklearnClassifier(LinearSVC(**options)),
+            return RawClassifier(LinearSVC(**options),
+                                 name, options)
+        elif kind == 'tree':
+            return RawClassifier(DecisionTreeClassifier(**options),
+                                 name, options)
+        elif kind == 'extra_tree':
+            return RawClassifier(ExtraTreeClassifier(**options),
                                  name, options)
         else:
             assert False, "%s: invalid 'kind' attribute." % name
@@ -71,19 +85,19 @@ class RawClassifier:
 
     def mean_accuracy(self):
         assert self.accuracies is not None
-        return sum(self.accuracies) / len(self.accuracies)
+        return numpy.mean(self.accuracies)
 
     def std_deviation(self):
         assert self.accuracies is not None
-        return 0.0 # TODO
+        return numpy.std(self.accuracies)
 
     @staticmethod
-    def evaluate(raw_classifier, splitter, dataset):
+    def evaluate(raw_classifier, dataset):
         verbose("Evaluating classifier '%s': %s" %
                 (raw_classifier.name, raw_classifier.options))
 
         raw_classifier.accuracies = cl.evaluate_features(
-                dataset, splitter, raw_classifier.raw_classifier)
+                dataset, raw_classifier.raw_classifier)
 
         verbose("Mean accuracy: %s" % round(raw_classifier.mean_accuracy(), 4))
 
@@ -108,18 +122,18 @@ class EnsembleClassifier:
         self.__raw_classifiers = raw_classifiers
         self.__majority_function = majority_function
 
-    def train(self, tuple_set):
+    def fit(self, X, y):
         self.__trained_classifiers = list()
         for c in self.__raw_classifiers:
-            classifier = c.raw_classifier.train(tuple_set)
+            classifier = c.raw_classifier.fit(X, y)
             self.__trained_classifiers.append(classifier)
 
         return self
 
-    def classify(self, instance):
+    def predict(self, X):
         predictions = dict()
         for (trained, raw) in zip(self.__trained_classifiers, self.__raw_classifiers):
-            predictions[raw] = trained.classify(instance)
+            predictions[raw] = trained.predict(X)[0]
 
         return self.__majority_function(predictions)
 
@@ -157,7 +171,6 @@ class ClassifierWriter:
         self.__writer = csv.DictWriter(sys.stdout,
                                        [ "dataset"
                                        , "classifier"
-                                       , "splitter"
                                        , "mean_accuracy"
                                        , "std_deviation"
                                        ])
@@ -165,10 +178,9 @@ class ClassifierWriter:
     def writeheader(self):
         self.__writer.writeheader()
 
-    def writerow(self, dataset, raw_classifier, splitter):
+    def writerow(self, dataset, raw_classifier):
         self.__writer.writerow({ "dataset": dataset.name()
                                , "classifier": raw_classifier.name
-                               , "splitter": splitter.name()
                                , "mean_accuracy": raw_classifier.mean_accuracy()
                                , "std_deviation": raw_classifier.std_deviation()
                                })
@@ -192,9 +204,8 @@ if __name__ == '__main__':
 
     # Initially evaluate all loaded classifiers and store accuracies.
     dataset = cl.DATASETS[options.dataset]
-    splitter = ds.CrossfoldSplitter(5)
     for raw_classifier in classifiers:
-        RawClassifier.evaluate(raw_classifier, splitter, dataset)
+        RawClassifier.evaluate(raw_classifier, dataset)
 
     # Evaluate the simple and weighted ensemble classifiers.
     simple_ensemble = RawClassifier(
@@ -209,8 +220,8 @@ if __name__ == '__main__':
             { 'majority_function': 'weighted_majority' }
             )
 
-    RawClassifier.evaluate(simple_ensemble, splitter, dataset)
-    RawClassifier.evaluate(weighted_ensemble, splitter, dataset)
+    RawClassifier.evaluate(simple_ensemble, dataset)
+    RawClassifier.evaluate(weighted_ensemble, dataset)
 
     # Output results.
     all_classifiers = list(classifiers)
@@ -219,4 +230,4 @@ if __name__ == '__main__':
     writer = ClassifierWriter()
     writer.writeheader()
     for raw_classifier in all_classifiers:
-        writer.writerow(dataset, raw_classifier, splitter)
+        writer.writerow(dataset, raw_classifier)
