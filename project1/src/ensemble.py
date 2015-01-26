@@ -264,13 +264,13 @@ if __name__ == '__main__':
     # Evaluate the simple and weighted ensemble classifiers.
     simple_ensemble = RawClassifier(
             EnsembleClassifier(classifiers, simple_majority),
-            "ensemble",
+            "simple_ensemble",
             { 'majority_function': 'simple_majority' }
             )
 
     weighted_ensemble = RawClassifier(
             EnsembleClassifier(classifiers, weighted_majority),
-            "ensemble",
+            "weighted_ensemble",
             { 'majority_function': 'weighted_majority' }
             )
 
