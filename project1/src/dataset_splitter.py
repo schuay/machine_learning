@@ -9,6 +9,9 @@ class DatasetSplitterI:
         """Returns a list of training and evaluation set tuples."""
         raise NotImplementedError("Please implement this yourself.")
 
+    def name(self):
+        raise NotImplementedError("Please implement this yourself.")
+
 class RatioRangeSplitter(DatasetSplitterI):
     def __init__(self, start, stop, step):
         self.__start = start
@@ -33,12 +36,22 @@ class RatioRangeSplitter(DatasetSplitterI):
 
             yield (trainDataset, testDataset)
 
+    def name(self):
+        return "ratiorange(%d, %d, %d)" % ( self.__start
+                                          , self.__stop
+                                          , self.__step
+                                          )
+
 class RatioSplitter(DatasetSplitterI):
     def __init__(self, percent):
         self.__splitter = RatioRangeSplitter(percent, percent + 1, 1)
+        self.__percent = percent
 
     def split(self, ds):
         return self.__splitter.split(ds)
+
+    def name(self):
+        return "ratio(%d)" % self.__percent
 
 class CrossfoldSplitter(DatasetSplitterI):
     def __init__(self, k):
@@ -66,3 +79,6 @@ class CrossfoldSplitter(DatasetSplitterI):
 
             # Rotate instances.
             instances = train + test
+
+    def name(self):
+        return "crossfold(%d)" % self.__k

@@ -1,6 +1,5 @@
 #!/usr/bin/env python2
 
-import csv
 import gc
 import getopt
 import math
@@ -45,45 +44,6 @@ class Opts:
     verbose = False
 
 options = Opts()
-
-class ClassifierWriter:
-    def __init__(self):
-        self.__writer = csv.DictWriter(sys.stdout,
-                                       [ "dataset"
-                                       , "classifier"
-                                       , "splitter"
-                                       , "train_size"
-                                       , "train_time"
-                                       , "eval_size"
-                                       , "eval_time"
-                                       , "classifier_size"
-                                       , "accuracy"
-                                       , "class"
-                                       , "class_size"
-                                       , "precision"
-                                       , "recall"
-                                       ])
-
-    def writeheader(self):
-        self.__writer.writeheader()
-
-    def writerow(self, train_size, train_time, eval_size, eval_time,
-                 classifier_size, accuracy, cls, cls_size, precision, recall):
-        self.__writer.writerow({ "dataset": options.dataset
-                               , "classifier": options.classifier
-                               , "splitter": options.splitter
-                               , "train_size": train_size
-                               , "train_time": train_time
-                               , "eval_size": eval_size
-                               , "eval_time": eval_time
-                               , "classifier_size": classifier_size
-                               , "accuracy": accuracy
-                               , "class": cls
-                               , "class_size": cls_size
-                               , "precision": precision
-                               , "recall": recall
-                               })
-
 
 class Classifier:
     def __init__(self, classifier, train_size, train_time):
@@ -134,9 +94,6 @@ class Classifier:
 
 def evaluate_features(dataset, splitter, raw_classifier):
     dataset_tuples = splitter.split(dataset)
-
-#    writer = ClassifierWriter()
-#    writer.writeheader()
 
     accuracies = []
     for (train_set, test_set) in dataset_tuples:

@@ -1,13 +1,6 @@
 #!/usr/bin/env python2
 
-# TODO: A module to read used classifiers and their parameters from a config file
-#       (command line args would be too long and messy). There must be a ready-made module
-#       around that can do this.
-# TODO: Evaluate accuracy on all classifiers using crossfold validation. Store results,
-#       including data to write to CSV later on.
-# TODO: Generate ensemble classifier (weighted & std) and evaluate.
-# TODO: Print results to stdout.
-
+import csv
 import getopt
 import sys
 import ConfigParser
@@ -36,14 +29,7 @@ def usage():
     print("""USAGE: %s [options]
             -c  The configuration file to load.`
             -d  The dataset to use. One of %s.
-            -v  Verbose output.
-
-            Config file syntax is:
-
-            [classifier_instance_name]
-            type = the_classifier_type
-            option = value
-            [...]""" %
+            -v  Verbose output.""" %
             ( sys.argv[0]
             , cl.DATASETS.keys()
             )
@@ -74,6 +60,8 @@ class RawClassifierFactory:
         else:
             assert False, "%s: invalid 'kind' attribute." % name
 
+# TODO: Rename to something more appropriate, as this is more of a classifier
+# wrapper than a raw classifier.
 class RawClassifier:
     def __init__(self, raw_classifier, name, options):
         self.raw_classifier = raw_classifier
@@ -85,17 +73,15 @@ class RawClassifier:
         assert self.accuracies is not None
         return sum(self.accuracies) / len(self.accuracies)
 
+    def std_deviation(self):
+        assert self.accuracies is not None
+        return 0.0 # TODO
+
     @staticmethod
     def evaluate(raw_classifier, splitter, dataset):
         verbose("Evaluating classifier '%s': %s" %
                 (raw_classifier.name, raw_classifier.options))
 
-        # TODO: CSV output still relies on classifier.py global options.
-        # We will need to alter this to output accuracy only (precision & recall
-        # mess up the CSV too much and we won't be able to present this well),
-        # to properly insert only a single header row at the beginning of the file,
-        # and to return the resulting averaged accuracy. It might be best to move
-        # CSV writing out here and simply return a result list.
         raw_classifier.accuracies = cl.evaluate_features(
                 dataset, splitter, raw_classifier.raw_classifier)
 
@@ -166,6 +152,27 @@ def verbose(message):
     if options.verbose:
         print message
 
+class ClassifierWriter:
+    def __init__(self):
+        self.__writer = csv.DictWriter(sys.stdout,
+                                       [ "dataset"
+                                       , "classifier"
+                                       , "splitter"
+                                       , "mean_accuracy"
+                                       , "std_deviation"
+                                       ])
+
+    def writeheader(self):
+        self.__writer.writeheader()
+
+    def writerow(self, dataset, raw_classifier, splitter):
+        self.__writer.writerow({ "dataset": dataset.name()
+                               , "classifier": raw_classifier.name
+                               , "splitter": splitter.name()
+                               , "mean_accuracy": raw_classifier.mean_accuracy()
+                               , "std_deviation": raw_classifier.std_deviation()
+                               })
+
 if __name__ == '__main__':
     opts, args = getopt.getopt(sys.argv[1:], "c:d:hv")
     for o, a in opts:
@@ -204,3 +211,12 @@ if __name__ == '__main__':
 
     RawClassifier.evaluate(simple_ensemble, splitter, dataset)
     RawClassifier.evaluate(weighted_ensemble, splitter, dataset)
+
+    # Output results.
+    all_classifiers = list(classifiers)
+    all_classifiers.extend([simple_ensemble, weighted_ensemble])
+
+    writer = ClassifierWriter()
+    writer.writeheader()
+    for raw_classifier in all_classifiers:
+        writer.writerow(dataset, raw_classifier, splitter)
