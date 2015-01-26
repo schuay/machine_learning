@@ -1,6 +1,5 @@
 #!/usr/bin/env python2
 
-# TODO: Tree classifiers do not work yet (they complain about sparse feature matrices).
 # TODO: The spec mentions analyzing runtime (trivial for ensembles as the sum of its
 # parts) and using a validation set (which sklearn documentation says is not required
 # with crossfold validation).
