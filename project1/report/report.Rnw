@@ -1,0 +1,141 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{amsmath}
+\usepackage{bashful}
+\usepackage{booktabs}
+\usepackage{comment}
+\usepackage[pdfborder={0 0 0}]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{xspace}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    showspaces=false,
+    showtabs=false,
+    numbers=left,
+}
+
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  firstline=2,% Supress the first line that begins with `%`
+  basicstyle=\small\sffamily,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=3pt,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{yellow!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
+
+\lstdefinestyle{BashOutputStyle}{
+  basicstyle=\small\ttfamily,
+  numbers=none,
+  frame=tblr,
+  columns=fullflexible,
+  backgroundcolor=\color{gray!10},
+}
+
+\title{Exercise 2 \\
+       Machine Learning WS 2014/2015 \\
+       Technical University of Vienna}
+\author{Jakob Gruber, 0203440 \\
+        Mino Sharkhawy, 1025887}
+
+\newcommand{\annealing}{\texttt{annealing}\xspace}
+
+\newcommand{\simplemaj}{\texttt{simple\_majority}\xspace}
+\newcommand{\weightedmaj}{\texttt{weighted\_majority}\xspace}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\tableofcontents
+
+\newpage
+\section{Introduction}
+
+This assignment consists of:
+
+\begin{itemize}
+\item combining several different classification algorithms in an ensemble classifier,
+\item implementing two strategies - simple majority and weighted majority voting - for use in this ensemble classifier,
+\item create a suite of different datasets and classifier ensembles,
+\item evaluate classifier and ensemble classifier performance and efficiency on this suite,
+\item and finally provide a user interface based on a configuration file to specify the classifier ensembles and test suite.
+\end{itemize}
+
+% --------------------------------------------------------------------------------------------------
+
+\section{Materials and Methods}
+
+\subsection{Dataset Selection}
+
+%TODO
+
+\subsection{Classifier Selection}
+
+%TODO
+
+\subsection{Ensemble Selection}
+
+%TODO
+
+% --------------------------------------------------------------------------------------------------
+
+\subsection{Tools}
+
+We based our experiments on the machine learning toolkit
+\verb|scikit-learn 0.15.2|\footnote{\url{http://scikit-learn.org/stable/}}.
+
+The entire application logic
+(loading, preprocessing, training, and evaluation) is written in Python, giving us
+maximal flexibility.
+
+Results were exported to CSV files, which were then used to generate graphs
+using R and the \verb|ggplot2|\footnote{\url{http://ggplot2.org/}} package.
+
+Obviously, this report was typeset in \LaTeX\space and (less obviously) integrated with
+R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Sweave/}}.
+
+\subsection{Toolchain}
+
+The \lstinline|data| directory contains subdirectories for the used datasets. By executing \lstinline|make| in
+\lstinline|data| all datasets are downloaded to their respective directories. Each dataset is represented by a
+class in the \lstinline|src| directory.
+
+%TODO: describe ensemble.py and conffile
+
+Listing~\ref{lst:ensemble} shows the call syntax of \lstinline|ensemble.py|.
+
+\bash[stdoutFile=ensemble.tex,ignoreStderr=true]
+../src/ensemble.py -h
+\END
+
+\lstinputlisting[label=lst:ensemble,style=BashOutputStyle,caption=ensemble.py usage]{ensemble.tex}
+
+\subsection{Evaluation suite}
+
+%TODO
+
+% --------------------------------------------------------------------------------------------------
+
+\section{Results}
+
+%TODO
+
+\section{Conclusion}
+
+%TODO
+
+\end{document}

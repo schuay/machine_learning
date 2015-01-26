@@ -1,0 +1,59 @@
+\documentclass[usenames,dvipsnames]{beamer}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{comment}
+%\usepackage[pdfborder={0 0 0}]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{xspace}
+
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    showspaces=false,
+    showtabs=false,
+    numbers=left,
+}
+
+\title{Exercise 2 \\
+       Machine Learning WS 2014/2015 \\
+       Technical University of Vienna}
+\author{Jakob Gruber, 0203440 \\
+        Mino Sharkhawy, 1025887}
+
+\newcommand{\annealing}{\texttt{annealing}\xspace}
+
+\newcommand{\simplemaj}{\texttt{simple\_majority}\xspace}
+\newcommand{\weightedmaj}{\texttt{weighted\_majority}\xspace}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Classifiers} \label{sec:classifiers}
+
+\begin{frame}{\nameref{sec:classifiers}}
+
+\begin{itemize}
+\item \texttt{scikit-learn, R}, \LaTeX
+%TODO
+\end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\section{Conclusion} \label{sec:conclusion}
+
+\begin{frame}{Q \& A}
+\centering
+Questions?
+\end{frame}
+
+\end{document}

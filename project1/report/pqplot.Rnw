@@ -1,0 +1,260 @@
+library(Rmisc)
+library(extrafont)
+library(fontcm)
+library(ggplot2)
+library(plyr)
+library(scales)
+
+plot_ratio_range_r2 <- function(sgdfile, svrfile, noscalefile) {
+    figbasename = strsplit(basename(sgdfile), "\\.")[[1]][1]
+    figfile <- paste(figbasename, "_r2.eps", sep = "")
+
+    dfb <- read.csv(sgdfile)
+    dfs <- read.csv(svrfile)
+
+    if (is.null(noscalefile)) {
+        df <- rbind(dfb, dfs)
+    } else {
+        dfk <- read.csv(noscalefile)
+        df <- rbind(dfb, dfs, dfk)
+    }
+
+    df$ratio <- df$train_size / (df$train_size + df$eval_size)
+
+    # Line graph.
+
+    p <- ggplot(df, aes(x = ratio, y = r2_score, color = regressor, shape = regressor)) +
+                geom_line() +
+                geom_point() +
+                ylab(parse(text=paste("R", "^2", "*-score", sep=""))) +
+                xlab("Training-evaluation ratio") +
+                scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+    # Themes
+                theme_bw() +
+                theme(axis.text = element_text(size = 18),
+                      axis.title = element_text(size = 20),
+                      axis.title.x = element_text(vjust=-0.2),
+                      axis.title.y = element_text(vjust=1),
+                      legend.text = element_text(size = 20),
+                      legend.title = element_text(size = 22),
+                      legend.position = c(0, 1),
+                      legend.justification = c(0, 1),
+                      legend.background = element_rect(fill = alpha("black", 0)))
+
+    postscript(file = figfile,
+               paper = "special",
+               width = 10,
+               height = 5,
+               horizontal = FALSE,
+               family = "CM Roman")
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+}
+
+plot_ratio_range_mse <- function(sgdfile, svrfile, noscalefile) {
+    figbasename = strsplit(basename(sgdfile), "\\.")[[1]][1]
+    figfile <- paste(figbasename, "_mse.eps", sep = "")
+
+    dfb <- read.csv(sgdfile)
+    dfs <- read.csv(svrfile)
+
+    if (is.null(noscalefile)) {
+        df <- rbind(dfb, dfs)
+    } else {
+        dfk <- read.csv(noscalefile)
+        df <- rbind(dfb, dfs, dfk)
+    }
+
+    df$ratio <- df$train_size / (df$train_size + df$eval_size)
+
+    # Line graph.
+
+    p <- ggplot(df, aes(x = ratio, y = mse, color = regressor, shape = regressor)) +
+                geom_line() +
+                geom_point() +
+                ylab("Mean squared error") +
+                xlab("Training-evaluation ratio") +
+                scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+    # Themes
+                theme_bw() +
+                theme(axis.text = element_text(size = 18),
+                      axis.title = element_text(size = 20),
+                      axis.title.x = element_text(vjust=-0.2),
+                      axis.title.y = element_text(vjust=1),
+                      legend.text = element_text(size = 20),
+                      legend.title = element_text(size = 22),
+                      legend.position = c(0, 1),
+                      legend.justification = c(0, 1),
+                      legend.background = element_rect(fill = alpha("black", 0)))
+
+    postscript(file = figfile,
+               paper = "special",
+               width = 10,
+               height = 5,
+               horizontal = FALSE,
+               family = "CM Roman")
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+}
+
+plot_ratio_range_accuracy <- function(bayesfile, svmfile, knnfile) {
+    figbasename = strsplit(basename(bayesfile), "\\.")[[1]][1]
+    figfile <- paste(figbasename, "_accuracy.eps", sep = "")
+
+    dfb <- read.csv(bayesfile)
+    dfs <- read.csv(svmfile)
+
+    if (is.null(knnfile)) {
+        df <- rbind(dfb, dfs)
+    } else {
+        dfk <- read.csv(knnfile)
+        df <- rbind(dfb, dfs, dfk)
+    }
+
+    df$ratio <- df$train_size / (df$train_size + df$eval_size)
+
+    # Line graph.
+
+    p <- ggplot(df, aes(x = ratio, y = accuracy, color = classifier, shape = classifier)) +
+                geom_line() +
+                geom_point() +
+                ylab("Accuracy") +
+                xlab("Training-evaluation ratio") +
+                scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+    # Themes
+                theme_bw() +
+                theme(axis.text = element_text(size = 18),
+                      axis.title = element_text(size = 20),
+                      axis.title.x = element_text(vjust=-0.2),
+                      axis.title.y = element_text(vjust=1),
+                      legend.text = element_text(size = 20),
+                      legend.title = element_text(size = 22),
+                      legend.position = c(0, 1),
+                      legend.justification = c(0, 1),
+                      legend.background = element_rect(fill = alpha("black", 0)))
+
+    postscript(file = figfile,
+               paper = "special",
+               width = 10,
+               height = 5,
+               horizontal = FALSE,
+               family = "CM Roman")
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+}
+
+plot_ratio_range_size <- function(bayesfile, svmfile, knnfile, type = c("classifier", "regressor")) {
+    type <- match.arg(type)
+    if (type == "classifier") {
+        size_col <- "classifier_size"
+        y_lab <- "Classifier size (bytes)"
+    } else {
+        size_col <- "regressor_size"
+        y_lab <- "Regressor size (bytes)"
+    }
+
+    figbasename = strsplit(basename(bayesfile), "\\.")[[1]][1]
+    figfile <- paste(figbasename, "_size.eps", sep = "")
+
+    dfb <- read.csv(bayesfile)
+
+    if (is.null(svmfile)) {
+        df <- dfb
+    } else {
+        dfs <- read.csv(svmfile)
+        if (is.null(knnfile)) {
+            df <- rbind(dfb, dfs)
+        } else {
+            dfk <- read.csv(knnfile)
+            df <- rbind(dfb, dfs, dfk)
+        }
+    }
+
+    df$ratio <- df$train_size / (df$train_size + df$eval_size)
+
+    # Line graph.
+
+    p <- ggplot(df, aes_string(x = "ratio", y = size_col, color = type, shape = type)) +
+                geom_line() +
+                geom_point() +
+                ylab(y_lab) +
+                xlab("Training-evaluation ratio") +
+                scale_x_continuous(breaks = pretty_breaks(n = 10)) +
+    # Themes
+                theme_bw() +
+                theme(axis.text = element_text(size = 18),
+                      axis.title = element_text(size = 20),
+                      axis.title.x = element_text(vjust=-0.2),
+                      axis.title.y = element_text(vjust=1),
+                      legend.text = element_text(size = 20),
+                      legend.title = element_text(size = 22),
+                      legend.position = c(0, 1),
+                      legend.justification = c(0, 1),
+                      legend.background = element_rect(fill = alpha("black", 0)))
+
+
+    postscript(file = figfile,
+               paper = "special",
+               width = 10,
+               height = 5,
+               horizontal = FALSE,
+               family = "CM Roman")
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+}
+
+pqplot <- function(csvfile) {
+    # install.packages(c("Rmisc", "ggplot2", "plyr"))
+
+    figfile <- "fig.eps"
+
+    df <- read.csv(csvfile)
+    colnames(df) <- c("kernel", "p", "throughput")
+
+    df$throughput <- df$throughput/1E6
+
+    df2 <- ddply(df, .(kernel, p), summarize, mean = mean(throughput),
+                 lower = CI(throughput)[[3]], upper = CI(throughput)[[1]])
+
+    # Bar graph
+
+    # dodge <- position_dodge(width=0.9)
+    # p <- ggplot(df2, aes(x = factor(p), y = mean, fill = factor(kernel))) +
+    #             geom_bar(stat = "identity", position = dodge) +
+    #             geom_errorbar(aes(ymin = lower, ymax = upper), position = dodge, width = 0.3) +
+    #             ylab("throughput [Mops/s]") +
+    #             xlab("number of threads")
+
+    p <- ggplot(df2, aes(x = p, y = mean, color = kernel, shape = kernel)) +
+                geom_line() +
+                geom_point(size = 4) +
+    #            geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.3) +
+                ylab("throughput in Mops/s") +
+                xlab("number of threads") +
+    # Themes
+                theme_bw() +
+                theme(axis.text = element_text(size = 16),
+                      axis.title = element_text(size = 18),
+                      axis.title.x = element_text(vjust=-0.2),
+                      axis.title.y = element_text(vjust=1),
+                      legend.text = element_text(size = 16),
+                      legend.title = element_text(size = 18),
+                      legend.position = c(1, 1),
+                      legend.justification = c(1, 1),
+                      legend.background = element_rect(fill = alpha("black", 0)))
+
+    postscript(file = figfile, paper = "special", width = 10, height = 5, horizontal = FALSE)
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+
+    # PDF output
+
+    # pdf("abcd.pdf", width=10, height=10)
+    # plot(p)
+    # dev.off()
+}
