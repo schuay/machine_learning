@@ -12,6 +12,7 @@ import numpy
 import sys
 import ConfigParser
 
+import annealing
 import classifier as cl
 
 from sklearn.naive_bayes import GaussianNB
@@ -32,13 +33,17 @@ OPTION_CONVERSIONS = { ('svm', 'C'): lambda o: float(o)
                      , ('knn', 'n_neighbors'): lambda o: int(o)
                      }
 
+DATASETS = { 'annealing': annealing.AnnealingDataset(
+                    '../data/annealing/anneal.data')
+           }
+
 def usage():
     print("""USAGE: %s [options]
             -c  The configuration file to load.`
             -d  The dataset to use. One of %s.
             -v  Verbose output.""" %
             ( sys.argv[0]
-            , cl.DATASETS.keys()
+            , DATASETS.keys()
             )
          )
     sys.exit(1)
@@ -190,7 +195,7 @@ if __name__ == '__main__':
         if o == "-c":
             options.config_file = a
         elif o == "-d":
-            if not a in cl.DATASETS:
+            if not a in DATASETS:
                 usage()
             options.dataset = a
         elif o == "-v":
@@ -202,7 +207,7 @@ if __name__ == '__main__':
     classifiers = load_classifiers(options.config_file)
 
     # Initially evaluate all loaded classifiers and store accuracies.
-    dataset = cl.DATASETS[options.dataset]
+    dataset = DATASETS[options.dataset]
     for raw_classifier in classifiers:
         RawClassifier.evaluate(raw_classifier, dataset)
 

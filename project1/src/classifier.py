@@ -10,14 +10,7 @@ import sklearn
 import sys
 import time
 
-import annealing
-
 from sklearn.cross_validation import KFold
-
-DATASETS = { 'annealing': annealing.AnnealingDataset(
-                    '../data/annealing/anneal.data')
-#           , 'tic': tic.TICDatasetClass('../data/tic/ticdata2000.txt', None)
-           }
 
 class Classifier:
     def __init__(self, classifier, train_size, train_time):
