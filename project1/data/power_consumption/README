@@ -1,9 +1,0 @@
-The household electric power consumption data set is available from:
-http://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption
-
-Number of samples: Huge
-Number of attributes: Small
-Types of attributes: Real
-Preprocessing: ?
-Classification: Real
-Missing values: Yes

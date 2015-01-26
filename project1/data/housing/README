@@ -1,9 +1,0 @@
-The housing dataset is available from:
-http://archive.ics.uci.edu/ml/datasets/Housing
-
-Number of samples: Small
-Number of attributes: Medium
-Types of attributes: Categorical, Integer, Real
-Preprocessing: ?
-Classification: Real
-Missing values: None

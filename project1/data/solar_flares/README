@@ -1,9 +1,0 @@
-The solar flare dataset is available from:
-http://archive.ics.uci.edu/ml/datasets/Solar+Flare
-
-Number of samples: Medium
-Number of attributes: Small
-Types of attributes: Categorical
-Preprocessing: ?
-Classification: Categorical
-Missing values: None
