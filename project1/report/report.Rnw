@@ -98,6 +98,10 @@ This assignment consists of:
 We based our experiments on the machine learning toolkit
 \verb|scikit-learn 0.15.2|\footnote{\url{http://scikit-learn.org/stable/}}.
 
+Some of the datasets used (\verb|breast-cancer_scale|, \verb|heart_scale|,
+\verb|connect-4|, \verb|vehicle.scale| and \verb|vowel.scale|) are part of
+\verb|libSVM|\footnote{\url{http://www.csie.ntu.edu.tw/~cjlin/libsvm/}}.
+
 The entire application logic
 (loading, preprocessing, training, and evaluation) is written in Python, giving us
 maximal flexibility.
@@ -110,11 +114,26 @@ R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Swe
 
 \subsection{Toolchain}
 
-The \lstinline|data| directory contains subdirectories for the used datasets. By executing \lstinline|make| in
-\lstinline|data| all datasets are downloaded to their respective directories. Each dataset is represented by a
-class in the \lstinline|src| directory.
+The \lstinline|data| directory contains subdirectories for the used datasets that are not
+part of \verb|scikit-learn|. By executing \lstinline|make| in \lstinline|data| all of
+these datasets are downloaded to their respective directories. Each dataset is represented
+by a class in the \lstinline|src| directory. The datasets from \verb|libSVM| share a
+single directory in \lstinline|data|.
 
-%TODO: describe ensemble.py and conffile
+The ensemble is specified via an INI-style configuration file. Each section header
+contains a classifier name. The Python class which provides the underlying algorithm is
+specified with the \texttt{kind} option. All other options in a section specify options
+specific to this class.
+
+Listing~\ref{lst:config} shows the default config file which resides in
+\lstinline|src/conf|.
+
+\lstinputlisting[label=lst:config,style=BashOutputStyle,caption=src/conf/default.conf]{../src/conf/default.conf}
+
+When \lstinline|ensemble.py| in \lstinline|src| is called, it evaluates the performance of
+all classifiers in the config file and of the simple and weighted majority ensemble
+classifers on the specified dataset and prints the results in the CSV format to the
+terminal.
 
 Listing~\ref{lst:ensemble} shows the call syntax of \lstinline|ensemble.py|.
 
