@@ -79,6 +79,27 @@ class RawClassifier:
         self.raw_classifier = raw_classifier
         self.name = name
         self.options = options
+        self.accuracies = None
+
+    def mean_accuracy(self):
+        assert self.accuracies is not None
+        return sum(self.accuracies) / len(self.accuracies)
+
+    @staticmethod
+    def evaluate(raw_classifier, splitter, dataset):
+        verbose("Evaluating classifier '%s': %s" %
+                (raw_classifier.name, raw_classifier.options))
+
+        # TODO: CSV output still relies on classifier.py global options.
+        # We will need to alter this to output accuracy only (precision & recall
+        # mess up the CSV too much and we won't be able to present this well),
+        # to properly insert only a single header row at the beginning of the file,
+        # and to return the resulting averaged accuracy. It might be best to move
+        # CSV writing out here and simply return a result list.
+        raw_classifier.accuracies = cl.evaluate_features(
+                dataset, splitter, raw_classifier.raw_classifier)
+
+        verbose("Mean accuracy: %s" % round(raw_classifier.mean_accuracy(), 4))
 
 def load_classifiers(config_file):
     """Loads classifiers as specified in config_file and returns them as a list."""
@@ -111,8 +132,8 @@ class EnsembleClassifier:
 
     def classify(self, instance):
         predictions = dict()
-        for classifier in self.__trained_classifiers:
-            predictions[classifier] = classifier.classify(instance)
+        for (trained, raw) in zip(self.__trained_classifiers, self.__raw_classifiers):
+            predictions[raw] = trained.classify(instance)
 
         return self.__majority_function(predictions)
 
@@ -120,6 +141,19 @@ def simple_majority(predictions):
     counts = dict()
     for p in predictions.itervalues():
         counts[p] = counts[p] + 1 if p in counts else 0
+
+    winner = counts.iterkeys().next()
+    for p, c in counts.iteritems():
+        if (c > counts[winner]):
+            winner = p
+
+    return winner
+
+def weighted_majority(predictions):
+    counts = dict()
+    for raw, p in predictions.iteritems():
+        weight = raw.mean_accuracy()
+        counts[p] = counts[p] + weight if p in counts else 0
 
     winner = counts.iterkeys().next()
     for p, c in counts.iteritems():
@@ -146,30 +180,27 @@ if __name__ == '__main__':
         else:
             usage()
 
+    # Load all classifiers from the configuration file.
     classifiers = load_classifiers(options.config_file)
 
-    ensemble = RawClassifier(
-            EnsembleClassifier(list(classifiers), simple_majority),
-            "MajorityClassifier",
-            "majority function = 'simple_majority'"
-            )
-    classifiers.append(ensemble)
-
+    # Initially evaluate all loaded classifiers and store accuracies.
+    dataset = cl.DATASETS[options.dataset]
     splitter = ds.CrossfoldSplitter(5)
     for raw_classifier in classifiers:
-        verbose("Evaluating classifier '%s': %s" %
-                (raw_classifier.name, raw_classifier.options))
-        dataset = cl.DATASETS[options.dataset]
+        RawClassifier.evaluate(raw_classifier, splitter, dataset)
 
-        # TODO: CSV output still relies on classifier.py global options.
-        # We will need to alter this to output accuracy only (precision & recall
-        # mess up the CSV too much and we won't be able to present this well),
-        # to properly insert only a single header row at the beginning of the file,
-        # and to return the resulting averaged accuracy. It might be best to move
-        # CSV writing out here and simply return a result list.
-        accuracies = cl.evaluate_features( dataset
-                                         , splitter
-                                         , raw_classifier.raw_classifier
-                                         )
+    # Evaluate the simple and weighted ensemble classifiers.
+    simple_ensemble = RawClassifier(
+            EnsembleClassifier(classifiers, simple_majority),
+            "ensemble",
+            { 'majority_function': 'simple_majority' }
+            )
 
-        verbose("Accuracies: %s" % accuracies)
+    weighted_ensemble = RawClassifier(
+            EnsembleClassifier(classifiers, weighted_majority),
+            "ensemble",
+            { 'majority_function': 'weighted_majority' }
+            )
+
+    RawClassifier.evaluate(simple_ensemble, splitter, dataset)
+    RawClassifier.evaluate(weighted_ensemble, splitter, dataset)
