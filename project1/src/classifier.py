@@ -17,6 +17,7 @@ class Classifier:
         self.__classifier = classifier
         self.__train_size = train_size
         self.__train_time = train_time
+        self.__test_time = None
 
     """Returns a classifier object trained on the given training sets."""
     @staticmethod
@@ -35,10 +36,19 @@ class Classifier:
         predicted_y = [ self.classify(xs) for xs in X ]
         elapsed = time.clock() - start
 
+        self.__test_time = elapsed
+
         return sklearn.metrics.accuracy_score(y, predicted_y)
 
     def classify(self, X):
         return self.__classifier.predict(X)
+
+    def train_time(self):
+        return self.__train_time
+
+    # TODO: Handling of test_time is ugly, fix this.
+    def test_time(self):
+        return self.__test_time
 
 def evaluate_features(dataset, raw_classifier):
     data = dataset.data()
@@ -47,11 +57,16 @@ def evaluate_features(dataset, raw_classifier):
     kf = KFold(len(data), n_folds = 5)
 
     accuracies = []
+    train_times = []
+    test_times = []
     for train, test in kf:
         X_train, X_test = data[train], data[test]
         y_train, y_test = target[train], target[test]
 
         classifier = Classifier.train(raw_classifier, X_train, y_train);
         accuracies.append(classifier.evaluate(X_test, y_test))
+        train_times.append(classifier.train_time())
+        test_times.append(classifier.test_time())
 
-    return accuracies
+    # TODO: This is ugly too, should probably be an object.
+    return accuracies, train_times, test_times

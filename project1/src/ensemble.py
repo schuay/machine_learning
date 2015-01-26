@@ -1,8 +1,7 @@
 #!/usr/bin/env python2
 
-# TODO: The spec mentions analyzing runtime (trivial for ensembles as the sum of its
-# parts) and using a validation set (which sklearn documentation says is not required
-# with crossfold validation).
+# TODO: The spec mentions using a validation set (which sklearn documentation says is not
+# required with crossfold validation).
 
 import csv
 import getopt
@@ -134,6 +133,8 @@ class RawClassifier:
         self.name = name
         self.options = options
         self.accuracies = None
+        self.train_times = None
+        self.test_times = None
 
     def mean_accuracy(self):
         assert self.accuracies is not None
@@ -143,17 +144,31 @@ class RawClassifier:
         assert self.accuracies is not None
         return numpy.std(self.accuracies)
 
+    def mean_train_time(self):
+        assert self.train_times is not None
+        return numpy.std(self.train_times)
+
+    def mean_test_time(self):
+        assert self.test_times is not None
+        return numpy.std(self.test_times)
+
     @staticmethod
     def evaluate(raw_classifier, dataset):
         verbose("Evaluating classifier '%s': %s" %
                 (raw_classifier.name, raw_classifier.options))
 
-        raw_classifier.accuracies = cl.evaluate_features(
-                dataset, raw_classifier.raw_classifier)
+        acc, trt, tst = cl.evaluate_features(dataset, raw_classifier.raw_classifier)
 
-        verbose("Mean accuracy: %s, Std Deviation: %s" % (
+        raw_classifier.accuracies = acc
+        raw_classifier.train_times = trt
+        raw_classifier.test_times = tst
+
+        verbose("Mean accuracy: %s, Std Deviation: %s, "
+                 "Mean training time %s, Mean testing time %s" % (
             round(raw_classifier.mean_accuracy(), 4),
-            round(raw_classifier.std_deviation(), 4)))
+            round(raw_classifier.std_deviation(), 4),
+            round(raw_classifier.mean_train_time(), 4),
+            round(raw_classifier.mean_test_time(), 4)))
 
 class ConfigOptions:
     def __init__(self, config_file):
@@ -244,6 +259,8 @@ class ClassifierWriter:
                                        , "classifier"
                                        , "mean_accuracy"
                                        , "std_deviation"
+                                       , "mean_train_time"
+                                       , "mean_test_time"
                                        ])
 
     def writeheader(self):
@@ -254,6 +271,8 @@ class ClassifierWriter:
                                , "classifier": raw_classifier.name
                                , "mean_accuracy": raw_classifier.mean_accuracy()
                                , "std_deviation": raw_classifier.std_deviation()
+                               , "mean_train_time": raw_classifier.mean_train_time()
+                               , "mean_test_time": raw_classifier.mean_test_time()
                                })
 
 if __name__ == '__main__':
