@@ -155,20 +155,37 @@ class RawClassifier:
             round(raw_classifier.mean_accuracy(), 4),
             round(raw_classifier.std_deviation(), 4)))
 
-def load_classifiers(config_file):
-    """Loads classifiers as specified in config_file and returns them as a list."""
-    cp = ConfigParser.RawConfigParser()
-    cp.optionxform = str # Preserve case of option names.
+class ConfigOptions:
+    def __init__(self, config_file):
+        cp = ConfigParser.RawConfigParser()
+        cp.optionxform = str # Preserve case of option names.
 
-    with open(config_file) as f:
-        cp.readfp(f)
+        with open(config_file) as f:
+            cp.readfp(f)
 
-    classifiers = []
-    for cl_instance in cp.sections():
-        cl_options = dict(cp.items(cl_instance))
-        classifiers.append(RawClassifierFactory.new(cl_instance, cl_options))
+        classifiers = dict()
+        ensembles = None
+        for cl_instance in cp.sections():
+            if (cl_instance == 'ensembles'):
+                ensembles = dict(cp.items('ensembles'))
+                continue
+            cl_options = dict(cp.items(cl_instance))
+            classifiers[cl_instance] = RawClassifierFactory.new(cl_instance, cl_options)
 
-    return classifiers
+        if not ensembles:
+            raise ConfigParser.NoSectionError('No \'ensembles\' section specified.')
+
+        self.__ensembles = dict()
+        for e, cs in ensembles.iteritems():
+            self.__ensembles[e] = [ classifiers[s.strip()] for s in cs.split(',') ]
+
+        self.__classifiers = classifiers.values()
+
+    def ensembles(self):
+        return self.__ensembles
+
+    def classifiers(self):
+        return self.__classifiers
 
 class EnsembleClassifier:
     """An ensemble classifier combines the results of several different classifiers."""
@@ -253,34 +270,39 @@ if __name__ == '__main__':
         else:
             usage()
 
+    # Parse the configuration file.
+    copts = ConfigOptions(options.config_file)
+
     # Load all classifiers from the configuration file.
-    classifiers = load_classifiers(options.config_file)
+    classifiers = copts.classifiers()
 
     # Initially evaluate all loaded classifiers and store accuracies.
     dataset = DATASETS[options.dataset]()
     for raw_classifier in classifiers:
         RawClassifier.evaluate(raw_classifier, dataset)
 
-    # Evaluate the simple and weighted ensemble classifiers.
-    simple_ensemble = RawClassifier(
-            EnsembleClassifier(classifiers, simple_majority),
-            "simple_ensemble",
-            { 'majority_function': 'simple_majority' }
-            )
+    all_classifiers = list(classifiers)
 
-    weighted_ensemble = RawClassifier(
-            EnsembleClassifier(classifiers, weighted_majority),
-            "weighted_ensemble",
-            { 'majority_function': 'weighted_majority' }
-            )
+    for e, cs in copts.ensembles().iteritems():
+        # Evaluate the simple and weighted ensemble classifiers.
+        simple_ensemble = RawClassifier(
+                EnsembleClassifier(cs, simple_majority),
+                "%s_simple_ensemble" % e,
+                { 'majority_function': 'simple_majority' }
+                )
 
-    RawClassifier.evaluate(simple_ensemble, dataset)
-    RawClassifier.evaluate(weighted_ensemble, dataset)
+        weighted_ensemble = RawClassifier(
+                EnsembleClassifier(cs, weighted_majority),
+                "%s_weighted_ensemble" % e,
+                { 'majority_function': 'weighted_majority' }
+                )
+
+        RawClassifier.evaluate(simple_ensemble, dataset)
+        RawClassifier.evaluate(weighted_ensemble, dataset)
+
+        all_classifiers.extend([simple_ensemble, weighted_ensemble])
 
     # Output results.
-    all_classifiers = list(classifiers)
-    all_classifiers.extend([simple_ensemble, weighted_ensemble])
-
     writer = ClassifierWriter()
     writer.writeheader()
     for raw_classifier in all_classifiers:
