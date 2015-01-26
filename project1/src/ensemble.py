@@ -12,7 +12,7 @@ import numpy
 import sys
 import ConfigParser
 
-import annealing
+import d_annealing
 import classifier as cl
 
 from sklearn.naive_bayes import GaussianNB
@@ -33,7 +33,7 @@ OPTION_CONVERSIONS = { ('svm', 'C'): lambda o: float(o)
                      , ('knn', 'n_neighbors'): lambda o: int(o)
                      }
 
-DATASETS = { 'annealing': annealing.AnnealingDataset(
+DATASETS = { 'annealing': d_annealing.AnnealingDataset(
                     '../data/annealing/anneal.data')
            }
 
