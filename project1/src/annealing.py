@@ -2,6 +2,7 @@ import numpy as np
 import re
 
 from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 
 import dataset
 
@@ -33,6 +34,13 @@ class AnnealingDataset(dataset.DatasetI):
             col = npdata[:, ix]
             le.fit(col)
             self.__data[:, ix] = le.transform(col)
+
+        # Most classifier results are skewed if categorical features are mapped
+        # to integer-valued features. Use a one-hot encoding.
+
+        oe = OneHotEncoder()
+        oe.fit(self.__data)
+        self.__data = oe.transform(self.__data).toarray()
 
     def data(self):
         return self.__data
