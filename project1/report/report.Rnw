@@ -143,15 +143,17 @@ these datasets are downloaded to their respective directories. Each dataset is r
 by a class in the \lstinline|src| directory. The datasets from \verb|libSVM| share a
 single directory in \lstinline|data|.
 
-The ensemble is specified via an INI-style configuration file. Each section header
+The ensembles are specified via an INI-style configuration file. Each section header
 contains a classifier name. The Python class which provides the underlying algorithm is
 specified with the \texttt{kind} option. All other options in a section specify options
-specific to this class.
+specific to this class. The special \texttt{ensemble} section is used to specify
+ensembles. Here, each option is the name of an ensemble and the option's value is a comma
+separated list of classifier names.
 
-Listing~\ref{lst:config} shows the default config file which resides in
-\lstinline|src/conf|.
+Config files reside in \lstinline|src/conf|. Listing~\ref{lst:config} shows a sample
+config which defines an ensemble of three KNN-classifiers.
 
-\lstinputlisting[label=lst:config,style=BashOutputStyle,caption=src/conf/default.conf]{../src/conf/default.conf}
+\lstinputlisting[label=lst:config,style=BashOutputStyle,caption=src/conf/knn3.conf]{../src/conf/knn3.conf}
 
 When \lstinline|ensemble.py| in \lstinline|src| is called, it evaluates the performance of
 all classifiers in the config file and of the simple and weighted majority ensemble
