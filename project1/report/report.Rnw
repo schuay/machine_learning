@@ -237,6 +237,32 @@ plot_accuracy(c("../results/digits.csv", "../results/hastie.csv"),
 \caption{test \label{fig:results_test}}
 \end{figure}
 
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_train_time(c("../results/digits.csv", "../results/hastie.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"mix_default_weighted_ensemble", "nb7_weighted_ensemble", "knn7_weighted_ensemble",
+			"svm7_weighted_ensemble", "tree7_weighted_ensemble", "extraforest_weighted_ensemble"))
+@
+\caption{test2 \label{fig:results_test2}}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_test_time(c("../results/digits.csv", "../results/hastie.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"mix_default_weighted_ensemble", "nb7_weighted_ensemble", "knn7_weighted_ensemble",
+			"svm7_weighted_ensemble", "tree7_weighted_ensemble", "extraforest_weighted_ensemble"))
+@
+\caption{test3 \label{fig:results_test3}}
+\end{figure}
+
 % --------------------------------------------------------------------------------------------------
 
 \section{Conclusion}

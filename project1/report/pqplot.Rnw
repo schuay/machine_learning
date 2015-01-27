@@ -33,6 +33,58 @@ plot_accuracy <- function(file_names, classifiers) {
     cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
 }
 
+plot_train_time <- function(file_names, classifiers) {
+    figbasename = strsplit(as.character(runif(1, 0, 1)), "\\.")[[1]][2]
+    figfile <- paste(figbasename, ".eps", sep = "")
+
+    data <- NULL
+    for (fn in file_names) {
+        f <- read.csv(fn)
+        data <- rbind(data, f)
+    }
+
+    data <- subset(data, classifier %in% classifiers)
+
+    p <- ggplot(data, aes(x=dataset, y=mean_train_time, fill=classifier)) +
+            geom_bar(position=position_dodge(), stat="identity")
+
+    postscript(file = figfile,
+               paper = "special",
+               width = 10,
+               height = 5,
+               horizontal = FALSE,
+               family = "CM Roman")
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+}
+
+plot_test_time <- function(file_names, classifiers) {
+    figbasename = strsplit(as.character(runif(1, 0, 1)), "\\.")[[1]][2]
+    figfile <- paste(figbasename, ".eps", sep = "")
+
+    data <- NULL
+    for (fn in file_names) {
+        f <- read.csv(fn)
+        data <- rbind(data, f)
+    }
+
+    data <- subset(data, classifier %in% classifiers)
+
+    p <- ggplot(data, aes(x=dataset, y=mean_test_time, fill=classifier)) +
+            geom_bar(position=position_dodge(), stat="identity")
+
+    postscript(file = figfile,
+               paper = "special",
+               width = 10,
+               height = 5,
+               horizontal = FALSE,
+               family = "CM Roman")
+    plot(p)
+    invisible(dev.off())
+    cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
+}
+
 plot_ratio_range_r2 <- function(sgdfile, svrfile, noscalefile) {
     figbasename = strsplit(basename(sgdfile), "\\.")[[1]][1]
     figfile <- paste(figbasename, "_r2.eps", sep = "")
