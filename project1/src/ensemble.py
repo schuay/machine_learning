@@ -146,11 +146,11 @@ class RawClassifier:
 
     def mean_train_time(self):
         assert self.train_times is not None
-        return numpy.std(self.train_times)
+        return numpy.mean(self.train_times)
 
     def mean_test_time(self):
         assert self.test_times is not None
-        return numpy.std(self.test_times)
+        return numpy.mean(self.test_times)
 
     @staticmethod
     def evaluate(raw_classifier, dataset):
