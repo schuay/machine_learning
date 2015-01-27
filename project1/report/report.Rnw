@@ -162,13 +162,17 @@ single directory in \lstinline|data|.
 
 The ensembles are specified via an INI-style configuration file. Each section header
 contains a classifier name. The Python class which provides the underlying algorithm is
-specified with the \texttt{kind} option. All other options in a section specify options
+specified with the \texttt{kind} option. Classifiers trained on random samples of
+the training set are configured using the \texttt{training\_subset\_ratio} and
+\texttt{training\_subset\_seed} options. All other options in a section specify options
 specific to this class. The special \texttt{ensemble} section is used to specify
 ensembles. Here, each option is the name of an ensemble and the option's value is a comma
 separated list of classifier names.
 
-Config files reside in \lstinline|src/conf|. Listing~\ref{lst:config} shows a sample
-config which defines an ensemble of three KNN-classifiers.
+Config files reside in \lstinline|src/conf|. Listing~\ref{lst:config} shows one of the
+many available sample configs. This one defines an ensemble of three KNN-classifiers,
+each of which is configured to use a different number of neighbors and train on
+a random sample $75\%$ the size of the training set.
 
 \lstinputlisting[label=lst:config,style=BashOutputStyle,caption=src/conf/knn3.conf]{../src/conf/knn3.conf}
 
@@ -187,9 +191,33 @@ Listing~\ref{lst:ensemble} shows the call syntax of \lstinline|ensemble.py|.
 
 % --------------------------------------------------------------------------------------------------
 
-\subsection{Evaluation suite}
+\newcommand{\mixdefault}{\texttt{mixdefault}\xspace}
+\newcommand{\nb}{\texttt{nb}\xspace}
+\newcommand{\knn}{\texttt{knn}\xspace}
+\newcommand{\svm}{\texttt{svm}\xspace}
+\newcommand{\tree}{\texttt{tree}\xspace}
+\newcommand{\extraforest}{\texttt{extraforest}\xspace}
 
-%TODO
+\subsection{Methodology}
+
+The classifiers for our main experiments were configured in the
+\verb|conf/default.conf| configuration file. Six different ensemble classifiers
+were tested, each in both simple and weighted majority vote variations:
+
+\begin{itemize}
+\item \mixdefault consists of one of each base classifier in its default configuration.
+\item \nb combines seven naive bayes classifiers, each trained on a random sample
+      of the training set.
+\item \knn combines seven nearest neighbor classifiers with considered neighbors ranging
+      from one to nine.
+\item \svm consists of SVM classifiers with varying error term penalties..
+\item \tree combines several tree variations with differing node splitters and criteria.
+\item \extraforest combines ten extremely random trees trained on a random sample of the training set.
+\end{itemize}
+
+Each of these (and all of their component classifiers) were run on all
+datasets using 5-fold cross-valdition. We report on training- and evaluation times,
+together with mean and standard deviation of accuracies.
 
 % --------------------------------------------------------------------------------------------------
 
