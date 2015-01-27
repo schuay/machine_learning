@@ -1,0 +1,25 @@
+Dependencies
+------------
+
+* scikit-learn. The package is called 'python2-scikit-learn' on Arch Linux,
+  and python-sklearn on Debian. Help is also available at
+  http://scikit-learn.org/stable/install.html.
+
+Configuration
+-------------
+
+Classifiers and ensembles are specified using configuration files. A range
+of examples are available in the conf/ subdirectory. conf/default.conf is
+commented and used as testing setup for this project.
+
+Running the experiments
+-----------------------
+
+Classifiers are evaluated using ensemble.py. Run
+
+$ ./ensemble.py -h
+
+for a list of available options. An example call using an alternative
+configuration, verbose output, and the 'iris' dataset would be:
+
+$ ./ensemble.py -c conf/mix.conf -d iris -v
