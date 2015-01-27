@@ -889,6 +889,311 @@ plot_accuracy(c("../results/random10.csv"),
 \caption{\randomten-extraforest}
 \end{figure}
 
+%TODO: remove
+\clearpage
+% --------------------------------------------------------------------------------------------------
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv",
+			"../results/random10-supreme.csv", "../results/vowel.scale-supreme.csv",
+			"../results/heart_scale-supreme.csv", "../results/digits-supreme.csv",
+			"../results/random10-small.csv", "../results/vowel.scale-small.csv",
+			"../results/heart_scale-small.csv", "../results/digits-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"mix_default_weighted_ensemble", "nb7_weighted_ensemble", "knn7_weighted_ensemble",
+			"svm7_weighted_ensemble", "tree7_weighted_ensemble", "extraforest_weighted_ensemble",
+			"extraforest2_weighted_ensemble", "extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble", "nbsmall_weighted_ensemble",
+			"svmsmall_simple_ensemble", "svmsmall_weighted_ensemble",
+			"knnsmall_simple_ensemble", "knnsmall_weighted_ensemble",
+			"treesmall_simple_ensemble", "treesmall_weighted_ensemble"))
+@
+\caption{\randomten, \vowel, \heart, \digits}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv"),
+		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\randomten, \vowel, \heart, \digits-mix\_default}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv"),
+		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
+@
+\caption{\randomten, \vowel, \heart, \digits-nb7}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv"),
+		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
+@
+\caption{\randomten, \vowel, \heart, \digits-knn7}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv"),
+		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
+@
+\caption{\randomten, \vowel, \heart, \digits-svm7}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv"),
+		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
+@
+\caption{\randomten, \vowel, \heart, \digits-tree7}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv"),
+		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
+@
+\caption{\randomten, \vowel, \heart, \digits-extraforest}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10-supreme.csv", "../results/vowel.scale-supreme.csv",
+		"../results/heart_scale-supreme.csv", "../results/digits-supreme.csv"),
+		c("extraforest2_simple_ensemble", "extraforest2_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15", "t16", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25", "t26", "t27", "t28", "t29"))
+@
+\caption{\randomten, \vowel, \heart, \digits-supremeforest}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.csv",
+		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
+		c("nbsmall_simple_ensemble", "nbsmall_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7", "nb8", "nb9", "nb10"))
+@
+\caption{\randomten, \vowel, \heart, \digits-nbsmall}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.csv",
+		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
+		c("svmsmall_simple_ensemble", "svmsmall_weighted_ensemble", "svm1", "svm2", "svm3", "svm4", "svm5", "svm6", "svm7", "svm8", "svm9", "svm10"))
+@
+\caption{\randomten, \vowel, \heart, \digits-svmsmall}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.csv",
+		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
+		c("knnsmall_simple_ensemble", "knnsmall_weighted_ensemble", "knn1", "knn2", "knn3", "knn4", "knn5", "knn6", "knn7", "knn8", "knn9", "knn10"))
+@
+\caption{\randomten, \vowel, \heart, \digits-knnsmall}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.csv",
+		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
+		c("treesmall_simple_ensemble", "treesmall_weighted_ensemble", "tree1", "tree2", "tree3", "tree4", "tree5", "tree6", "tree7", "tree8", "tree9", "tree10"))
+@
+\caption{\randomten, \vowel, \heart, \digits-treesmall}
+\end{figure}
+
+%TODO: remove
+\clearpage
+% --------------------------------------------------------------------------------------------------
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy_by_train_time(c("../results/digits.csv",
+				"../results/digits-supreme.csv",
+				"../results/digits-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\digits-train\_time-accuracy}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy_by_test_time(c("../results/digits.csv",
+				"../results/digits-supreme.csv",
+				"../results/digits-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\digits-test\_time-accuracy}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy_by_train_time(c("../results/heart_scale.csv",
+				"../results/heart_scale-supreme.csv",
+				"../results/heart_scale-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\heart-train\_time-accuracy}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy_by_test_time(c("../results/heart_scale.csv",
+				"../results/heart_scale-supreme.csv",
+				"../results/heart_scale-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\heart-test\_time-accuracy}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy_by_train_time(c("../results/vowel.scale.csv",
+				"../results/vowel.scale-supreme.csv",
+				"../results/vowel.scale-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\vowel-train\_time-accuracy}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy_by_test_time(c("../results/vowel.scale.csv",
+				"../results/vowel.scale-supreme.csv",
+				"../results/vowel.scale-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\vowel-test\_time-accuracy}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy_by_train_time(c("../results/random10.csv",
+				"../results/random10-supreme.csv",
+				"../results/random10-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\randomten-train\_time-accuracy}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{pqplot.Rnw}
+plot_accuracy_by_test_time(c("../results/random10.csv",
+				"../results/random10-supreme.csv",
+				"../results/random10-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\randomten-test\_time-accuracy}
+\end{figure}
+
+
 % --------------------------------------------------------------------------------------------------
 
 \section{Conclusion}
