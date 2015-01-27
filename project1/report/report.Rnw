@@ -72,51 +72,33 @@
 \newpage
 \tableofcontents
 
+% --------------------------------------------------------------------------------------------------
+
 \newpage
 \section{Introduction}
 
 This assignment consists of:
 
 \begin{itemize}
-\item combining several different classification algorithms in an ensemble classifier,
-\item implementing two strategies - simple majority and weighted majority voting - for use in this ensemble classifier,
-\item create a suite of different datasets and classifier ensembles,
-\item evaluate classifier and ensemble classifier performance and efficiency on this suite,
-\item and finally provide a user interface based on a configuration file to specify the classifier ensembles and test suite.
+\item collecting a suite of different datasets,
+\item implementing two ensemble learning strategies: simple majority and weighted majority voting,
+\item evaluating base- and ensemble classifier effectiveness and efficiency on this suite,
+\item and finally providing a simple user interface.
 \end{itemize}
 
 % --------------------------------------------------------------------------------------------------
 
 \section{Materials and Methods}
 
+% --------------------------------------------------------------------------------------------------
+
 \subsection{Dataset Selection}
 
 %TODO
 
-\subsection{Classifier Selection}
-
-%TODO
-We selected the following classifiers and configuration options:
-\begin{itemize}
-	\item KNN
-	\item Naive Bayes
-	\item SVM
-	\item Descision Tree:
-\end{itemize}
-
-\subsection{Ensemble Selection}
-
-%TODO
-The methods to combine our classifiers were given in the specification. We implemented one
-ensemble classifier which performs a simple majority vote on the predictions of the
-classifiers (called \simplemaj) and one which uses a weighted majority vote (called
-\weightedmaj).
-
-However, we were free to choose which combinations of classifiers we should evaluate.
-
 % --------------------------------------------------------------------------------------------------
 
-\subsection{Tools}
+\subsection{Libraries, Toolkits, etc.}
 
 We based our experiments on the machine learning toolkit
 \verb|scikit-learn 0.15.2|\footnote{\url{http://scikit-learn.org/stable/}}.
@@ -134,6 +116,41 @@ using R and the \verb|ggplot2|\footnote{\url{http://ggplot2.org/}} package.
 
 Obviously, this report was typeset in \LaTeX\space and (less obviously) integrated with
 R using \verb|sweave|\footnote{\url{https://www.stat.uni-muenchen.de/~leisch/Sweave/}}.
+
+% --------------------------------------------------------------------------------------------------
+
+\subsection{Classifier Selection}
+
+In this assignment, we used \verb|scikit-learn| exclusively. We selected the
+following base classifiers:
+
+\begin{itemize}
+\item \lstinline|KNeighborsClassifier|: A k-nearest neighbors classifier with
+      a configurable number of neighbors and distance metric.
+\item \lstinline|GaussianNB|: A simple gaussian naive bayes classifier.
+\item \lstinline|LinearSVC|: A linear support vector machine classifier with
+      configurable penalty parameters.
+\item \lstinline|DecisionTreeClassifier|: A decision tree with configurable split
+      quality criteria.
+\item \lstinline|ExtraTreeClassifier|: An extremely randomized tree classifier,
+      intended especially for ensemble classifiers. Random splits are drawn
+      for a number of features at each node, and the best among these is chosen.
+\end{itemize}
+
+These base classifiers were then combined into ensemble classifiers in various
+configurations. We experimented both with including classifiers of different configurations,
+and training several identical classifiers on a random sample of the training set (i.e., bagging).
+
+Ensemble classifiers were implemented in two variations:
+
+\begin{itemize}
+\item The \simplemaj ensemble classifier uses a simple majority vote to determine
+      the winning class, while
+\item the \weightedmaj ensemble classifier uses predetermined accuracies of each
+      base classifier to distribute weight according to a classifier's effectiveness.
+\end{itemize}
+
+% --------------------------------------------------------------------------------------------------
 
 \subsection{Toolchain}
 
@@ -168,6 +185,8 @@ Listing~\ref{lst:ensemble} shows the call syntax of \lstinline|ensemble.py|.
 
 \lstinputlisting[label=lst:ensemble,style=BashOutputStyle,caption=ensemble.py usage]{ensemble.tex}
 
+% --------------------------------------------------------------------------------------------------
+
 \subsection{Evaluation suite}
 
 %TODO
@@ -177,6 +196,8 @@ Listing~\ref{lst:ensemble} shows the call syntax of \lstinline|ensemble.py|.
 \section{Results}
 
 %TODO
+
+% --------------------------------------------------------------------------------------------------
 
 \section{Conclusion}
 
