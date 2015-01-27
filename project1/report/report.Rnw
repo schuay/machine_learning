@@ -210,7 +210,7 @@ were tested, each in both simple and weighted majority vote variations:
       of the training set.
 \item \knn combines seven nearest neighbor classifiers with considered neighbors ranging
       from one to nine.
-\item \svm consists of SVM classifiers with varying error term penalties..
+\item \svm consists of SVM classifiers with varying error term penalties.
 \item \tree combines several tree variations with differing node splitters and criteria.
 \item \extraforest combines ten extremely random trees trained on a random sample of the training set.
 \end{itemize}

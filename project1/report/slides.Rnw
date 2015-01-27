@@ -32,18 +32,45 @@
 \newcommand{\simplemaj}{\texttt{simple\_majority}\xspace}
 \newcommand{\weightedmaj}{\texttt{weighted\_majority}\xspace}
 
+\newcommand{\mixdefault}{\texttt{mixdefault}\xspace}
+\newcommand{\nb}{\texttt{nb}\xspace}
+\newcommand{\knn}{\texttt{knn}\xspace}
+\newcommand{\svm}{\texttt{svm}\xspace}
+\newcommand{\tree}{\texttt{tree}\xspace}
+\newcommand{\extraforest}{\texttt{extraforest}\xspace}
+
 \begin{document}
 
 \maketitle
 
+% ------------------------------------------------------------------------------
 
 \section{Classifiers} \label{sec:classifiers}
 
 \begin{frame}{\nameref{sec:classifiers}}
 
 \begin{itemize}
-\item \texttt{scikit-learn, R}, \LaTeX
-%TODO
+\item Python, \texttt{scikit-learn}
+\item \lstinline|KNeighborsClassifier|: K-nearest Neighbors (\# neighbors, distance metric)
+\item \lstinline|GaussianNB|: Naive Bayes
+\item \lstinline|LinearSVC|: SVM (penalty parameters)
+\item \lstinline|DecisionTreeClassifier|: (split quality criteria)
+\item \lstinline|ExtraTreeClassifier|: Extremely randomized tree
+\end{itemize}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\begin{frame}{\nameref{sec:classifiers}}
+
+\begin{itemize}
+\item Simple / weighted majority vote variant of:
+\item \mixdefault: one of each base classifier in its default configuration.
+\item \nb: naive bayes, trained on random sample.
+\item \knn: KNN with considered neighbors ranging from one to nine.
+\item \svm: SVM, varying error term penalties.
+\item \tree: tree variations, differing node splitters and criteria.
+\item \extraforest: extremely random trees, trained on a random sample.
 \end{itemize}
 \end{frame}
 
