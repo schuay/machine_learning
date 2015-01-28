@@ -436,7 +436,7 @@ plot_accuracy_by_test_time(c("../results/breast-cancer_scale.csv"),
 \caption{\breastcancer}
 \end{figure}
 
-\clearpage
+%\clearpage
 % --------------------------------------------------------------------------------------------------
 
 \begin{figure}[ht]
@@ -1203,6 +1203,7 @@ plot_accuracy_by_test_time(c("../results/connect-4.csv"),
 \caption{\connectfour\label{fig:connectfour}}
 \end{figure}
 
+\clearpage
 % --------------------------------------------------------------------------------------------------
 
 For all datasets, the ensemble classifiers perform similarly to their component
@@ -1286,7 +1287,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 			"knnsmall_simple_ensemble",
 			"treesmall_simple_ensemble"))
 @
-\caption{Ensemble classifier accuracy}
+\caption{Ensemble classifier accuracy\label{fig:allensacc}}
 \end{figure}
 
 % --------------------------------------------------------------------------------------------------
@@ -1488,7 +1489,7 @@ it is less pronounced than with trees - and the runtime overhead of choosing ran
 subsets, coupled with the lost accuracy of base components caused by the smaller training set
 may offset any performance gain.
 
-Hoever, forests seem to be fairly stable over different
+However, forests seem to be fairly stable over different
 problem sets; i.e. unlike single classifiers, which sometimes perform poorly on one dataset
 while excelling on another, forests seem to consistently produce accuracies in the
 upper middle ranges and may be very well suited when reliable performance is more
