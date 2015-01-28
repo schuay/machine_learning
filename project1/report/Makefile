@@ -2,12 +2,12 @@ all: build
 
 build: report slides
 
-report: report.Rnw pqplot.Rnw
+report: report.Rnw ../src/pqplot.r
 	R CMD Sweave $<
 	pdflatex -shell-escape report.tex
 	pdflatex -shell-escape report.tex
 
-slides: slides.Rnw pqplot.Rnw
+slides: slides.Rnw ../src/pqplot.r
 	R CMD Sweave $<
 	pdflatex -shell-escape slides.tex
 	pdflatex -shell-escape slides.tex

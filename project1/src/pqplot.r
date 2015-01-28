@@ -5,9 +5,11 @@ library(ggplot2)
 library(plyr)
 library(scales)
 
-plot_accuracy <- function(file_names, classifiers) {
-    figbasename = strsplit(as.character(runif(1, 0, 1)), "\\.")[[1]][2]
-    figfile <- paste(figbasename, ".eps", sep = "")
+plot_accuracy <- function(file_names, classifiers, figfile=NULL) {
+    if (is.null(figfile)) {
+    	figbasename = strsplit(as.character(runif(1, 0, 1)), "\\.")[[1]][2]
+    	figfile <- paste(figbasename, ".eps", sep = "")
+    }
 
     data <- NULL
     for (fn in file_names) {
@@ -42,9 +44,11 @@ plot_accuracy <- function(file_names, classifiers) {
     cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
 }
 
-plot_accuracy_by_train_time <- function(file_names, classifiers) {
-    figbasename = strsplit(as.character(runif(1, 0, 1)), "\\.")[[1]][2]
-    figfile <- paste(figbasename, ".eps", sep = "")
+plot_accuracy_by_train_time <- function(file_names, classifiers, figfile=NULL) {
+    if (is.null(figfile)) {
+    	figbasename = strsplit(as.character(runif(1, 0, 1)), "\\.")[[1]][2]
+    	figfile <- paste(figbasename, ".eps", sep = "")
+    }
 
     data <- NULL
     for (fn in file_names) {
@@ -77,9 +81,11 @@ plot_accuracy_by_train_time <- function(file_names, classifiers) {
     cat("\\includegraphics[width = \\textwidth]{", figfile, "}\n\n", sep = "")
 }
 
-plot_accuracy_by_test_time <- function(file_names, classifiers) {
-    figbasename = strsplit(as.character(runif(1, 0, 1)), "\\.")[[1]][2]
-    figfile <- paste(figbasename, ".eps", sep = "")
+plot_accuracy_by_test_time <- function(file_names, classifiers, figfile=NULL) {
+    if (is.null(figfile)) {
+    	figbasename = strsplit(as.character(runif(1, 0, 1)), "\\.")[[1]][2]
+    	figfile <- paste(figbasename, ".eps", sep = "")
+    }
 
     data <- NULL
     for (fn in file_names) {

@@ -275,7 +275,7 @@ classifier, which produced the best results in both of these difficult multi-cla
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/annealing.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -284,7 +284,7 @@ plot_accuracy(c("../results/annealing.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/annealing.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -293,7 +293,7 @@ plot_accuracy(c("../results/annealing.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/annealing.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -302,7 +302,7 @@ plot_accuracy(c("../results/annealing.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/annealing.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -311,7 +311,7 @@ plot_accuracy(c("../results/annealing.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/annealing.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -320,7 +320,7 @@ plot_accuracy(c("../results/annealing.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/annealing.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -329,7 +329,7 @@ plot_accuracy(c("../results/annealing.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/annealing.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -340,7 +340,7 @@ plot_accuracy_by_train_time(c("../results/annealing.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/annealing.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -359,7 +359,7 @@ plot_accuracy_by_test_time(c("../results/annealing.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/breast-cancer_scale.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -368,7 +368,7 @@ plot_accuracy(c("../results/breast-cancer_scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/breast-cancer_scale.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -377,7 +377,7 @@ plot_accuracy(c("../results/breast-cancer_scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/breast-cancer_scale.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -386,7 +386,7 @@ plot_accuracy(c("../results/breast-cancer_scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/breast-cancer_scale.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -395,7 +395,7 @@ plot_accuracy(c("../results/breast-cancer_scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/breast-cancer_scale.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -404,7 +404,7 @@ plot_accuracy(c("../results/breast-cancer_scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/breast-cancer_scale.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -413,7 +413,7 @@ plot_accuracy(c("../results/breast-cancer_scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/breast-cancer_scale.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -424,7 +424,7 @@ plot_accuracy_by_train_time(c("../results/breast-cancer_scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/breast-cancer_scale.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -444,7 +444,7 @@ plot_accuracy_by_test_time(c("../results/breast-cancer_scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vehicle.scale.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -453,7 +453,7 @@ plot_accuracy(c("../results/vehicle.scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vehicle.scale.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -462,7 +462,7 @@ plot_accuracy(c("../results/vehicle.scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vehicle.scale.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -471,7 +471,7 @@ plot_accuracy(c("../results/vehicle.scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vehicle.scale.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -480,7 +480,7 @@ plot_accuracy(c("../results/vehicle.scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vehicle.scale.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -489,7 +489,7 @@ plot_accuracy(c("../results/vehicle.scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vehicle.scale.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -498,7 +498,7 @@ plot_accuracy(c("../results/vehicle.scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/vehicle.scale.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -509,7 +509,7 @@ plot_accuracy_by_train_time(c("../results/vehicle.scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/vehicle.scale.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -530,7 +530,7 @@ plot_accuracy_by_test_time(c("../results/vehicle.scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random2.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -539,7 +539,7 @@ plot_accuracy(c("../results/random2.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random2.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -548,7 +548,7 @@ plot_accuracy(c("../results/random2.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random2.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -557,7 +557,7 @@ plot_accuracy(c("../results/random2.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random2.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -566,7 +566,7 @@ plot_accuracy(c("../results/random2.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random2.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -575,7 +575,7 @@ plot_accuracy(c("../results/random2.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random2.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -584,7 +584,7 @@ plot_accuracy(c("../results/random2.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/random2.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -595,7 +595,7 @@ plot_accuracy_by_train_time(c("../results/random2.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/random2.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -615,7 +615,7 @@ plot_accuracy_by_test_time(c("../results/random2.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/hastie.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -624,7 +624,7 @@ plot_accuracy(c("../results/hastie.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/hastie.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -633,7 +633,7 @@ plot_accuracy(c("../results/hastie.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/hastie.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -642,7 +642,7 @@ plot_accuracy(c("../results/hastie.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/hastie.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -651,7 +651,7 @@ plot_accuracy(c("../results/hastie.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/hastie.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -660,7 +660,7 @@ plot_accuracy(c("../results/hastie.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/hastie.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -669,7 +669,7 @@ plot_accuracy(c("../results/hastie.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/hastie.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -680,7 +680,7 @@ plot_accuracy_by_train_time(c("../results/hastie.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/hastie.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -700,7 +700,7 @@ plot_accuracy_by_test_time(c("../results/hastie.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/digits.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -709,7 +709,7 @@ plot_accuracy(c("../results/digits.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/digits.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -718,7 +718,7 @@ plot_accuracy(c("../results/digits.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/digits.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -727,7 +727,7 @@ plot_accuracy(c("../results/digits.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/digits.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -736,7 +736,7 @@ plot_accuracy(c("../results/digits.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/digits.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -745,7 +745,7 @@ plot_accuracy(c("../results/digits.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/digits.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -754,7 +754,7 @@ plot_accuracy(c("../results/digits.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/digits.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -765,7 +765,7 @@ plot_accuracy_by_train_time(c("../results/digits.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/digits.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -785,7 +785,7 @@ plot_accuracy_by_test_time(c("../results/digits.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/iris.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -794,7 +794,7 @@ plot_accuracy(c("../results/iris.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/iris.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -803,7 +803,7 @@ plot_accuracy(c("../results/iris.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/iris.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -812,7 +812,7 @@ plot_accuracy(c("../results/iris.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/iris.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -821,7 +821,7 @@ plot_accuracy(c("../results/iris.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/iris.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -830,7 +830,7 @@ plot_accuracy(c("../results/iris.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/iris.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -839,7 +839,7 @@ plot_accuracy(c("../results/iris.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/iris.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -850,7 +850,7 @@ plot_accuracy_by_train_time(c("../results/iris.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/iris.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -870,7 +870,7 @@ plot_accuracy_by_test_time(c("../results/iris.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/heart_scale.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -879,7 +879,7 @@ plot_accuracy(c("../results/heart_scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/heart_scale.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -888,7 +888,7 @@ plot_accuracy(c("../results/heart_scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/heart_scale.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -897,7 +897,7 @@ plot_accuracy(c("../results/heart_scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/heart_scale.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -906,7 +906,7 @@ plot_accuracy(c("../results/heart_scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/heart_scale.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -915,7 +915,7 @@ plot_accuracy(c("../results/heart_scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/heart_scale.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -924,7 +924,7 @@ plot_accuracy(c("../results/heart_scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/heart_scale.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -935,7 +935,7 @@ plot_accuracy_by_train_time(c("../results/heart_scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/heart_scale.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -956,7 +956,7 @@ plot_accuracy_by_test_time(c("../results/heart_scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vowel.scale.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -965,7 +965,7 @@ plot_accuracy(c("../results/vowel.scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vowel.scale.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -974,7 +974,7 @@ plot_accuracy(c("../results/vowel.scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vowel.scale.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -983,7 +983,7 @@ plot_accuracy(c("../results/vowel.scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vowel.scale.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -992,7 +992,7 @@ plot_accuracy(c("../results/vowel.scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vowel.scale.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -1001,7 +1001,7 @@ plot_accuracy(c("../results/vowel.scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/vowel.scale.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -1010,7 +1010,7 @@ plot_accuracy(c("../results/vowel.scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/vowel.scale.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -1021,7 +1021,7 @@ plot_accuracy_by_train_time(c("../results/vowel.scale.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/vowel.scale.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -1040,7 +1040,7 @@ plot_accuracy_by_test_time(c("../results/vowel.scale.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -1049,7 +1049,7 @@ plot_accuracy(c("../results/random10.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -1058,7 +1058,7 @@ plot_accuracy(c("../results/random10.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -1067,7 +1067,7 @@ plot_accuracy(c("../results/random10.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -1076,7 +1076,7 @@ plot_accuracy(c("../results/random10.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -1085,7 +1085,7 @@ plot_accuracy(c("../results/random10.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -1094,7 +1094,7 @@ plot_accuracy(c("../results/random10.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/random10.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -1105,7 +1105,7 @@ plot_accuracy_by_train_time(c("../results/random10.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/random10.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -1126,7 +1126,7 @@ plot_accuracy_by_test_time(c("../results/random10.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/connect-4.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
@@ -1135,7 +1135,7 @@ plot_accuracy(c("../results/connect-4.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/connect-4.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
@@ -1144,7 +1144,7 @@ plot_accuracy(c("../results/connect-4.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/connect-4.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
@@ -1153,7 +1153,7 @@ plot_accuracy(c("../results/connect-4.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/connect-4.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
@@ -1162,7 +1162,7 @@ plot_accuracy(c("../results/connect-4.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/connect-4.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -1171,7 +1171,7 @@ plot_accuracy(c("../results/connect-4.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/connect-4.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
@@ -1180,7 +1180,7 @@ plot_accuracy(c("../results/connect-4.csv"),
 
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/connect-4.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -1191,7 +1191,7 @@ plot_accuracy_by_train_time(c("../results/connect-4.csv"),
 \hfill
 \begin{subfigure}{0.49\textwidth}
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/connect-4.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
@@ -1271,7 +1271,7 @@ ensembles on the four previously mentioned datasets.
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
 			"../results/digits.csv",
 			"../results/random10-supreme.csv", "../results/vowel.scale-supreme.csv",
@@ -1300,7 +1300,7 @@ in any improvements.
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
 			"../results/digits.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
@@ -1311,7 +1311,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
 			"../results/digits.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
@@ -1322,7 +1322,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
 			"../results/digits.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
@@ -1333,7 +1333,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10-supreme.csv", "../results/vowel.scale-supreme.csv",
 		"../results/heart_scale-supreme.csv", "../results/digits-supreme.csv"),
 		c("extraforest2_simple_ensemble", "extraforest2_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"))
@@ -1344,7 +1344,7 @@ plot_accuracy(c("../results/random10-supreme.csv", "../results/vowel.scale-supre
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.csv",
 		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
 		c("svmsmall_simple_ensemble", "svmsmall_weighted_ensemble", "svm1", "svm2", "svm3", "svm4", "svm5", "svm6", "svm7", "svm8", "svm9", "svm10"))
@@ -1355,7 +1355,7 @@ plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.c
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.csv",
 		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
 		c("treesmall_simple_ensemble", "treesmall_weighted_ensemble", "tree1", "tree2", "tree3", "tree4", "tree5", "tree6", "tree7", "tree8", "tree9", "tree10"))
@@ -1387,7 +1387,7 @@ training respectively testing time.
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/digits.csv",
 				"../results/digits-supreme.csv",
 				"../results/digits-small.csv"),
@@ -1406,7 +1406,7 @@ plot_accuracy_by_train_time(c("../results/digits.csv",
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/digits.csv",
 				"../results/digits-supreme.csv",
 				"../results/digits-small.csv"),
@@ -1425,7 +1425,7 @@ plot_accuracy_by_test_time(c("../results/digits.csv",
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_train_time(c("../results/random10.csv",
 				"../results/random10-supreme.csv",
 				"../results/random10-small.csv"),
@@ -1444,7 +1444,7 @@ plot_accuracy_by_train_time(c("../results/random10.csv",
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
+\SweaveInput{../src/pqplot.r}
 plot_accuracy_by_test_time(c("../results/random10.csv",
 				"../results/random10-supreme.csv",
 				"../results/random10-small.csv"),
