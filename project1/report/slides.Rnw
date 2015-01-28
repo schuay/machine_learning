@@ -28,6 +28,16 @@
         Mino Sharkhawy, 1025887}
 
 \newcommand{\annealing}{\texttt{annealing}\xspace}
+\newcommand{\breastcancer}{\texttt{breast-cancer\_scale}\xspace}
+\newcommand{\vehicle}{\texttt{vehicle.scale}\xspace}
+\newcommand{\randomtwo}{\texttt{random2}\xspace}
+\newcommand{\hastie}{\texttt{hastie}\xspace}
+\newcommand{\digits}{\texttt{digits}\xspace}
+\newcommand{\iris}{\texttt{iris}\xspace}
+\newcommand{\heart}{\texttt{heart\_scale}\xspace}
+\newcommand{\connectfour}{\texttt{connect-4}\xspace}
+\newcommand{\vowel}{\texttt{vowel.scale}\xspace}
+\newcommand{\randomten}{\texttt{random10}\xspace}
 
 \newcommand{\simplemaj}{\texttt{simple\_majority}\xspace}
 \newcommand{\weightedmaj}{\texttt{weighted\_majority}\xspace}
@@ -39,15 +49,21 @@
 \newcommand{\tree}{\texttt{tree}\xspace}
 \newcommand{\extraforest}{\texttt{extraforest}\xspace}
 
+\newcommand{\nbsmall}{\texttt{nbsmall}\xspace}
+\newcommand{\knnsmall}{\texttt{knnsmall}\xspace}
+\newcommand{\svmsmall}{\texttt{svmsmall}\xspace}
+\newcommand{\treesmall}{\texttt{treesmall}\xspace}
+
 \begin{document}
 
 \maketitle
 
 % ------------------------------------------------------------------------------
 
-\section{Classifiers} \label{sec:classifiers}
+\section{Setup} \label{sec:setup}
 
-\begin{frame}{\nameref{sec:classifiers}}
+\begin{frame}{\nameref{sec:setup}}
+\framesubtitle{Component Classifiers}
 
 \begin{itemize}
 \item Python, \texttt{scikit-learn}
@@ -61,7 +77,8 @@
 
 % ------------------------------------------------------------------------------
 
-\begin{frame}{\nameref{sec:classifiers}}
+\begin{frame}{\nameref{sec:setup}}
+\framesubtitle{Ensemble Classifiers}
 
 \begin{itemize}
 \item Simple / weighted majority vote variant of:
@@ -76,7 +93,225 @@
 
 % ------------------------------------------------------------------------------
 
+\begin{frame}{\nameref{sec:setup}}
+\framesubtitle{Datasets}
+
+\begin{enumerate}
+\item \annealing: steel annealing,
+
+\item \digits: handwritten digit recognition,
+\item \iris: iris taxonomy,
+
+\item \hastie: randomly generated binary classification as in Hastie et al. 2009,
+\item \randomtwo: randomly generated data with 2 classes,
+\item \randomten: randomly generated data with 10 classes,
+
+\item \breastcancer: classification according to symptoms,
+\item \vehicle: no information provided,
+\item \heart: heart disease diagnosis,
+\item \connectfour: outcome prediction for a game of connect-4,
+\item \vowel: speech recognition,
+\end{enumerate}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\section{Evaluation} \label{sec:evaluation}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\mixdefault Accuracy}
+
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/digits.csv"),
+		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\digits-mix\_default}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\nb Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/digits.csv"),
+		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
+@
+\caption{\digits-nb7}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\knn Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/digits.csv"),
+		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
+@
+\caption{\digits-knn7}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\svm Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/digits.csv"),
+		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
+@
+\caption{\digits-svm7}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\tree Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv"),
+		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
+@
+\caption{Tree ensemble accuracy}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\extraforest Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+			"../results/digits.csv"),
+		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
+@
+\caption{ExtraForest ensemble accuracy}
+\end{figure}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{Bagging}
+
+\begin{itemize}
+\item Performance improvement for \tree and \extraforest.
+\item New ensemble classifiers to investigate bagging for Naive Bayes, SVM, KNN, Tree:
+\begin{itemize}
+	\item 10 component classifiers.
+	\item Standard configuration.
+	\item Use random sample, 20\% of the size of the training set each.
+	\item \nbsmall, \svmsmall, \knnsmall, \treesmall
+	\item Results for the first three are similar. Tree benefits most.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\svmsmall Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/digits-small.csv"),
+		c("svmsmall_simple_ensemble", "svmsmall_weighted_ensemble", "svm1", "svm2", "svm3", "svm4", "svm5", "svm6", "svm7", "svm8", "svm9", "svm10"))
+@
+\caption{SVM (bagging) ensemble accuracy}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\treesmall Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/digits-small.csv"),
+		c("treesmall_simple_ensemble", "treesmall_weighted_ensemble", "tree1", "tree2", "tree3", "tree4", "tree5", "tree6", "tree7", "tree8", "tree9", "tree10"))
+@
+\caption{Tree (bagging) ensemble accuracy\label{fig:treesmallacc}}
+\end{figure}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{Performance vs. Efficiency}
+
+\begin{itemize}
+\item Compare ensemble and baseline accuracy,
+\item with regard to the time needed for training/testing.
+\item See if ensemble "pays off".
+\end{itemize}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{Performance vs. Efficiency: Training}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy_by_train_time(c("../results/digits.csv",
+				"../results/digits-supreme.csv",
+				"../results/digits-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\digits: Train time vs. accuracy\label{fig:digitstrain}}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{Performance vs. Efficiency: Testing}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy_by_test_time(c("../results/digits.csv",
+				"../results/digits-supreme.csv",
+				"../results/digits-small.csv"),
+		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
+			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble",
+			"nb0", "knn0", "svm0", "tree0", "extratree0"))
+@
+\caption{\digits: Test time vs. accuracy}
+\end{figure}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+
 \section{Conclusion} \label{sec:conclusion}
+
+\begin{frame}{\nameref{sec:conclusion}}
+
+\begin{itemize}
+\item Only forests reliably improve performance.
+\item Forests deliver good performance with different datasets.
+\item Often comparable to the best single classifiers.
+\item Bagging introduces a large runtime overhead during training. Improvements best for trees.
+\end{itemize}
+\end{frame}
 
 \begin{frame}{Q \& A}
 \centering
