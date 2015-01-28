@@ -405,7 +405,6 @@ plot_accuracy_by_test_time(c("../results/breast-cancer_scale.csv"),
 \caption{\breastcancer}
 \end{figure}
 
-% TODO: remove
 \clearpage
 % --------------------------------------------------------------------------------------------------
 
@@ -575,7 +574,6 @@ plot_accuracy_by_test_time(c("../results/random2.csv"),
 \caption{\randomtwo}
 \end{figure}
 
-%TODO: remove
 \clearpage
 % --------------------------------------------------------------------------------------------------
 
@@ -745,7 +743,6 @@ plot_accuracy_by_test_time(c("../results/digits.csv"),
 \caption{\digits}
 \end{figure}
 
-%TODO: remove
 \clearpage
 % --------------------------------------------------------------------------------------------------
 
@@ -915,7 +912,6 @@ plot_accuracy_by_test_time(c("../results/heart_scale.csv"),
 \caption{\heart}
 \end{figure}
 
-%TODO: remove
 \clearpage
 % --------------------------------------------------------------------------------------------------
 
@@ -1085,7 +1081,6 @@ plot_accuracy_by_test_time(c("../results/random10.csv"),
 \caption{\randomten\label{fig:randomten}}
 \end{figure}
 
-%TODO: remove
 \clearpage
 % --------------------------------------------------------------------------------------------------
 
@@ -1104,6 +1099,39 @@ datasets.
 
 % --------------------------------------------------------------------------------------------------
 
+\newcommand{\nbsmall}{\texttt{nbsmall}\xspace}
+\newcommand{\knnsmall}{\texttt{knnsmall}\xspace}
+\newcommand{\svmsmall}{\texttt{svmsmall}\xspace}
+\newcommand{\treesmall}{\texttt{treesmall}\xspace}
+\newcommand{\extraforesttwo}{\texttt{extraforest2}\xspace}
+
+%TODO
+To further test the effectiveness of training the component classifiers on a subset of the
+training set (as used for \extraforest), we designed five additional ensembles and
+evaluated them on four datasets (\digits, \heart, \vowel and \randomten).
+
+As the previous tests showed no difference between \simplemaj and \weightedmaj, we will
+omit the latter in some of the following graphs.
+
+The new ensembles are:
+\begin{itemize}
+\item \nbsmall combines ten naive bayes classifiers, each trained on a random sample
+      of the training set 20\% the size of the original training set.
+\item \knnsmall combines ten nearest neighbor classifiers, each trained on a random sample
+      of the training set 20\% the size of the original training set.
+\item \svmsmall consists of ten SVM classifiers, each trained on a random sample of the
+      training set 20\% the size of the original training set.
+\item \treesmall consists of ten tree classifiers, each trained on a random sample of the
+      training set 20\% the size of the original training set.
+\item \extraforesttwo combines 30 extremely random trees trained on a random sample of the
+      training set 15\% the size of the original training set.
+\end{itemize}
+
+% --------------------------------------------------------------------------------------------------
+
+Figure~\ref{fig:allensacc} compares mean accuracy and standard deviation for all defined
+ensembles on the four previously mentioned datasets.
+
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
@@ -1116,16 +1144,19 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 			"../results/heart_scale-small.csv", "../results/digits-small.csv"),
 		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
 			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
-			"mix_default_weighted_ensemble", "nb7_weighted_ensemble", "knn7_weighted_ensemble",
-			"svm7_weighted_ensemble", "tree7_weighted_ensemble", "extraforest_weighted_ensemble",
-			"extraforest2_weighted_ensemble", "extraforest2_simple_ensemble",
-			"nbsmall_simple_ensemble", "nbsmall_weighted_ensemble",
-			"svmsmall_simple_ensemble", "svmsmall_weighted_ensemble",
-			"knnsmall_simple_ensemble", "knnsmall_weighted_ensemble",
-			"treesmall_simple_ensemble", "treesmall_weighted_ensemble"))
+			"extraforest2_simple_ensemble",
+			"nbsmall_simple_ensemble",
+			"svmsmall_simple_ensemble",
+			"knnsmall_simple_ensemble",
+			"treesmall_simple_ensemble"))
 @
-\caption{\randomten, \vowel, \heart, \digits}
+\caption{\randomten, \vowel, \heart, \digits\label{fig:allensacc}}
 \end{figure}
+
+% --------------------------------------------------------------------------------------------------
+
+Figures~\ref{fig:mixacc} through \ref{fig:treesmallacc} compare each ensemble classifier
+with its respective components for all four datasets.
 
 \begin{figure}[ht]
 \centering
@@ -1135,7 +1166,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 			"../results/digits.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\randomten, \vowel, \heart, \digits-mix\_default}
+\caption{\randomten, \vowel, \heart, \digits-mix\_default\label{fig:mixacc}}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1245,12 +1276,24 @@ plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.c
 		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
 		c("treesmall_simple_ensemble", "treesmall_weighted_ensemble", "tree1", "tree2", "tree3", "tree4", "tree5", "tree6", "tree7", "tree8", "tree9", "tree10"))
 @
-\caption{\randomten, \vowel, \heart, \digits-treesmall}
+\caption{\randomten, \vowel, \heart, \digits-treesmall\label{fig:treesmallacc}}
 \end{figure}
 
-%TODO: remove
+While there is no significant improvement for \mixdefault, \nb, \knn and \svm over their
+component classifiers, the tree based ensemble classifiers \tree and \extraforest show a
+noticable gain in accuracy when compared to their components. For the new \extraforesttwo,
+this is even more pronounced.
+
+The \nbsmall, \svmsmall, \knnsmall and \treesmall ensembles also exhibit higher accuracy
+compared to their components. As before, this improvement is more pronounced for the
+forest \treesmall.
+
 \clearpage
 % --------------------------------------------------------------------------------------------------
+
+Figures~\ref{fig:digitstrain} through \ref{fig:randomtentest} show the accuracy of all
+defined ensemble classifiers and all baseline classifiers in conjunction with the mean
+training respectively testing time.
 
 \begin{figure}[ht]
 \centering
@@ -1268,7 +1311,7 @@ plot_accuracy_by_train_time(c("../results/digits.csv",
 			"treesmall_simple_ensemble",
 			"nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\digits-train\_time-accuracy}
+\caption{\digits-train\_time-accuracy\label{fig:digitstrain}}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1401,14 +1444,33 @@ plot_accuracy_by_test_time(c("../results/random10.csv",
 			"treesmall_simple_ensemble",
 			"nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\randomten-test\_time-accuracy}
+\caption{\randomten-test\_time-accuracy\label{fig:randomtentest}}
 \end{figure}
 
+\clearpage
 
+These runtime figures show, that forests compare favourably with both the baseline tree
+with regards to accuracy. However, when only a subset of the training set is used for each
+tree component (as is the case in \extraforest, \extraforesttwo and \treesmall), the
+runtime of the ensemble classifier dramatically increases. This may be due to a slow
+algorithm for the random subset selection.
+
+The \mixdefault ensemble generally shows good performance, while being not much slower
+than any of the baseline classifiers for all cases.
+
+The remaining ensembles either bring a limited accuracy improvent or are much slower than
+their baseline classifier.
 % --------------------------------------------------------------------------------------------------
 
 \section{Conclusion}
 
 %TODO
+According to our results, the only ensembles that reliably improve the classification
+performance over a single classifier are forests. We achieved these improvements by both
+bagging and combining trees with different split heuristics.
+
+The use of bagging for other classifier types also shows improvements in the accuracy, but
+it is less pronounced than with trees and the runtime overhead of choosing random training
+subsets may offset any performance gain.
 
 \end{document}
