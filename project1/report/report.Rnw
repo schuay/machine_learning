@@ -244,6 +244,11 @@ Each of these (and all of their component classifiers) were run on all
 datasets using 5-fold cross-valdition. We report on training- and evaluation times,
 together with mean and standard deviation of accuracies.
 
+For the \weightedmaj classifiers we also used the mean accuracy reported for a component
+as the weight in the majority function. The use of cross-validation to obtain this weight
+makes a separate validation data set superfluous\footnote{see
+\url{http://scikit-learn.org/stable/modules/cross_validation.html}}.
+
 % --------------------------------------------------------------------------------------------------
 
 \section{Results}
