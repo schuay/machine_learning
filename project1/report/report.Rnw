@@ -97,7 +97,29 @@ This assignment consists of:
 
 \subsection{Dataset Selection}
 
-%TODO
+We used a selection of datasets to test our classifiers, consisting of:
+
+\begin{enumerate}
+\item \annealing: steel annealing,
+
+\item \digits: handwritten digit recognition,
+\item \iris: iris taxonomy,
+
+\item \hastie: randomly generated binary classification as in Hastie et al. 2009,
+\item \randomtwo: randomly generated data with 2 classes,
+\item \randomten: randomly generated data with 10 classes,
+
+\item \breastcancer: classification according to symptoms,
+\item \vehicle: no information provided,
+\item \heart: heart disease diagnosis,
+\item \connectfour: outcome prediction for a game of connect-4,
+\item \vowel: speech recognition,
+\end{enumerate}
+
+Dataset 1 is taken from \url{http://archive.ics.uci.edu/ml/}, sets 2-3 are
+fetched and imported using \verb|scikit-learn| functions, sets 4-6 are randomly
+generated using \verb|scikit-learn| functions, and finally sets 7-11 are taken from
+the \verb|libSVM| dataset collection at \url{http://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/}.
 
 % --------------------------------------------------------------------------------------------------
 
@@ -228,7 +250,10 @@ together with mean and standard deviation of accuracies.
 
 The Figures~\ref{fig:annealing} through \ref{fig:connectfour} show the results of our
 ensemble classifiers for each of our eleven datasets. In a) through f) the mean accuracies
-and standard deviations of each ensemble classifier is compared to that of each component.
+and standard deviations of each ensemble classifier is compared to that of each component. In order
+to make it easier to discern differences between classifiers, note that all axes
+are scaled from $0.5$ to $1.0$. Any classifiers producing accuracy less than $0.5$ do not show
+up on the graph.
 
 In g) the accuracies of all \simplemaj classifiers and all five baseline classifiers (in
 their standard configuration) are plotted depending on the mean of the time needed to
