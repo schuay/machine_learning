@@ -248,7 +248,7 @@ together with mean and standard deviation of accuracies.
 
 \section{Results}
 
-The Figures~\ref{fig:annealing} through \ref{fig:connectfour} show the results of our
+Figures~\ref{fig:randomtwo} through \ref{fig:connectfour} show the results of our
 ensemble classifiers for each of our eleven datasets. In a) through f) the mean accuracies
 and standard deviations of each ensemble classifier is compared to that of each component. In order
 to make it easier to discern differences between classifiers, note that all axes
@@ -260,10 +260,16 @@ their standard configuration) are plotted depending on the mean of the time need
 train each classifier. h) shows the same for the time needed classify all samples in the
 test set.
 
-%TODO
+Results were very similar for many of our datasets, and thus we only examine the most
+interesting graphs here in order to save space. In particular, figures for \annealing and
+\breastcancer were omitted since all classifiers were uniformly very effective.
+Likewise, \vowel and \randomten were omitted since all classifiers performed poorly
+and results were mostly off the chart (with a notable exception of the nearest neighbor
+classifier, which produced the best results in both of these difficult multi-class problems).
+\vehicle was omitted due to its similarity to \randomtwo.
 
 % --------------------------------------------------------------------------------------------------
-
+\begin{comment}
 \begin{figure}[ht]
 \centering
 
@@ -514,9 +520,11 @@ plot_accuracy_by_test_time(c("../results/vehicle.scale.csv"),
 
 \caption{\vehicle}
 \end{figure}
+\end{comment}
 
 % --------------------------------------------------------------------------------------------------
 
+%\clearpage
 \begin{figure}[ht]
 \centering
 
@@ -596,10 +604,10 @@ plot_accuracy_by_test_time(c("../results/random2.csv"),
 \caption{\randomtwo-test\_time-accuracy}
 \end{subfigure}
 
-\caption{\randomtwo}
+\caption{\randomtwo\label{fig:randomtwo}}
 \end{figure}
 
-\clearpage
+%\clearpage
 % --------------------------------------------------------------------------------------------------
 
 \begin{figure}[ht]
@@ -686,6 +694,7 @@ plot_accuracy_by_test_time(c("../results/hastie.csv"),
 
 % --------------------------------------------------------------------------------------------------
 
+%\clearpage
 \begin{figure}[ht]
 \centering
 
@@ -768,7 +777,7 @@ plot_accuracy_by_test_time(c("../results/digits.csv"),
 \caption{\digits}
 \end{figure}
 
-\clearpage
+%\clearpage
 % --------------------------------------------------------------------------------------------------
 
 \begin{figure}[ht]
@@ -855,6 +864,7 @@ plot_accuracy_by_test_time(c("../results/iris.csv"),
 
 % --------------------------------------------------------------------------------------------------
 
+%\clearpage
 \begin{figure}[ht]
 \centering
 
@@ -937,9 +947,10 @@ plot_accuracy_by_test_time(c("../results/heart_scale.csv"),
 \caption{\heart}
 \end{figure}
 
-\clearpage
+%\clearpage
 % --------------------------------------------------------------------------------------------------
 
+\begin{comment}
 \begin{figure}[ht]
 \centering
 
@@ -1107,6 +1118,7 @@ plot_accuracy_by_test_time(c("../results/random10.csv"),
 \end{figure}
 
 \clearpage
+\end{comment}
 % --------------------------------------------------------------------------------------------------
 
 \begin{figure}[ht]
@@ -1193,18 +1205,32 @@ plot_accuracy_by_test_time(c("../results/connect-4.csv"),
 
 % --------------------------------------------------------------------------------------------------
 
-%TODO
 For all datasets, the ensemble classifiers perform similarly to their component
 classifiers with the notable exception of \tree and \extraforest, which deliver a higher
 accuracy for than their components for all but the \iris dataset.
 
 Furthermore, the \tree ensemble compares favourably to other classifiers in the training
-and testing time diagrams, being only slightly slower than a single tree. Interestingly,
-the \extraforest ensemble does not share this property, as it is significantly slower
+and testing time diagrams, being only slightly slower than a single tree.
+The \extraforest ensemble does not share this property, as it is significantly slower
 during training.
 
-There is almost no difference between the \simplemaj and \weightedmaj ensembles for all
-datasets.
+The chosen majority function on the other hand does not seem to make a discernable
+or consistent difference in most cases. The lower variance of the weighted ensemble
+in the \heart dataset can be explained by the inherent randomization of the
+classifier.
+
+It is interesting to note how the behavior of classifier families (Bayes, nearest neighbors, etc.)
+differs according to the dataset. For instance, naive Bayes classifiers perform very competitively on
+most datasets (most impressively on \hastie), but produce poor results on \connectfour. In contrast, support
+vector classifiers have almost the opposite behavior, and completely fail to perform on the \hastie
+dataset.
+
+Finally, support vector and naive Bayes classifiers always produce very consistent results over all
+component classifiers of the ensemble. The variation between decision trees and nearest neighbor
+classifiers is larger, leaving a higher potential for ensemble methods. Ensembles
+show the most improvements over their components when using extremely random trees,
+which is not surprising as these classifiers were explicitly intended for use in ensemble methods.
+
 
 % --------------------------------------------------------------------------------------------------
 
@@ -1215,6 +1241,7 @@ datasets.
 \newcommand{\extraforesttwo}{\texttt{extraforest2}\xspace}
 
 %TODO
+
 To further test the effectiveness of training the component classifiers on a subset of the
 training set (as used for \extraforest), we designed five additional ensembles and
 evaluated them on four datasets (\digits, \heart, \vowel and \randomten).
@@ -1259,13 +1286,16 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 			"knnsmall_simple_ensemble",
 			"treesmall_simple_ensemble"))
 @
-\caption{\randomten, \vowel, \heart, \digits\label{fig:allensacc}}
+\caption{Ensemble classifier accuracy}
 \end{figure}
 
 % --------------------------------------------------------------------------------------------------
 
 Figures~\ref{fig:mixacc} through \ref{fig:treesmallacc} compare each ensemble classifier
-with its respective components for all four datasets.
+with its respective components for all four datasets. Again, only the most interesting
+figures are shown, with very similar results such as naive Bayes, nearest neighbor,
+and support vector machines being left out as ensemble techniques did not result
+in any improvements.
 
 \begin{figure}[ht]
 \centering
@@ -1275,40 +1305,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 			"../results/digits.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\randomten, \vowel, \heart, \digits-mix\_default\label{fig:mixacc}}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
-			"../results/digits.csv"),
-		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
-@
-\caption{\randomten, \vowel, \heart, \digits-nb7}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
-			"../results/digits.csv"),
-		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
-@
-\caption{\randomten, \vowel, \heart, \digits-knn7}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
-			"../results/digits.csv"),
-		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
-@
-\caption{\randomten, \vowel, \heart, \digits-svm7}
+\caption{Mixed ensemble accuracy\label{fig:mixacc}}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1319,7 +1316,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 			"../results/digits.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
-\caption{\randomten, \vowel, \heart, \digits-tree7}
+\caption{Tree ensemble accuracy}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1330,7 +1327,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 			"../results/digits.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
-\caption{\randomten, \vowel, \heart, \digits-extraforest}
+\caption{ExtraForest ensemble accuracy}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1339,20 +1336,9 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 \SweaveInput{pqplot.Rnw}
 plot_accuracy(c("../results/random10-supreme.csv", "../results/vowel.scale-supreme.csv",
 		"../results/heart_scale-supreme.csv", "../results/digits-supreme.csv"),
-		c("extraforest2_simple_ensemble", "extraforest2_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "t13", "t14", "t15", "t16", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25", "t26", "t27", "t28", "t29"))
+		c("extraforest2_simple_ensemble", "extraforest2_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"))
 @
-\caption{\randomten, \vowel, \heart, \digits-supremeforest}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.csv",
-		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
-		c("nbsmall_simple_ensemble", "nbsmall_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7", "nb8", "nb9", "nb10"))
-@
-\caption{\randomten, \vowel, \heart, \digits-nbsmall}
+\caption{Forest of 30 trees accuracy}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1363,18 +1349,7 @@ plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.c
 		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
 		c("svmsmall_simple_ensemble", "svmsmall_weighted_ensemble", "svm1", "svm2", "svm3", "svm4", "svm5", "svm6", "svm7", "svm8", "svm9", "svm10"))
 @
-\caption{\randomten, \vowel, \heart, \digits-svmsmall}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.csv",
-		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
-		c("knnsmall_simple_ensemble", "knnsmall_weighted_ensemble", "knn1", "knn2", "knn3", "knn4", "knn5", "knn6", "knn7", "knn8", "knn9", "knn10"))
-@
-\caption{\randomten, \vowel, \heart, \digits-knnsmall}
+\caption{SVM (bagging) ensemble accuracy}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1385,17 +1360,22 @@ plot_accuracy(c("../results/random10-small.csv", "../results/vowel.scale-small.c
 		"../results/heart_scale-small.csv", "../results/digits-small.csv"),
 		c("treesmall_simple_ensemble", "treesmall_weighted_ensemble", "tree1", "tree2", "tree3", "tree4", "tree5", "tree6", "tree7", "tree8", "tree9", "tree10"))
 @
-\caption{\randomten, \vowel, \heart, \digits-treesmall\label{fig:treesmallacc}}
+\caption{Tree (bagging) ensemble accuracy\label{fig:treesmallacc}}
 \end{figure}
 
 While there is no significant improvement for \mixdefault, \nb, \knn and \svm over their
 component classifiers, the tree based ensemble classifiers \tree and \extraforest show a
 noticable gain in accuracy when compared to their components. For the new \extraforesttwo,
-this is even more pronounced.
+this is even more pronounced in the \digits dataset. Note also how the variance is greatly reduced
+in these cases over the base components.
 
 The \nbsmall, \svmsmall, \knnsmall and \treesmall ensembles also exhibit higher accuracy
 compared to their components. As before, this improvement is more pronounced for the
 forest \treesmall.
+
+However, the best accuracy is still obtained by simply using a single base classifier.
+For example, for \digits, a nearest neighbor classifier is obviously the best choice, while
+naive Bayes produces the best accuracy on the \heart dataset.
 
 \clearpage
 % --------------------------------------------------------------------------------------------------
@@ -1420,7 +1400,7 @@ plot_accuracy_by_train_time(c("../results/digits.csv",
 			"treesmall_simple_ensemble",
 			"nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\digits-train\_time-accuracy\label{fig:digitstrain}}
+\caption{\digits: Train time vs. accuracy\label{fig:digitstrain}}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1439,83 +1419,7 @@ plot_accuracy_by_test_time(c("../results/digits.csv",
 			"treesmall_simple_ensemble",
 			"nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\digits-test\_time-accuracy}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy_by_train_time(c("../results/heart_scale.csv",
-				"../results/heart_scale-supreme.csv",
-				"../results/heart_scale-small.csv"),
-		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
-			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
-			"extraforest2_simple_ensemble",
-			"nbsmall_simple_ensemble",
-			"svmsmall_simple_ensemble",
-			"knnsmall_simple_ensemble",
-			"treesmall_simple_ensemble",
-			"nb0", "knn0", "svm0", "tree0", "extratree0"))
-@
-\caption{\heart-train\_time-accuracy}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy_by_test_time(c("../results/heart_scale.csv",
-				"../results/heart_scale-supreme.csv",
-				"../results/heart_scale-small.csv"),
-		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
-			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
-			"extraforest2_simple_ensemble",
-			"nbsmall_simple_ensemble",
-			"svmsmall_simple_ensemble",
-			"knnsmall_simple_ensemble",
-			"treesmall_simple_ensemble",
-			"nb0", "knn0", "svm0", "tree0", "extratree0"))
-@
-\caption{\heart-test\_time-accuracy}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy_by_train_time(c("../results/vowel.scale.csv",
-				"../results/vowel.scale-supreme.csv",
-				"../results/vowel.scale-small.csv"),
-		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
-			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
-			"extraforest2_simple_ensemble",
-			"nbsmall_simple_ensemble",
-			"svmsmall_simple_ensemble",
-			"knnsmall_simple_ensemble",
-			"treesmall_simple_ensemble",
-			"nb0", "knn0", "svm0", "tree0", "extratree0"))
-@
-\caption{\vowel-train\_time-accuracy}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy_by_test_time(c("../results/vowel.scale.csv",
-				"../results/vowel.scale-supreme.csv",
-				"../results/vowel.scale-small.csv"),
-		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
-			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
-			"extraforest2_simple_ensemble",
-			"nbsmall_simple_ensemble",
-			"svmsmall_simple_ensemble",
-			"knnsmall_simple_ensemble",
-			"treesmall_simple_ensemble",
-			"nb0", "knn0", "svm0", "tree0", "extratree0"))
-@
-\caption{\vowel-test\_time-accuracy}
+\caption{\digits: Test time vs. accuracy}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1534,7 +1438,7 @@ plot_accuracy_by_train_time(c("../results/random10.csv",
 			"treesmall_simple_ensemble",
 			"nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\randomten-train\_time-accuracy}
+\caption{\randomten: Train time vs. accuracy}
 \end{figure}
 
 \begin{figure}[ht]
@@ -1553,16 +1457,17 @@ plot_accuracy_by_test_time(c("../results/random10.csv",
 			"treesmall_simple_ensemble",
 			"nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\randomten-test\_time-accuracy\label{fig:randomtentest}}
+\caption{\randomten: Test time vs. accuracy\label{fig:randomtentest}}
 \end{figure}
 
 \clearpage
 
-These runtime figures show, that forests compare favourably with both the baseline tree
-with regards to accuracy. However, when only a subset of the training set is used for each
+These runtime figures show that forests compare favourably with the baseline tree
+in regards to accuracy. However, when only a subset of the training set is used for each
 tree component (as is the case in \extraforest, \extraforesttwo and \treesmall), the
-runtime of the ensemble classifier dramatically increases. This may be due to a slow
-algorithm for the random subset selection.
+runtime of the ensemble classifier dramatically increases, due to a slow
+algorithm for the random subset selection. With increasing dataset size, training time
+again dominates.
 
 The \mixdefault ensemble generally shows good performance, while being not much slower
 than any of the baseline classifiers for all cases.
@@ -1573,13 +1478,20 @@ their baseline classifier.
 
 \section{Conclusion}
 
-%TODO
 According to our results, the only ensembles that reliably improve the classification
-performance over a single classifier are forests. We achieved these improvements by both
+performance over a single classifier are forests. In many cases, the resulting accuracies
+are comparable to the best single classifiers. We achieved these improvements by both
 bagging and combining trees with different split heuristics.
 
 The use of bagging for other classifier types also shows improvements in the accuracy, but
-it is less pronounced than with trees and the runtime overhead of choosing random training
-subsets may offset any performance gain.
+it is less pronounced than with trees - and the runtime overhead of choosing random training
+subsets, coupled with the lost accuracy of base components caused by the smaller training set
+may offset any performance gain.
+
+Hoever, forests seem to be fairly stable over different
+problem sets; i.e. unlike single classifiers, which sometimes perform poorly on one dataset
+while excelling on another, forests seem to consistently produce accuracies in the
+upper middle ranges and may be very well suited when reliable performance is more
+important than optimal accuracy.
 
 \end{document}
