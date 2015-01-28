@@ -4,6 +4,8 @@ Dependencies
 * scikit-learn. The package is called 'python2-scikit-learn' on Arch Linux,
   and python-sklearn on Debian. Help is also available at
   http://scikit-learn.org/stable/install.html.
+* The R language and the packages Rmisc, extrafont, fontcm, ggplot2, plyr and
+  scales.
 
 Configuration
 -------------
@@ -23,3 +25,25 @@ for a list of available options. An example call using an alternative
 configuration, verbose output, and the 'iris' dataset would be:
 
 $ ./ensemble.py -c conf/mix.conf -d iris -v
+
+The results of the run are printed to stdout in the CSV format.
+
+Creating graphs
+---------------
+
+After the results of the experiments are stored in csv files, you can run
+
+$ ./plot.r acc 1.csv 2.csv nb0 nb7_simple_ensemble out.eps
+
+to plot the mean accuracy for the two classifiers 'nb0' and
+'nb7_simple_ensemble' to the file 'out.eps'. Run
+
+$ ./plot.r
+
+to see all options for printing plots.
+
+Currently 'plot.r' supports three types of graphs:
+* 'acc'  Plot the accuracy and standard deviation for each classifier per dataset.
+* 'atr'  Plot the accuracy depending on the training time for each classifier.
+* 'ats'  Plot the accuracy depending on the testing time for each classifier.
+The modes atr and ats support only one dataset.
