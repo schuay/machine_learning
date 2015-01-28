@@ -16,11 +16,14 @@ plot_accuracy <- function(file_names, classifiers) {
     }
 
     data <- subset(data, classifier %in% classifiers)
+    data$classifier <- factor(data$classifier, levels = data$classifier, ordered = TRUE)
 
     p <- ggplot(data, aes(x=dataset, y=mean_accuracy, fill=classifier)) +
             geom_bar(position=position_dodge(), stat="identity") +
             geom_errorbar(aes(ymin=mean_accuracy-std_deviation, ymax=mean_accuracy+std_deviation),
                     width=.2, position=position_dodge(.9)) +
+            ylab("Accuracy") +
+            coord_cartesian(ylim = c(0.5, 1.0)) +
             theme_bw() +
                 theme(text = element_text(size = 20),
                       axis.text = element_text(size = 18),
@@ -54,6 +57,8 @@ plot_accuracy_by_train_time <- function(file_names, classifiers) {
     p <- ggplot(data, aes(x=mean_train_time, y=mean_accuracy, colour=classifier, shape=classifier)) +
             scale_shape_manual(values=1:nlevels(data$classifier)) +
             geom_point(size=3) +
+            ylab("Accuracy") +
+            xlab("Train time (s)") +
             theme_bw() +
                 theme(text = element_text(size = 20),
                       axis.text = element_text(size = 18),
@@ -87,6 +92,8 @@ plot_accuracy_by_test_time <- function(file_names, classifiers) {
     p <- ggplot(data, aes(x=mean_test_time, y=mean_accuracy, colour=classifier, shape=classifier)) +
             scale_shape_manual(values=1:nlevels(data$classifier)) +
             geom_point(size=3) +
+            ylab("Accuracy") +
+            xlab("Test time (s)") +
             theme_bw() +
                 theme(text = element_text(size = 20),
                       axis.text = element_text(size = 18),
