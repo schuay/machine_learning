@@ -4,7 +4,8 @@ Dependencies
 * scikit-learn. The package is called 'python2-scikit-learn' on Arch Linux,
   and python-sklearn on Debian. Help is also available at
   http://scikit-learn.org/stable/install.html.
-* The R language and the packages Rmisc, extrafont, fontcm, ggplot2, plyr and
+* The plot.r script (which generates plots from CSV output) requires the R
+  language and the packages Rmisc, extrafont, fontcm, ggplot2, plyr and
   scales.
 
 Configuration
