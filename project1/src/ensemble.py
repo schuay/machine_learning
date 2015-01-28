@@ -1,8 +1,5 @@
 #!/usr/bin/env python2
 
-# TODO: The spec mentions using a validation set (which sklearn documentation says is not
-# required with crossfold validation).
-
 import csv
 import getopt
 import numpy
