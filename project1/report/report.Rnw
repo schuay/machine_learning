@@ -226,36 +226,16 @@ together with mean and standard deviation of accuracies.
 
 \section{Results}
 
+The Figures~\ref{fig:annealing} through \ref{fig:randomten} show the results of our
+ensemble classifiers for each of our ten datasets. In a) through f) the mean accuracies
+and standard deviations of each ensemble classifier is compared to that of each component.
+
+In g) the accuracies of all \simplemaj classifiers and all five baseline classifiers (in
+their standard configuration) are plotted depending on the mean of the time needed to
+train each classifier. h) shows the same for the time needed classify all samples in the
+test set.
+
 %TODO
-\begin{figure}[ht]
-\centering
-
-\begin{subfigure}{0.49\textwidth}
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_accuracy(c("../results/digits.csv", "../results/hastie.csv"),
-		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
-			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
-			"mix_default_weighted_ensemble", "nb7_weighted_ensemble", "knn7_weighted_ensemble",
-			"svm7_weighted_ensemble", "tree7_weighted_ensemble", "extraforest_weighted_ensemble"))
-@
-\caption{test \label{fig:results_test}}
-\end{subfigure}
-\hfill
-\begin{subfigure}{0.49\textwidth}
-<<results = tex, echo = FALSE>>=
-\SweaveInput{pqplot.Rnw}
-plot_train_time(c("../results/digits.csv", "../results/hastie.csv"),
-		c("mix_default_simple_ensemble", "nb7_simple_ensemble", "knn7_simple_ensemble",
-			"svm7_simple_ensemble", "tree7_simple_ensemble", "extraforest_simple_ensemble",
-			"mix_default_weighted_ensemble", "nb7_weighted_ensemble", "knn7_weighted_ensemble",
-			"svm7_weighted_ensemble", "tree7_weighted_ensemble", "extraforest_weighted_ensemble"))
-@
-\caption{test2 \label{fig:results_test2}}
-\end{subfigure}
-
-\caption{tests}
-\end{figure}
 
 % --------------------------------------------------------------------------------------------------
 
@@ -338,7 +318,7 @@ plot_accuracy_by_test_time(c("../results/annealing.csv"),
 \caption{\annealing-test\_time-accuracy}
 \end{subfigure}
 
-\caption{\annealing}
+\caption{\annealing\label{fig:annealing}}
 \end{figure}
 
 % --------------------------------------------------------------------------------------------------
@@ -1102,11 +1082,26 @@ plot_accuracy_by_test_time(c("../results/random10.csv"),
 \caption{\randomten-test\_time-accuracy}
 \end{subfigure}
 
-\caption{\randomten}
+\caption{\randomten\label{fig:randomten}}
 \end{figure}
 
 %TODO: remove
 \clearpage
+% --------------------------------------------------------------------------------------------------
+
+%TODO
+For all datasets, the ensemble classifiers perform similarly to their component
+classifiers with the notable exception of \tree and \extraforest, which deliver a higher
+accuracy for than their components for all but the \iris dataset.
+
+Furthermore, the \tree ensemble compares favourably to other classifiers in the training
+and testing time diagrams, being only slightly slower than a single tree. Interestingly,
+the \extraforest ensemble does not share this property, as it is significantly slower
+during training.
+
+There is almost no difference between the \simplemaj and \weightedmaj ensembles for all
+datasets.
+
 % --------------------------------------------------------------------------------------------------
 
 \begin{figure}[ht]
