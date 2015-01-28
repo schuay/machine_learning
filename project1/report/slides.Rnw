@@ -21,7 +21,7 @@
     numbers=left,
 }
 
-\title{Exercise 2 \\
+\title{Exercise 2: Ensemble Classifiers \\
        Machine Learning WS 2014/2015 \\
        Technical University of Vienna}
 \author{Jakob Gruber, 0203440 \\
@@ -96,22 +96,12 @@
 \begin{frame}{\nameref{sec:setup}}
 \framesubtitle{Datasets}
 
-\begin{enumerate}
-\item \annealing: steel annealing,
-
-\item \digits: handwritten digit recognition,
-\item \iris: iris taxonomy,
-
-\item \hastie: randomly generated binary classification as in Hastie et al. 2009,
-\item \randomtwo: randomly generated data with 2 classes,
-\item \randomten: randomly generated data with 10 classes,
-
-\item \breastcancer: classification according to symptoms,
-\item \vehicle: no information provided,
-\item \heart: heart disease diagnosis,
-\item \connectfour: outcome prediction for a game of connect-4,
-\item \vowel: speech recognition,
-\end{enumerate}
+\begin{itemize}
+\item 11 datasets:
+\item 3 randomly generated datasets with varying \# of classes.
+\item 6 datasets with low to medium \# of classes ($< 5$).
+\item 2 datasets with high \# of classes ($10+$).
+\end{itemize}
 \end{frame}
 
 % ------------------------------------------------------------------------------
@@ -125,7 +115,8 @@
 \centering
 <<results = tex, echo = FALSE>>=
 \SweaveInput{../src/pqplot.r}
-plot_accuracy(c("../results/digits.csv"),
+plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
+            "../results/digits.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
 \caption{\digits-mix\_default}
@@ -138,7 +129,8 @@ plot_accuracy(c("../results/digits.csv"),
 \centering
 <<results = tex, echo = FALSE>>=
 \SweaveInput{../src/pqplot.r}
-plot_accuracy(c("../results/digits.csv"),
+plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
+            "../results/digits.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
 \caption{\digits-nb7}
@@ -151,7 +143,8 @@ plot_accuracy(c("../results/digits.csv"),
 \centering
 <<results = tex, echo = FALSE>>=
 \SweaveInput{../src/pqplot.r}
-plot_accuracy(c("../results/digits.csv"),
+plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
+            "../results/digits.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
 \caption{\digits-knn7}
@@ -164,7 +157,8 @@ plot_accuracy(c("../results/digits.csv"),
 \centering
 <<results = tex, echo = FALSE>>=
 \SweaveInput{../src/pqplot.r}
-plot_accuracy(c("../results/digits.csv"),
+plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
+            "../results/digits.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
 \caption{\digits-svm7}
@@ -177,7 +171,7 @@ plot_accuracy(c("../results/digits.csv"),
 \centering
 <<results = tex, echo = FALSE>>=
 \SweaveInput{../src/pqplot.r}
-plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
 			"../results/digits.csv"),
 		c("tree7_simple_ensemble", "tree7_weighted_ensemble", "extratree1", "extratree2", "extratree3", "treebestgini", "treerandomgini", "treebestentropy", "treerandomentropy"))
 @
@@ -191,7 +185,7 @@ plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../res
 \centering
 <<results = tex, echo = FALSE>>=
 \SweaveInput{../src/pqplot.r}
-plot_accuracy(c("../results/random10.csv", "../results/vowel.scale.csv", "../results/heart_scale.csv",
+plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
 			"../results/digits.csv"),
 		c("extraforest_simple_ensemble", "extraforest_weighted_ensemble", "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"))
 @
