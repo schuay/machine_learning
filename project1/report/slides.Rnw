@@ -203,7 +203,7 @@ plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
 \item New ensemble classifiers to investigate bagging for Naive Bayes, SVM, KNN, Tree:
 \begin{itemize}
 	\item 10 component classifiers.
-	\item Standard configuration.
+	\item Default configuration.
 	\item Use random sample, 20\% of the size of the training set each.
 	\item \nbsmall, \svmsmall, \knnsmall, \treesmall
 	\item Results for the first three are similar. Tree benefits most.
@@ -212,15 +212,44 @@ plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
 \end{frame}
 
 \begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\nbsmall Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/vowel.scale-small.csv", "../results/heart_scale-small.csv",
+                "../results/digits-small.csv"),
+		c("nbsmall_simple_ensemble", "nbsmall_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7", "nb8", "nb9", "nb10"))
+@
+\caption{Naive Bayes (bagging) ensemble accuracy}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
 \framesubtitle{\svmsmall Accuracy}
 \begin{figure}[ht]
 \centering
 <<results = tex, echo = FALSE>>=
 \SweaveInput{../src/pqplot.r}
-plot_accuracy(c("../results/digits-small.csv"),
+plot_accuracy(c("../results/vowel.scale-small.csv", "../results/heart_scale-small.csv",
+                "../results/digits-small.csv"),
 		c("svmsmall_simple_ensemble", "svmsmall_weighted_ensemble", "svm1", "svm2", "svm3", "svm4", "svm5", "svm6", "svm7", "svm8", "svm9", "svm10"))
 @
 \caption{SVM (bagging) ensemble accuracy}
+\end{figure}
+\end{frame}
+
+\begin{frame}{\nameref{sec:evaluation}}
+\framesubtitle{\knnsmall Accuracy}
+\begin{figure}[ht]
+\centering
+<<results = tex, echo = FALSE>>=
+\SweaveInput{../src/pqplot.r}
+plot_accuracy(c("../results/vowel.scale-small.csv", "../results/heart_scale-small.csv",
+                "../results/digits-small.csv"),
+		c("knnsmall_simple_ensemble", "knnsmall_weighted_ensemble", "knn1", "knn2", "knn3", "knn4", "knn5", "knn6", "knn7", "knn8", "knn9", "knn10"))
+@
+\caption{KNN (bagging) ensemble accuracy}
 \end{figure}
 \end{frame}
 
@@ -230,7 +259,8 @@ plot_accuracy(c("../results/digits-small.csv"),
 \centering
 <<results = tex, echo = FALSE>>=
 \SweaveInput{../src/pqplot.r}
-plot_accuracy(c("../results/digits-small.csv"),
+plot_accuracy(c("../results/vowel.scale-small.csv", "../results/heart_scale-small.csv",
+                "../results/digits-small.csv"),
 		c("treesmall_simple_ensemble", "treesmall_weighted_ensemble", "tree1", "tree2", "tree3", "tree4", "tree5", "tree6", "tree7", "tree8", "tree9", "tree10"))
 @
 \caption{Tree (bagging) ensemble accuracy\label{fig:treesmallacc}}
