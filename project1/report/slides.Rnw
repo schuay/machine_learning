@@ -119,7 +119,7 @@ plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
             "../results/digits.csv"),
 		c("mix_default_simple_ensemble", "mix_default_weighted_ensemble", "nb0", "knn0", "svm0", "tree0", "extratree0"))
 @
-\caption{\digits-mix\_default}
+\caption{Mixed ensemble Accuracy}
 \end{figure}
 \end{frame}
 
@@ -133,7 +133,7 @@ plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
             "../results/digits.csv"),
 		c("nb7_simple_ensemble", "nb7_weighted_ensemble", "nb1", "nb2", "nb3", "nb4", "nb5", "nb6", "nb7"))
 @
-\caption{\digits-nb7}
+\caption{Naive Bayes ensemble Accuracy}
 \end{figure}
 \end{frame}
 
@@ -147,7 +147,7 @@ plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
             "../results/digits.csv"),
 		c("knn7_simple_ensemble", "knn7_weighted_ensemble", "knn1", "knn2", "knn3", "knn5", "knn7", "knn8", "knn9"))
 @
-\caption{\digits-knn7}
+\caption{K-nearest Neighbor ensemble Accuracy}
 \end{figure}
 \end{frame}
 
@@ -161,7 +161,7 @@ plot_accuracy(c("../results/vowel.scale.csv", "../results/heart_scale.csv",
             "../results/digits.csv"),
 		c("svm7_simple_ensemble", "svm7_weighted_ensemble", "svm01", "svm05", "svm10", "svm15", "svm20", "svm25", "svm30"))
 @
-\caption{\digits-svm7}
+\caption{SVM ensemble Accuracy}
 \end{figure}
 \end{frame}
 
